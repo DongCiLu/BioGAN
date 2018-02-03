@@ -52,17 +52,27 @@ if [[ "$git_repo" == "" ]]; then
   exit
 fi
 
+gpu_unit=$3
+if [[ "$gpu_unit" == "" ]]; then
+    echo "use default gpu (GPU3)."
+    gpu_unit=3
+fi
+
+export CUDA_VISIBLE_DEVICES=$gpu_unit
+
+echo $CUDA_VISIBLE_DEVICES
+
 # Base name for where the checkpoint and logs will be saved to.
-TRAIN_DIR=/tmp/mnist-model
+TRAIN_DIR=celegans-model
 
 # Base name for where the evaluation images will be saved to.
-EVAL_DIR=/tmp/mnist-model/eval
+EVAL_DIR=celegans-model/eval
 
 # Where the dataset is saved to.
-DATASET_DIR=/tmp/mnist-data
+DATASET_DIR=celegans-data
 
 # Location of the classifier frozen graph used for evaluation.
-FROZEN_GRAPH="${git_repo}/research/gan/mnist/data/classify_mnist_graph_def.pb"
+FROZEN_GRAPH="${git_repo}/research/gan/bio_gan/data/classify_mnist_graph_def.pb"
 
 export PYTHONPATH=$PYTHONPATH:$git_repo:$git_repo/research:$git_repo/research/slim
 
@@ -75,18 +85,18 @@ Banner () {
 }
 
 # Download the dataset.
-python "${git_repo}/research/slim/download_and_convert_data.py" \
-  --dataset_name=mnist \
-  --dataset_dir=${DATASET_DIR}
+# python "${git_repo}/research/slim/download_and_convert_data.py" \
+  # --dataset_name=mnist \
+  # --dataset_dir=${DATASET_DIR}
 
 # Run unconditional GAN.
 if [[ "$gan_type" == "unconditional" ]]; then
   UNCONDITIONAL_TRAIN_DIR="${TRAIN_DIR}/unconditional"
   UNCONDITIONAL_EVAL_DIR="${EVAL_DIR}/unconditional"
-  NUM_STEPS=300
+  NUM_STEPS=300000
   # Run training.
   Banner "Starting training unconditional GAN for ${NUM_STEPS} steps..."
-  python "${git_repo}/research/gan/mnist/train.py" \
+  python "${git_repo}/research/gan/bio_gan/train.py" \
     --train_log_dir=${UNCONDITIONAL_TRAIN_DIR} \
     --dataset_dir=${DATASET_DIR} \
     --max_number_of_steps=${NUM_STEPS} \
@@ -95,25 +105,25 @@ if [[ "$gan_type" == "unconditional" ]]; then
   Banner "Finished training unconditional GAN ${NUM_STEPS} steps."
 
   # Run evaluation.
-  Banner "Starting evaluation of unconditional GAN..."
-  python "${git_repo}/research/gan/mnist/eval.py" \
-    --checkpoint_dir=${UNCONDITIONAL_TRAIN_DIR} \
-    --eval_dir=${UNCONDITIONAL_EVAL_DIR} \
-    --dataset_dir=${DATASET_DIR} \
-    --eval_real_images=false \
-    --classifier_filename=${FROZEN_GRAPH} \
-    --max_number_of_evaluations=1
-  Banner "Finished unconditional evaluation. See ${UNCONDITIONAL_EVAL_DIR} for output images."
+  # Banner "Starting evaluation of unconditional GAN..."
+  # python "${git_repo}/research/gan/bio_gan/eval.py" \
+    # --checkpoint_dir=${UNCONDITIONAL_TRAIN_DIR} \
+    # --eval_dir=${UNCONDITIONAL_EVAL_DIR} \
+    # --dataset_dir=${DATASET_DIR} \
+    # --eval_real_images=false \
+    # --classifier_filename=${FROZEN_GRAPH} \
+    # --max_number_of_evaluations=1
+  # Banner "Finished unconditional evaluation. See ${UNCONDITIONAL_EVAL_DIR} for output images."
 fi
 
 # Run conditional GAN.
 if [[ "$gan_type" == "conditional" ]]; then
   CONDITIONAL_TRAIN_DIR="${TRAIN_DIR}/conditional"
   CONDITIONAL_EVAL_DIR="${EVAL_DIR}/conditional"
-  NUM_STEPS=3000
+  NUM_STEPS=300000
   # Run training.
   Banner "Starting training conditional GAN for ${NUM_STEPS} steps..."
-  python "${git_repo}/research/gan/mnist/train.py" \
+  python "${git_repo}/research/gan/bio_gan/train.py" \
     --train_log_dir=${CONDITIONAL_TRAIN_DIR} \
     --dataset_dir=${DATASET_DIR} \
     --max_number_of_steps=${NUM_STEPS} \
@@ -122,13 +132,13 @@ if [[ "$gan_type" == "conditional" ]]; then
   Banner "Finished training conditional GAN ${NUM_STEPS} steps."
 
   # Run evaluation.
-  Banner "Starting evaluation of conditional GAN..."
-  python "${git_repo}/research/gan/mnist/conditional_eval.py" \
-    --checkpoint_dir=${CONDITIONAL_TRAIN_DIR} \
-    --eval_dir=${CONDITIONAL_EVAL_DIR} \
-    --classifier_filename=${FROZEN_GRAPH} \
-    --max_number_of_evaluations=1
-  Banner "Finished conditional evaluation. See ${CONDITIONAL_EVAL_DIR} for output images."
+  # Banner "Starting evaluation of conditional GAN..."
+  # python "${git_repo}/research/gan/bio_gan/conditional_eval.py" \
+    # --checkpoint_dir=${CONDITIONAL_TRAIN_DIR} \
+    # --eval_dir=${CONDITIONAL_EVAL_DIR} \
+    # --classifier_filename=${FROZEN_GRAPH} \
+    # --max_number_of_evaluations=1
+  # Banner "Finished conditional evaluation. See ${CONDITIONAL_EVAL_DIR} for output images."
 fi
 
 # Run InfoGAN.
@@ -138,7 +148,7 @@ if [[ "$gan_type" == "infogan" ]]; then
   NUM_STEPS=3000
   # Run training.
   Banner "Starting training infogan GAN for ${NUM_STEPS} steps..."
-  python "${git_repo}/research/gan/mnist/train.py" \
+  python "${git_repo}/research/gan/bio_gan/train.py" \
     --train_log_dir=${INFOGAN_TRAIN_DIR} \
     --dataset_dir=${DATASET_DIR} \
     --max_number_of_steps=${NUM_STEPS} \
@@ -148,7 +158,7 @@ if [[ "$gan_type" == "infogan" ]]; then
 
   # Run evaluation.
   Banner "Starting evaluation of infogan..."
-  python "${git_repo}/research/gan/mnist/infogan_eval.py" \
+  python "${git_repo}/research/gan/bio_gan/infogan_eval.py" \
     --checkpoint_dir=${INFOGAN_TRAIN_DIR} \
     --eval_dir=${INFOGAN_EVAL_DIR} \
     --classifier_filename=${FROZEN_GRAPH} \

@@ -59,25 +59,30 @@ flags.DEFINE_integer('max_number_of_evaluations', None,
 
 def main(_, run_eval_loop=True):
   # Fetch real images.
-  with tf.name_scope('inputs'):
-    real_images, _, _ = data_provider.provide_data(
-        'train', FLAGS.num_images_generated, FLAGS.dataset_dir)
+  # with tf.name_scope('inputs'):
+    # real_images, _, _ = data_provider.provide_data(
+        # 'train', FLAGS.num_images_generated, FLAGS.dataset_dir)
 
   image_write_ops = None
   if FLAGS.eval_real_images:
+    pass
+    '''
     tf.summary.scalar('MNIST_Classifier_score',
                       util.mnist_score(real_images, FLAGS.classifier_filename))
+    '''
   else:
     # In order for variables to load, use the same variable scope as in the
     # train job.
     with tf.variable_scope('Generator'):
       images = networks.unconditional_generator(
           tf.random_normal([FLAGS.num_images_generated, FLAGS.noise_dims]))
+    '''
     tf.summary.scalar('MNIST_Frechet_distance',
                       util.mnist_frechet_distance(
                           real_images, images, FLAGS.classifier_filename))
     tf.summary.scalar('MNIST_Classifier_score',
                       util.mnist_score(images, FLAGS.classifier_filename))
+    '''
     if FLAGS.num_images_generated >= 100:
       reshaped_images = tfgan.eval.image_reshaper(
           images[:100, ...], num_cols=10)
@@ -86,10 +91,9 @@ def main(_, run_eval_loop=True):
           '%s/%s'% (FLAGS.eval_dir, 'unconditional_gan.png'),
           tf.image.encode_png(uint8_images[0]))
 
-  print("***********{}".format(FLAGS.max_number_of_evaluations))
-
   # For unit testing, use `run_eval_loop=False`.
   if not run_eval_loop: return
+  print("**********{}".format([tf.contrib.training.SummaryAtEndHook(FLAGS.eval_dir), tf.contrib.training.StopAfterNEvalsHook(1)]))
   tf.contrib.training.evaluate_repeatedly(
       FLAGS.checkpoint_dir,
       hooks=[tf.contrib.training.SummaryAtEndHook(FLAGS.eval_dir),

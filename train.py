@@ -29,6 +29,7 @@ import util
 
 flags = tf.flags
 tfgan = tf.contrib.gan
+tfgan_losses = tf.contrib.gan.losses
 
 
 flags.DEFINE_integer('batch_size', 32, 'The number of images in each batch.')
@@ -58,8 +59,8 @@ FLAGS = flags.FLAGS
 def _learning_rate(gan_type):
   # First is generator learning rate, second is discriminator learning rate.
   return {
-      'unconditional': (1e-3, 1e-4),
-      'conditional': (1e-5, 1e-4),
+      'unconditional': (1e-4, 1e-4),
+      'conditional': (1e-6, 1e-4),
       'infogan': (0.001, 9e-5),
   }[gan_type]
 
@@ -77,6 +78,7 @@ def main(_):
 
   # Define the GANModel tuple. Optionally, condition the GAN on the label or
   # use an InfoGAN to learn a latent representation.
+  print("create unconditional gan model!")
   if FLAGS.gan_type == 'unconditional':
     gan_model = tfgan.gan_model(
         generator_fn=networks.unconditional_generator,
@@ -84,6 +86,7 @@ def main(_):
         real_data=images,
         generator_inputs=tf.random_normal(
             [FLAGS.batch_size, FLAGS.noise_dims]))
+    print("Finished create unconditional gan model!")
   elif FLAGS.gan_type == 'conditional':
     noise = tf.random_normal([FLAGS.batch_size, FLAGS.noise_dims])
     gan_model = tfgan.gan_model(
@@ -92,7 +95,7 @@ def main(_):
         real_data=images,
         generator_inputs=(noise, one_hot_labels))
   elif FLAGS.gan_type == 'infogan':
-    cat_dim, cont_dim = 10, 2
+    cat_dim, cont_dim = 8, 2
     generator_fn = functools.partial(
         networks.infogan_generator, categorical_dim=cat_dim)
     discriminator_fn = functools.partial(
@@ -115,6 +118,8 @@ def main(_):
                                          else 0.0)
     gan_loss = tfgan.gan_loss(
         gan_model,
+        # generator_loss_fn=tfgan_losses.minimax_generator_loss,
+        # discriminator_loss_fn=tfgan_losses.minimax_discriminator_loss,
         gradient_penalty_weight=1.0,
         mutual_information_penalty_weight=mutual_information_penalty_weight,
         add_summaries=True)
@@ -126,8 +131,10 @@ def main(_):
     train_ops = tfgan.gan_train_ops(
         gan_model,
         gan_loss,
-        generator_optimizer=tf.train.AdamOptimizer(gen_lr, 0.5),
-        discriminator_optimizer=tf.train.AdamOptimizer(dis_lr, 0.5),
+        # generator_optimizer=tf.train.AdamOptimizer(gen_lr, 0.5),
+        # discriminator_optimizer=tf.train.AdamOptimizer(dis_lr, 0.5),
+        generator_optimizer=tf.train.RMSPropOptimizer(gen_lr),
+        discriminator_optimizer=tf.train.RMSPropOptimizer(dis_lr),
         summarize_gradients=True,
         aggregation_method=tf.AggregationMethod.EXPERIMENTAL_ACCUMULATE_N)
 

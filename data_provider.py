@@ -22,7 +22,8 @@ from __future__ import print_function
 
 import tensorflow as tf
 
-from slim.datasets import dataset_factory as datasets
+# from slim.datasets import dataset_factory as datasets
+import celegans
 
 slim = tf.contrib.slim
 
@@ -39,7 +40,7 @@ def provide_data(split_name, batch_size, dataset_dir, num_readers=1,
     num_threads: Number of prefetching threads.
 
   Returns:
-    images: A `Tensor` of size [batch_size, 28, 28, 1]
+    images: A `Tensor` of size [batch_size, 256, 256, 1]
     one_hot_labels: A `Tensor` of size [batch_size, mnist.NUM_CLASSES], where
       each row has a single element set to one and the rest set to zeros.
     num_samples: The number of total samples in the dataset.
@@ -47,7 +48,8 @@ def provide_data(split_name, batch_size, dataset_dir, num_readers=1,
   Raises:
     ValueError: If `split_name` is not either 'train' or 'test'.
   """
-  dataset = datasets.get_dataset('mnist', split_name, dataset_dir=dataset_dir)
+  # dataset = datasets.get_dataset('celegans', split_name, dataset_dir=dataset_dir)
+  dataset = celegans.get_split(split_name, dataset_dir=dataset_dir)
   provider = slim.dataset_data_provider.DatasetDataProvider(
       dataset,
       num_readers=num_readers,
@@ -55,6 +57,11 @@ def provide_data(split_name, batch_size, dataset_dir, num_readers=1,
       common_queue_min=batch_size,
       shuffle=(split_name == 'train'))
   [image, label] = provider.get(['image', 'label'])
+
+  # Resize image to an acceptable size
+  old_size = image.shape
+  # image = tf.image.resize_images(image, [128, 128])
+  print ("resize image from {} to {}".format(old_size, image.shape))
 
   # Preprocess the images.
   image = (tf.to_float(image) - 128.0) / 128.0
@@ -67,6 +74,10 @@ def provide_data(split_name, batch_size, dataset_dir, num_readers=1,
       capacity=5 * batch_size)
 
   one_hot_labels = tf.one_hot(labels, dataset.num_classes)
+  print ("celegans data loading stat:")
+  print ("image dimension: {}".format(images.shape))
+  print ("label dimension: {}".format(one_hot_labels.shape))
+  print ("number of samples: {}".format(dataset.num_samples))
   return images, one_hot_labels, dataset.num_samples
 
 
@@ -83,3 +94,10 @@ def float_image_to_uint8(image):
   """
   image = (image * 128.0) + 128.0
   return tf.cast(image, tf.uint8)
+
+'''
+if __name__ == '__main__':
+  with tf.device('/cpu:0'):
+    images, one_hot_labels, _ = provide_data(
+        'train', FLAGS.batch_size, FLAGS.dataset_dir, num_threads=4)
+'''

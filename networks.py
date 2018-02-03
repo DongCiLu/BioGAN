@@ -50,8 +50,11 @@ def _generator_helper(
     net = layers.fully_connected(noise, 1024)
     if is_conditional:
       net = tfgan.features.condition_tensor_from_onehot(net, one_hot_labels)
-    net = layers.fully_connected(net, 7 * 7 * 128)
-    net = tf.reshape(net, [-1, 7, 7, 128])
+    net = layers.fully_connected(net, 8 * 8 * 1024)
+    net = tf.reshape(net, [-1, 8, 8, 1024])
+    net = layers.conv2d_transpose(net, 512, [4, 4], stride=2)
+    net = layers.conv2d_transpose(net, 256, [4, 4], stride=2)
+    net = layers.conv2d_transpose(net, 128, [4, 4], stride=2)
     net = layers.conv2d_transpose(net, 64, [4, 4], stride=2)
     net = layers.conv2d_transpose(net, 32, [4, 4], stride=2)
     # Make sure that generator output is in the same range as `inputs`
@@ -72,7 +75,7 @@ def unconditional_generator(noise, weight_decay=2.5e-5):
   Returns:
     A generated image in the range [-1, 1].
   """
-  # image, _ = dcgan.generator(noise)
+  # image, _ = dcgan.generator(noise, final_size=64, num_outputs=1)
 
   # return tf.tanh(image)
   return _generator_helper(noise, False, None, weight_decay)
@@ -138,8 +141,12 @@ def _discriminator_helper(img, is_conditional, one_hot_labels, weight_decay):
       activation_fn=_leaky_relu, normalizer_fn=None,
       weights_regularizer=layers.l2_regularizer(weight_decay),
       biases_regularizer=layers.l2_regularizer(weight_decay)):
-    net = layers.conv2d(img, 64, [4, 4], stride=2)
+    print(img.shape)
+    net = layers.conv2d(img, 32, [4, 4], stride=2)
+    net = layers.conv2d(net, 64, [4, 4], stride=2)
     net = layers.conv2d(net, 128, [4, 4], stride=2)
+    net = layers.conv2d(net, 256, [4, 4], stride=2)
+    net = layers.conv2d(net, 512, [4, 4], stride=2)
     net = layers.flatten(net)
     if is_conditional:
       net = tfgan.features.condition_tensor_from_onehot(net, one_hot_labels)
