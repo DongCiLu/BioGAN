@@ -2,4 +2,7 @@
 GAN modification for biology images (celegans microscope images)
 
 We have some microscope images and we want to generate more samples like these with GAN.
-![alt text](https://raw.githubusercontent.com/DongCiLu/BioGAN/master/examples/raw_image.png)
+
+Raw and denoised image of celegans slice
+
+![alt text](./examples/raw_image.png?raw=true "Raw Image of celegans slice")     ![alt text](./examples/denoised_image.jpg?raw=true "Denoised Image of celegans slice")
