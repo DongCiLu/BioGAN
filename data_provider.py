@@ -60,7 +60,7 @@ def provide_data(split_name, batch_size, dataset_dir, num_readers=1,
 
   # Resize image to an acceptable size
   old_size = image.shape
-  # image = tf.image.resize_images(image, [128, 128])
+  image = tf.image.resize_images(image, [128, 128])
   print ("resize image from {} to {}".format(old_size, image.shape))
 
   # Preprocess the images.

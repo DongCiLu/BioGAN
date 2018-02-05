@@ -47,9 +47,10 @@ def _generator_helper(
       [layers.fully_connected, layers.conv2d_transpose],
       activation_fn=tf.nn.relu, normalizer_fn=layers.batch_norm,
       weights_regularizer=layers.l2_regularizer(weight_decay)):
-    net = layers.fully_connected(noise, 1024)
+    net = layers.fully_connected(noise, 1024, activation_fn=tf.nn.leaky_relu)
     if is_conditional:
       net = tfgan.features.condition_tensor_from_onehot(net, one_hot_labels)
+    '''
     net = layers.fully_connected(net, 8 * 8 * 1024)
     net = tf.reshape(net, [-1, 8, 8, 1024])
     net = layers.conv2d_transpose(net, 512, [4, 4], stride=2)
@@ -57,6 +58,13 @@ def _generator_helper(
     net = layers.conv2d_transpose(net, 128, [4, 4], stride=2)
     net = layers.conv2d_transpose(net, 64, [4, 4], stride=2)
     net = layers.conv2d_transpose(net, 32, [4, 4], stride=2)
+    '''
+    net = layers.fully_connected(net, 8 * 8 * 512)
+    net = tf.reshape(net, [-1, 8, 8, 512])
+    net = layers.conv2d_transpose(net, 256, [4, 4], stride=2, activation_fn=tf.nn.leaky_relu)
+    net = layers.conv2d_transpose(net, 128, [4, 4], stride=2, activation_fn=tf.nn.leaky_relu)
+    net = layers.conv2d_transpose(net, 64, [4, 4], stride=2, activation_fn=tf.nn.leaky_relu)
+    net = layers.conv2d_transpose(net, 32, [4, 4], stride=2, activation_fn=tf.nn.leaky_relu)
     # Make sure that generator output is in the same range as `inputs`
     # ie [-1, 1].
     net = layers.conv2d(
@@ -141,16 +149,22 @@ def _discriminator_helper(img, is_conditional, one_hot_labels, weight_decay):
       activation_fn=_leaky_relu, normalizer_fn=None,
       weights_regularizer=layers.l2_regularizer(weight_decay),
       biases_regularizer=layers.l2_regularizer(weight_decay)):
-    print(img.shape)
+    '''
     net = layers.conv2d(img, 32, [4, 4], stride=2)
     net = layers.conv2d(net, 64, [4, 4], stride=2)
     net = layers.conv2d(net, 128, [4, 4], stride=2)
     net = layers.conv2d(net, 256, [4, 4], stride=2)
     net = layers.conv2d(net, 512, [4, 4], stride=2)
     net = layers.flatten(net)
+    '''
+    net = layers.conv2d(img, 32, [4, 4], stride=2, activation_fn=tf.nn.leaky_relu)
+    net = layers.conv2d(net, 64, [4, 4], stride=2, activation_fn=tf.nn.leaky_relu)
+    net = layers.conv2d(net, 128, [4, 4], stride=2, activation_fn=tf.nn.leaky_relu)
+    net = layers.conv2d(net, 256, [4, 4], stride=2, activation_fn=tf.nn.leaky_relu)
+    net = layers.flatten(net)
     if is_conditional:
       net = tfgan.features.condition_tensor_from_onehot(net, one_hot_labels)
-    net = layers.fully_connected(net, 1024, normalizer_fn=layers.layer_norm)
+    net = layers.fully_connected(net, 1024, normalizer_fn=layers.layer_norm, activation_fn=tf.nn.leaky_relu)
 
     return net
 

@@ -60,7 +60,7 @@ def _learning_rate(gan_type):
   # First is generator learning rate, second is discriminator learning rate.
   return {
       'unconditional': (1e-4, 1e-4),
-      'conditional': (1e-6, 1e-4),
+      'conditional': (1e-4, 1e-4),
       'infogan': (0.001, 9e-5),
   }[gan_type]
 
@@ -131,10 +131,10 @@ def main(_):
     train_ops = tfgan.gan_train_ops(
         gan_model,
         gan_loss,
-        # generator_optimizer=tf.train.AdamOptimizer(gen_lr, 0.5),
-        # discriminator_optimizer=tf.train.AdamOptimizer(dis_lr, 0.5),
-        generator_optimizer=tf.train.RMSPropOptimizer(gen_lr),
-        discriminator_optimizer=tf.train.RMSPropOptimizer(dis_lr),
+        generator_optimizer=tf.train.AdamOptimizer(gen_lr, 0.5),
+        discriminator_optimizer=tf.train.AdamOptimizer(dis_lr, 0.5),
+        # generator_optimizer=tf.train.RMSPropOptimizer(gen_lr),
+        # discriminator_optimizer=tf.train.RMSPropOptimizer(dis_lr),
         summarize_gradients=True,
         aggregation_method=tf.AggregationMethod.EXPERIMENTAL_ACCUMULATE_N)
 
