@@ -14,6 +14,6 @@ We use our dataset to train both unconditional GAN and conditional GAN, based on
 
 ![alt text](./examples/unconditional_gan.png?raw=true "Results for unconditional GAN")
 
-2. Conditional GAN:
+2. Conditional GAN (condition on time frame to show the cell growth):
 
 ![alt text](./examples/conditional_gan.png?raw=true "Results for conditional GAN")
