@@ -29,7 +29,7 @@ slim = tf.contrib.slim
 
 
 def provide_data(split_name, batch_size, dataset_dir, num_readers=1,
-                 num_threads=1):
+                 num_threads=1, multiple=False):
   """Provides batches of MNIST digits.
 
   Args:
@@ -49,7 +49,8 @@ def provide_data(split_name, batch_size, dataset_dir, num_readers=1,
     ValueError: If `split_name` is not either 'train' or 'test'.
   """
   # dataset = datasets.get_dataset('celegans', split_name, dataset_dir=dataset_dir)
-  dataset = celegans.get_split(split_name, dataset_dir=dataset_dir)
+  dataset = celegans.get_split(split_name, 
+          dataset_dir=dataset_dir, multiple=multiple)
   provider = slim.dataset_data_provider.DatasetDataProvider(
       dataset,
       num_readers=num_readers,
@@ -60,7 +61,11 @@ def provide_data(split_name, batch_size, dataset_dir, num_readers=1,
 
   # Resize image to an acceptable size
   old_size = image.shape
-  image = tf.image.resize_images(image, [128, 128])
+  if multiple:
+    width = 256
+  else:
+    width = 128
+  image = tf.image.resize_images(image, [128, width])
   print ("resize image from {} to {}".format(old_size, image.shape))
 
   # Preprocess the images.
@@ -80,7 +85,6 @@ def provide_data(split_name, batch_size, dataset_dir, num_readers=1,
   print ("number of samples: {}".format(dataset.num_samples))
   return images, one_hot_labels, dataset.num_samples
 
-
 def float_image_to_uint8(image):
   """Convert float image in [-1, 1) to [0, 255] uint8.
 
@@ -94,10 +98,3 @@ def float_image_to_uint8(image):
   """
   image = (image * 128.0) + 128.0
   return tf.cast(image, tf.uint8)
-
-'''
-if __name__ == '__main__':
-  with tf.device('/cpu:0'):
-    images, one_hot_labels, _ = provide_data(
-        'train', FLAGS.batch_size, FLAGS.dataset_dir, num_threads=4)
-'''

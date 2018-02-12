@@ -45,7 +45,6 @@ def _generator_helper(
   """
   with tf.contrib.framework.arg_scope(
       [layers.fully_connected, layers.conv2d_transpose],
-      # activation_fn=tf.nn.relu, normalizer_fn=layers.batch_norm,
       activation_fn=tf.nn.leaky_relu, normalizer_fn=layers.batch_norm,
       weights_regularizer=layers.l2_regularizer(weight_decay)):
     net = layers.fully_connected(noise, 1024)
@@ -90,10 +89,13 @@ def multiple_generator(inputs, is_conditional=False, weight_decay=2.5e-5):
       [layers.fully_connected, layers.conv2d_transpose],
       activation_fn=tf.nn.leaky_relu, normalizer_fn=layers.batch_norm,
       weights_regularizer=layers.l2_regularizer(weight_decay)):
+    print("shape for noise: {}".format(noise.shape))
     half_slice = int(int(noise.shape[1]) / 2)
     batch_size = int(noise.shape[0])
     noise1 = tf.slice(noise, [0,0], [batch_size, half_slice])
-    noise2 = tf.slice(noise, [0,half_slice], [batch_size, half_slice])
+    noise2 = tf.slice(noise, [0,half_slice + 1], [batch_size, half_slice])
+    print("shape for noise1: {}".format(noise1.shape))
+    print("shape for noise2: {}".format(noise2.shape))
     net1 = layers.fully_connected(noise1, 1024)
     net2 = layers.fully_connected(noise2, 1024)
     if is_conditional:
@@ -101,32 +103,49 @@ def multiple_generator(inputs, is_conditional=False, weight_decay=2.5e-5):
               net1, one_hot_labels)
       net2 = tfgan.features.condition_tensor_from_onehot(
               net2, one_hot_labels)
+    print("shape after first fc layer: {}".format(net2.shape))
     net2 = tf.concat([net1,net2], 1)
+    print("shape after first fc layer concat: {}".format(net2.shape))
     net1 = layers.fully_connected(net1, 8 * 8 * 512)
     net2 = layers.fully_connected(net2, 8 * 8 * 512)
     net1 = tf.reshape(net1, [-1, 8, 8, 512])
     net2 = tf.reshape(net2, [-1, 8, 8, 512])
-    net2 = tf.concat([net1,net2], 3)
+    print("shape after second fc layer: {}".format(net2.shape))
+    net2 = tf.concat([net1,net2], 1)
+    print("shape after second fc layer concat: {}".format(net2.shape))
     net1 = layers.conv2d_transpose(net1, 256, [4, 4], stride=2)
-    net2 = layers.conv2d_transpose(net2, 256, [4, 4], stride=2)
-    net2 = tf.concat([net1,net2], 3)
+    net2 = layers.conv2d_transpose(net2, 256, [4, 4], stride=[1, 2])
+    print("shape after first conv layer: {}".format(net1.shape))
+    print("shape after first conv layer: {}".format(net2.shape))
+    net2 = tf.concat([net1,net2], 1)
+    print("shape after first conv layer concat: {}".format(net2.shape))
     net1 = layers.conv2d_transpose(net1, 128, [4, 4], stride=2)
-    net2 = layers.conv2d_transpose(net2, 128, [4, 4], stride=2)
-    net2 = tf.concat([net1,net2], 3)
+    net2 = layers.conv2d_transpose(net2, 128, [4, 4], stride=[1, 2])
+    print("shape after second conv layer: {}".format(net1.shape))
+    print("shape after second conv layer: {}".format(net2.shape))
+    net2 = tf.concat([net1,net2], 1)
+    print("shape after second conv layer concat: {}".format(net2.shape))
     net1 = layers.conv2d_transpose(net1, 64, [4, 4], stride=2)
-    net2 = layers.conv2d_transpose(net2, 64, [4, 4], stride=2)
-    net2 = tf.concat([net1,net2], 3)
+    net2 = layers.conv2d_transpose(net2, 64, [4, 4], stride=[1, 2])
+    print("shape after third conv layer: {}".format(net1.shape))
+    print("shape after third conv layer: {}".format(net2.shape))
+    net2 = tf.concat([net1,net2], 1)
+    print("shape after third conv layer concat: {}".format(net2.shape))
     net1 = layers.conv2d_transpose(net1, 32, [4, 4], stride=2)
-    net2 = layers.conv2d_transpose(net2, 32, [4, 4], stride=2)
-    net2 = tf.concat([net1,net2], 3)
+    net2 = layers.conv2d_transpose(net2, 32, [4, 4], stride=[1, 2])
+    print("shape after fourth conv layer: {}".format(net1.shape))
+    print("shape after fourth conv layer: {}".format(net2.shape))
+    net2 = tf.concat([net1,net2], 1)
+    print("shape after fourth conv layer concat: {}".format(net2.shape))
     # Make sure that generator output is in the same range as `inputs`
     # ie [-1, 1].
     net1 = layers.conv2d(
         net1, 1, [4, 4], normalizer_fn=None, activation_fn=tf.tanh)
     net2 = layers.conv2d(
-        net2, 1, [4, 4], normalizer_fn=None, activation_fn=tf.tanh)
-    net = tf.concat([net1,net2], 2)
-    print ("shape of output from G: {}".format(net.shape))
+        net2, 1, [4, 4], [2, 1], normalizer_fn=None, activation_fn=tf.tanh)
+    print("shape after final conv layer: {}".format(net1.shape))
+    print("shape after final conv layer: {}".format(net2.shape))
+
     return net
 
 
@@ -226,42 +245,6 @@ def _discriminator_helper(img, is_conditional, one_hot_labels, weight_decay):
 
     return net
 
-
-def multiple_discriminator(img, unused_conditioning, weight_decay=2.5e-5):
-  """Discriminator network on unconditional MNIST digits.
-
-  Args:
-    img: Real or generated MNIST digits. Should be in the range [-1, 1].
-    unused_conditioning: The TFGAN API can help with conditional GANs, which
-      would require extra `condition` information to both the generator and the
-      discriminator. Since this example is not conditional, we do not use this
-      argument.
-    weight_decay: The L2 weight decay.
-
-  Returns:
-    Logits for the probability that the image is real.
-  """
-  with tf.contrib.framework.arg_scope(
-      [layers.conv2d, layers.fully_connected],
-      # activation_fn=_leaky_relu, normalizer_fn=None,
-      activation_fn=tf.nn.leaky_relu, normalizer_fn=None,
-      weights_regularizer=layers.l2_regularizer(weight_decay),
-      biases_regularizer=layers.l2_regularizer(weight_decay)):
-    print("shape 1: {}".format(img.shape))
-    net = layers.conv2d(img, 32, [4, 4], stride=2)
-    print("shape 2: {}".format(net.shape))
-    net = layers.conv2d(net, 64, [4, 4], stride=2)
-    print("shape 3: {}".format(net.shape))
-    net = layers.conv2d(net, 128, [4, 4], stride=2)
-    print("shape 4: {}".format(net.shape))
-    net = layers.conv2d(net, 256, [4, 4], stride=2)
-    print("shape 5: {}".format(net.shape))
-    net = layers.flatten(net)
-    print("shape 6: {}".format(net.shape))
-    net = layers.fully_connected(net, 1024, normalizer_fn=layers.layer_norm)
-    print("shape 7: {}".format(net.shape))
-
-  return layers.linear(net, 1)
 
 def unconditional_discriminator(img, unused_conditioning, weight_decay=2.5e-5):
   """Discriminator network on unconditional MNIST digits.

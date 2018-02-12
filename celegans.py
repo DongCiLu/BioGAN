@@ -31,7 +31,7 @@ slim = tf.contrib.slim
 
 _FILE_PATTERN = 'celegans_%s.tfrecord'
 
-_SPLITS_TO_SIZES = {'train': 760, 'test': 0}
+_SPLITS_TO_SIZES = {'train': 750, 'test': 0}
 
 _NUM_CLASSES = 8
 
@@ -41,7 +41,7 @@ _ITEMS_TO_DESCRIPTIONS = {
 }
 
 
-def get_split(split_name, dataset_dir, file_pattern=None, reader=None):
+def get_split(split_name, dataset_dir, file_pattern=None, reader=None, multiple=False):
   """Gets a dataset tuple with instructions for reading MNIST.
 
   Args:
@@ -58,6 +58,7 @@ def get_split(split_name, dataset_dir, file_pattern=None, reader=None):
   Raises:
     ValueError: if `split_name` is not a valid train/test split.
   """
+
   if split_name not in _SPLITS_TO_SIZES:
     raise ValueError('split name %s was not recognized.' % split_name)
 
@@ -76,8 +77,13 @@ def get_split(split_name, dataset_dir, file_pattern=None, reader=None):
           [1], tf.int64, default_value=tf.zeros([1], dtype=tf.int64)),
   }
 
+  if multiple:
+    width = 512
+  else:
+    width = 156
+
   items_to_handlers = {
-      'image': slim.tfexample_decoder.Image(shape=[256, 256, 1], channels=1),
+      'image': slim.tfexample_decoder.Image(shape=[256, width, 1], channels=1),
       'label': slim.tfexample_decoder.Tensor('image/class/label', shape=[]),
   }
 

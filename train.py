@@ -47,7 +47,7 @@ flags.DEFINE_string(
     'Either `unconditional`, `conditional`, or `infogan`.')
 
 flags.DEFINE_integer(
-    'grid_size', 5, 'Grid size for image visualization.')
+    'grid_size', 3, 'Grid size for image visualization.')
 
 
 flags.DEFINE_integer(
@@ -60,6 +60,7 @@ def _learning_rate(gan_type):
   # First is generator learning rate, second is discriminator learning rate.
   return {
       'unconditional': (1e-4, 1e-4),
+      'multiple': (1e-4, 1e-4),
       'conditional': (1e-4, 1e-4),
       'infogan': (0.001, 9e-5),
   }[gan_type]
@@ -71,14 +72,19 @@ def main(_):
 
   # Force all input processing onto CPU in order to reserve the GPU for
   # the forward inference and back-propagation.
+  if FLAGS.gan_type == 'multiple':
+    multiple = True
+  else:
+    multiple = False
   with tf.name_scope('inputs'):
     with tf.device('/cpu:0'):
       images, one_hot_labels, _ = data_provider.provide_data(
-          'train', FLAGS.batch_size, FLAGS.dataset_dir, num_threads=4)
-
+          'train', FLAGS.batch_size, FLAGS.dataset_dir, 
+          num_threads=4, multiple=multiple)
+  
   # Define the GANModel tuple. Optionally, condition the GAN on the label or
   # use an InfoGAN to learn a latent representation.
-  print("create unconditional gan model!")
+  print("create gan model!")
   if FLAGS.gan_type == 'unconditional':
     gan_model = tfgan.gan_model(
         generator_fn=networks.unconditional_generator,
@@ -94,6 +100,15 @@ def main(_):
         discriminator_fn=networks.conditional_discriminator,
         real_data=images,
         generator_inputs=(noise, one_hot_labels))
+    print("Finished create conditional gan model!")
+  elif FLAGS.gan_type == 'multiple':
+    gan_model = tfgan.gan_model(
+        generator_fn=networks.multiple_generator,
+        discriminator_fn=networks.multiple_discriminator,
+        real_data=images,
+        generator_inputs=tf.random_normal(
+            [FLAGS.batch_size, FLAGS.noise_dims * 2]))
+    print("Finished create multiple gan model!")
   elif FLAGS.gan_type == 'infogan':
     cat_dim, cont_dim = 8, 2
     generator_fn = functools.partial(
@@ -109,6 +124,7 @@ def main(_):
         real_data=images,
         unstructured_generator_inputs=unstructured_inputs,
         structured_generator_inputs=structured_inputs)
+    print("Finished create info gan model!")
   tfgan.eval.add_gan_model_image_summaries(gan_model, FLAGS.grid_size)
 
   # Get the GANLoss tuple. You can pass a custom function, use one of the

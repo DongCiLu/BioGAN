@@ -40,8 +40,8 @@ set -e
 # Type of GAN to run. Right now, options are `unconditional`, `conditional`, or
 # `infogan`.
 gan_type=$1
-if ! [[ "$gan_type" =~ ^(unconditional|conditional|infogan) ]]; then
-  echo "'gan_type' must be one of: 'unconditional', 'conditional', 'infogan'."
+if ! [[ "$gan_type" =~ ^(unconditional|conditional|infogan|multiple) ]]; then
+  echo "'gan_type' must be one of: 'unconditional', 'conditional', 'infogan', 'multiple'."
   exit
 fi
 
@@ -93,7 +93,7 @@ Banner () {
 if [[ "$gan_type" == "unconditional" ]]; then
   UNCONDITIONAL_TRAIN_DIR="${TRAIN_DIR}/unconditional"
   UNCONDITIONAL_EVAL_DIR="${EVAL_DIR}/unconditional"
-  NUM_STEPS=300
+  NUM_STEPS=30000
   # Run training.
   Banner "Starting training unconditional GAN for ${NUM_STEPS} steps..."
   python "${git_repo}/research/gan/bio_gan/train.py" \
@@ -116,11 +116,40 @@ if [[ "$gan_type" == "unconditional" ]]; then
   Banner "Finished unconditional evaluation. See ${UNCONDITIONAL_EVAL_DIR} for output images."
 fi
 
+# Run multiple GAN
+if [[ "$gan_type" == "multiple" ]]; then
+  MULTIPLE_FACTOR=1
+  MULTIPLE_DATASET_DIR="celegans-data-multi${MULTIPLE_FACTOR}"
+  MULTIPLE_TRAIN_DIR="${TRAIN_DIR}/multiple${MULTIPLE_FACTOR}"
+  MULTIPLE_EVAL_DIR="${EVAL_DIR}/multiple${MULTIPLE_FACTOR}"
+  NUM_STEPS=30000
+  # Run training.
+  Banner "Starting training multiple GAN for ${NUM_STEPS} steps..."
+  python "${git_repo}/research/gan/bio_gan/train.py" \
+    --train_log_dir=${MULTIPLE_TRAIN_DIR} \
+    --dataset_dir=${MULTIPLE_DATASET_DIR} \
+    --max_number_of_steps=${NUM_STEPS} \
+    --gan_type="multiple" \
+    --alsologtostderr
+  Banner "Finished training multiple GAN ${NUM_STEPS} steps."
+
+  # Run evaluation.
+  # Banner "Starting evaluation of unconditional GAN..."
+  # python "${git_repo}/research/gan/bio_gan/eval.py" \
+    # --checkpoint_dir=${UNCONDITIONAL_TRAIN_DIR} \
+    # --eval_dir=${UNCONDITIONAL_EVAL_DIR} \
+    # --dataset_dir=${DATASET_DIR} \
+    # --eval_real_images=false \
+    # --classifier_filename=${FROZEN_GRAPH} \
+    # --max_number_of_evaluations=1
+  # Banner "Finished unconditional evaluation. See ${UNCONDITIONAL_EVAL_DIR} for output images."
+fi
+
 # Run conditional GAN.
 if [[ "$gan_type" == "conditional" ]]; then
   CONDITIONAL_TRAIN_DIR="${TRAIN_DIR}/conditional"
   CONDITIONAL_EVAL_DIR="${EVAL_DIR}/conditional"
-  NUM_STEPS=300
+  NUM_STEPS=30000
   # Run training.
   Banner "Starting training conditional GAN for ${NUM_STEPS} steps..."
   python "${git_repo}/research/gan/bio_gan/train.py" \
