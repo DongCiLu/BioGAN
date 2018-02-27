@@ -38,7 +38,7 @@ flags.DEFINE_string('eval_dir', '/tmp/mnist/',
 flags.DEFINE_integer('num_images_per_class', 10,
                      'Number of images to generate per class.')
 
-flags.DEFINE_integer('noise_dims', 64,
+flags.DEFINE_integer('noise_dims', 128,
                      'Dimensions of the generator noise vector')
 
 flags.DEFINE_string('classifier_filename', None,
@@ -50,8 +50,7 @@ flags.DEFINE_integer('max_number_of_evaluations', None,
                      'forever.')
 
 FLAGS = flags.FLAGS
-NUM_CLASSES = 8
-
+NUM_CLASSES = 10
 
 def main(_, run_eval_loop=True):
   with tf.name_scope('inputs'):

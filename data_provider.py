@@ -29,7 +29,7 @@ slim = tf.contrib.slim
 
 
 def provide_data(split_name, batch_size, dataset_dir, num_readers=1,
-                 num_threads=1, multiple=False):
+                 num_threads=1, mode=""):
   """Provides batches of MNIST digits.
 
   Args:
@@ -50,7 +50,7 @@ def provide_data(split_name, batch_size, dataset_dir, num_readers=1,
   """
   # dataset = datasets.get_dataset('celegans', split_name, dataset_dir=dataset_dir)
   dataset = celegans.get_split(split_name, 
-          dataset_dir=dataset_dir, multiple=multiple)
+          dataset_dir=dataset_dir, mode=mode)
   provider = slim.dataset_data_provider.DatasetDataProvider(
       dataset,
       num_readers=num_readers,
@@ -61,11 +61,15 @@ def provide_data(split_name, batch_size, dataset_dir, num_readers=1,
 
   # Resize image to an acceptable size
   old_size = image.shape
-  if multiple:
+  if mode == "multiple":
     width = 256
+    height = 128
   else:
     width = 128
-  image = tf.image.resize_images(image, [128, width])
+    height = 128
+  if mode != "classification" or \
+          (old_size[0] == height and old_size[1] == width):
+    image = tf.image.resize_images(image, [height, width])
   print ("resize image from {} to {}".format(old_size, image.shape))
 
   # Preprocess the images.

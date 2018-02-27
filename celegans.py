@@ -29,19 +29,20 @@ from datasets import dataset_utils
 
 slim = tf.contrib.slim
 
-_FILE_PATTERN = 'celegans_%s.tfrecord'
+# _FILE_PATTERN = 'celegans_%s.tfrecord'
+_FILE_PATTERN = 'celegans-%s.tfrecord'
 
-_SPLITS_TO_SIZES = {'train': 750, 'test': 0}
+_SPLITS_TO_SIZES = {'train': 150, 'test': 51}
 
-_NUM_CLASSES = 8
+_NUM_CLASSES = 2
 
 _ITEMS_TO_DESCRIPTIONS = {
     'image': 'A [256 x 256 x 1] grayscale image.',
-    'label': 'A single integer between 2 and 9',
+    'label': 'A single integer between 08 and 19',
 }
 
 
-def get_split(split_name, dataset_dir, file_pattern=None, reader=None, multiple=False):
+def get_split(split_name, dataset_dir, file_pattern=None, reader=None, mode=""):
   """Gets a dataset tuple with instructions for reading MNIST.
 
   Args:
@@ -77,13 +78,18 @@ def get_split(split_name, dataset_dir, file_pattern=None, reader=None, multiple=
           [1], tf.int64, default_value=tf.zeros([1], dtype=tf.int64)),
   }
 
-  if multiple:
+  if mode == "multiple":
     width = 512
+    height = 256
+  elif mode == "classification":
+    width = 128
+    height = 128
   else:
-    width = 156
+    width = 256
+    height = 256
 
   items_to_handlers = {
-      'image': slim.tfexample_decoder.Image(shape=[256, width, 1], channels=1),
+      'image': slim.tfexample_decoder.Image(shape=[height, width, 1], channels=1),
       'label': slim.tfexample_decoder.Tensor('image/class/label', shape=[]),
   }
 

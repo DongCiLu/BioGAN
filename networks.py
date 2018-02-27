@@ -61,6 +61,7 @@ def _generator_helper(
     net = layers.conv2d_transpose(net, 64, [4, 4], stride=2)
     net = layers.conv2d_transpose(net, 32, [4, 4], stride=2)
     '''
+    # net = layers.fully_connected(net, 8 * 8 * 512)
     net = layers.fully_connected(net, 8 * 8 * 512)
     print("shape 2: {}".format(net.shape))
     net = tf.reshape(net, [-1, 8, 8, 512])
@@ -140,7 +141,7 @@ def unconditional_generator(noise, weight_decay=2.5e-5):
   Returns:
     A generated image in the range [-1, 1].
   """
-  # image, _ = dcgan.generator(noise, final_size=64, num_outputs=1)
+  # image, _ = dcgan.generator(noise, final_size=128, num_outputs=1)
 
   # return tf.tanh(image)
   return _generator_helper(noise, False, None, weight_decay)

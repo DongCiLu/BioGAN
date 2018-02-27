@@ -45,7 +45,7 @@ flags.DEFINE_integer('num_images_generated', 1000,
 flags.DEFINE_boolean('eval_real_images', False,
                      'If `True`, run Inception network on real images.')
 
-flags.DEFINE_integer('noise_dims', 64,
+flags.DEFINE_integer('noise_dims', 128,
                      'Dimensions of the generator noise vector')
 
 flags.DEFINE_string('classifier_filename', None,
