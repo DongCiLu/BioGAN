@@ -74,12 +74,14 @@ def cnn_model(features, labels, mode):
     # tf.contrib.layers.summarize_activations(
             # conv1, summarizer=tf.contrib.layers.summarize_activation)
     # tf.contrib.layers.summarize_activation(conv1)
+    '''
     print (os.path.split(conv1.name)[0] + "/" + ops.GraphKeys.WEIGHTS)
     conv1_op = tf.get_default_graph().get_operation_by_name("Conv/Conv2D")
     wconv1 = tf.get_default_graph().get_tensor_by_name(
             os.path.split(conv1.name)[0] + '/weights/read')
     print (wconv1)
     tf.contrib.layers.summarize_collection(ops.GraphKeys.WEIGHTS, conv1)
+    '''
 
     predicted_classes = tf.argmax(logits, 1)
     groundtruth_classes = tf.argmax(labels, 1)
