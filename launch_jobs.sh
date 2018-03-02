@@ -89,32 +89,11 @@ Banner () {
   # --dataset_name=mnist \
   # --dataset_dir=${DATASET_DIR}
 
-# Run unconditional GAN.
+# Run tests.
 if [[ "$gan_type" == "temp" ]]; then
-  DATASET_DIR=celegans-nbr-data
-  UNCONDITIONAL_TRAIN_DIR="${TRAIN_DIR}/unconditional_nbr"
-  UNCONDITIONAL_EVAL_DIR="${EVAL_DIR}/unconditional_nbr"
-  NUM_STEPS=5000000
-  # Run training.
   Banner "Starting training unconditional GAN for ${NUM_STEPS} steps..."
-  python "${git_repo}/research/gan/bio_gan/train.py" \
-    --train_log_dir=${UNCONDITIONAL_TRAIN_DIR} \
-    --dataset_dir=${DATASET_DIR} \
-    --max_number_of_steps=${NUM_STEPS} \
-    --gan_type="unconditional" \
-    --alsologtostderr
+  python "${git_repo}/research/gan/bio_gan/data_provider_test.py" 
   Banner "Finished training unconditional GAN ${NUM_STEPS} steps."
-
-  # Run evaluation.
-  Banner "Starting evaluation of unconditional GAN..."
-  python "${git_repo}/research/gan/bio_gan/eval.py" \
-    --checkpoint_dir=${UNCONDITIONAL_TRAIN_DIR} \
-    --eval_dir=${UNCONDITIONAL_EVAL_DIR} \
-    --dataset_dir=${DATASET_DIR} \
-    --eval_real_images=false \
-    --classifier_filename=${FROZEN_GRAPH} \
-    --max_number_of_evaluations=1
-  Banner "Finished unconditional evaluation. See ${UNCONDITIONAL_EVAL_DIR} for output images."
 fi
 
 # Run unconditional GAN.

@@ -24,8 +24,10 @@ import numpy as np
 import tensorflow as tf
 layers = tf.contrib.layers
 from tensorflow.python import debug as tf_debug
+from tensorflow.python.framework import ops
 
 import data_provider
+import os
 
 flags = tf.flags
 
@@ -58,27 +60,29 @@ def cnn_model(features, labels, mode):
   with tf.contrib.framework.arg_scope(
       [layers.conv2d, layers.fully_connected],
       activation_fn=tf.nn.relu, normalizer_fn=layers.batch_norm):
-    net = layers.conv2d(features, 8, [4, 4], stride=2)
-    net = layers.conv2d(net, 16, [4, 4], stride=2)
-    net = layers.conv2d(net, 32, [4, 4], stride=2)
-    net = layers.conv2d(net, 64, [4, 4], stride=2)
-    net = layers.flatten(net)
-    net = layers.fully_connected(net, 256)
+    conv1 = layers.conv2d(features, 8, [4, 4], stride=2)
+    conv2 = layers.conv2d(conv1, 16, [4, 4], stride=2)
+    conv3 = layers.conv2d(conv2, 32, [4, 4], stride=2)
+    conv4 = layers.conv2d(conv3, 64, [4, 4], stride=2)
+    flat = layers.flatten(conv4)
+    fc1 = layers.fully_connected(flat, 256)
+    fc1_dropout = layers.dropout(fc1, 
+            is_training=(mode==tf.estimator.ModeKeys.TRAIN))
     logits = layers.fully_connected(
-            net, n_classes, activation_fn=None)
+            fc1_dropout, n_classes, activation_fn=None)
 
-    # print ('number of trainable variables: {}'.format(
-        # np.sum([np.prod(v.get_shape().as_list()) 
-        # for v in tf.trainable_variables()])))
+    # tf.contrib.layers.summarize_activations(
+            # conv1, summarizer=tf.contrib.layers.summarize_activation)
+    # tf.contrib.layers.summarize_activation(conv1)
+    print (os.path.split(conv1.name)[0] + "/" + ops.GraphKeys.WEIGHTS)
+    conv1_op = tf.get_default_graph().get_operation_by_name("Conv/Conv2D")
+    wconv1 = tf.get_default_graph().get_tensor_by_name(
+            os.path.split(conv1.name)[0] + '/weights/read')
+    print (wconv1)
+    tf.contrib.layers.summarize_collection(ops.GraphKeys.WEIGHTS, conv1)
 
     predicted_classes = tf.argmax(logits, 1)
-    n_pred_false = tf.reduce_sum(predicted_classes)
     groundtruth_classes = tf.argmax(labels, 1)
-    n_gt_false = tf.reduce_sum(predicted_classes)
-    tf.summary.scalar("pred_false", n_pred_false)
-    tf.summary.scalar("gt_false", n_gt_false)
-    tf.Print(labels, [labels], message="this is labels: ")
-    tf.Print(logits, [logits], message="this is logits: ")
     if mode == tf.estimator.ModeKeys.PREDICT:
       return tf.estimator.EstimatorSpec(
           mode=mode,
@@ -89,7 +93,6 @@ def cnn_model(features, labels, mode):
 
     loss = tf.losses.softmax_cross_entropy(
             onehot_labels=labels, logits=logits)
-    tf.Print(loss, [loss], message="this is loss: ")
     if mode == tf.estimator.ModeKeys.TRAIN:
       optimizer = tf.train.AdamOptimizer(learning_rate=0.001)
       train_op = optimizer.minimize(loss, 
@@ -111,16 +114,6 @@ def main(_):
           model_fn=cnn_model, model_dir=FLAGS.train_log_dir)
   # debug_hook = tf_debug.TensorBoardDebugHook("dgx-dl03:7006")
 
-  '''
-  if FLAGS.mode == 'train':
-      for i in range(10):
-          classifier.train(lambda: input_fn('train'), 
-                  steps=FLAGS.max_number_of_steps / 10)
-                  # hooks=[debug_hook])
-          classifier.evaluate(lambda: input_fn('test'),
-                  steps=FLAGS.max_eval_steps)
-                  # hooks=[debug_hook])
-  '''
   train_spec = tf.estimator.TrainSpec(input_fn=lambda: input_fn('train'),
           max_steps=FLAGS.max_number_of_steps)
   eval_spec = tf.estimator.EvalSpec(input_fn=lambda: input_fn('test'),

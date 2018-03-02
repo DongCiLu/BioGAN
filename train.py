@@ -78,7 +78,7 @@ def main(_):
       images, one_hot_labels, _ = data_provider.provide_data(
           'train', FLAGS.batch_size, FLAGS.dataset_dir, 
           num_threads=4, mode=FLAGS.gan_type)
-  
+
   # Define the GANModel tuple. Optionally, condition the GAN on the label or
   # use an InfoGAN to learn a latent representation.
   print("create gan model!")

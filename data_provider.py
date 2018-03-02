@@ -87,6 +87,7 @@ def provide_data(split_name, batch_size, dataset_dir, num_readers=1,
   print ("image dimension: {}".format(images.shape))
   print ("label dimension: {}".format(one_hot_labels.shape))
   print ("number of samples: {}".format(dataset.num_samples))
+  # return images, one_hot_labels, labels, dataset.num_samples
   return images, one_hot_labels, dataset.num_samples
 
 def float_image_to_uint8(image):
