@@ -51,7 +51,7 @@ flags.DEFINE_integer(
 
 
 flags.DEFINE_integer(
-    'noise_dims', 128, 'Dimensions of the generator noise vector.')
+    'noise_dims', 64, 'Dimensions of the generator noise vector.')
 
 FLAGS = flags.FLAGS
 
@@ -59,7 +59,7 @@ FLAGS = flags.FLAGS
 def _learning_rate(gan_type):
   # First is generator learning rate, second is discriminator learning rate.
   return {
-      'unconditional': (2e-5, 2e-5),
+      'unconditional': (1e-4, 1e-5),
       'acgan': (1e-4, 1e-4),
       'multiple': (1e-4, 1e-4),
       'conditional': (1e-4, 1e-4),
@@ -75,8 +75,9 @@ def main(_):
   # the forward inference and back-propagation.
   with tf.name_scope('inputs'):
     with tf.device('/cpu:0'): 
+      split_name = 'unlabeled'
       images, one_hot_labels, _ = data_provider.provide_data(
-          'train', FLAGS.batch_size, FLAGS.dataset_dir, 
+          split_name, FLAGS.batch_size, FLAGS.dataset_dir, 
           num_threads=4, mode=FLAGS.gan_type)
 
   # Define the GANModel tuple. Optionally, condition the GAN on the label or

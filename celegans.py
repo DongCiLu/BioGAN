@@ -32,7 +32,9 @@ slim = tf.contrib.slim
 # _FILE_PATTERN = 'celegans_%s.tfrecord'
 _FILE_PATTERN = 'celegans-%s.tfrecord'
 
-_SPLITS_TO_SIZES = {'train': 150, 'test': 51}
+# _SPLITS_TO_SIZES = {'train': 150, 'test': 51, 'predict': 124}
+_SPLITS_TO_SIZES = {'unlabeled': 11250, 'train': 190, 'test': 122, 'predict': 0}
+# _SPLITS_TO_SIZES = {'train': 11250, 'test': 0, 'predict': 0}
 
 _NUM_CLASSES = 2
 
@@ -78,15 +80,13 @@ def get_split(split_name, dataset_dir, file_pattern=None, reader=None, mode=""):
           [1], tf.int64, default_value=tf.zeros([1], dtype=tf.int64)),
   }
 
+  base_size = 128
   if mode == "multiple":
-    width = 512
-    height = 256
-  elif mode == "classification":
-    width = 128
-    height = 128
+    width = base_size * 2
+    height = base_size
   else:
-    width = 256
-    height = 256
+    width = base_size
+    height = base_size
 
   items_to_handlers = {
       'image': slim.tfexample_decoder.Image(shape=[height, width, 1], channels=1),

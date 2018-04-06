@@ -98,10 +98,11 @@ fi
 
 # Run unconditional GAN.
 if [[ "$gan_type" == "unconditional" ]]; then
-  DATASET_DIR=celegans-ros-data
-  UNCONDITIONAL_TRAIN_DIR="${TRAIN_DIR}/unconditional"
-  UNCONDITIONAL_EVAL_DIR="${EVAL_DIR}/unconditional"
-  NUM_STEPS=50000
+  DATASET_DIR="celegans-unsupervised"
+  VERSION_NUMBER=0
+  UNCONDITIONAL_TRAIN_DIR="${TRAIN_DIR}/unconditional${VERSION_NUMBER}"
+  UNCONDITIONAL_EVAL_DIR="${EVAL_DIR}/unconditional${VERSION_NUMBER}"
+  NUM_STEPS=1000000
   # Run training.
   Banner "Starting training unconditional GAN for ${NUM_STEPS} steps..."
   python "${git_repo}/research/gan/bio_gan/train.py" \
@@ -113,15 +114,15 @@ if [[ "$gan_type" == "unconditional" ]]; then
   Banner "Finished training unconditional GAN ${NUM_STEPS} steps."
 
   # Run evaluation.
-  Banner "Starting evaluation of unconditional GAN..."
-  python "${git_repo}/research/gan/bio_gan/eval.py" \
-    --checkpoint_dir=${UNCONDITIONAL_TRAIN_DIR} \
-    --eval_dir=${UNCONDITIONAL_EVAL_DIR} \
-    --dataset_dir=${DATASET_DIR} \
-    --eval_real_images=false \
-    --classifier_filename=${FROZEN_GRAPH} \
-    --max_number_of_evaluations=1
-  Banner "Finished unconditional evaluation. See ${UNCONDITIONAL_EVAL_DIR} for output images."
+  # Banner "Starting evaluation of unconditional GAN..."
+  # python "${git_repo}/research/gan/bio_gan/eval.py" \
+    # --checkpoint_dir=${UNCONDITIONAL_TRAIN_DIR} \
+    # --eval_dir=${UNCONDITIONAL_EVAL_DIR} \
+    # --dataset_dir=${DATASET_DIR} \
+    # --eval_real_images=false \
+    # --classifier_filename=${FROZEN_GRAPH} \
+    # --max_number_of_evaluations=1
+  # Banner "Finished unconditional evaluation. See ${UNCONDITIONAL_EVAL_DIR} for output images."
 fi
 
 # Run multiple GAN
@@ -155,10 +156,12 @@ fi
 
 # Run classifier
 if [[ "$gan_type" == "classification" ]]; then
+  # CLASSIFICATION_DATASET_DIR="celegans-ros-data"
+  VERSION_NUMBER="-raw1"
   CLASSIFICATION_DATASET_DIR="celegans-ros-data"
-  CLASSIFICATION_TRAIN_DIR="${TRAIN_DIR}/classification"
-  CLASSIFICATION_EVAL_DIR="${EVAL_DIR}/classification"
-  NUM_STEPS=3000
+  CLASSIFICATION_TRAIN_DIR="${TRAIN_DIR}/classification${VERSION_NUMBER}"
+  CLASSIFICATION_EVAL_DIR="${EVAL_DIR}/classification${VERSION_NUMBER}"
+  NUM_STEPS=10000000
   # Run training.
   # Banner "Starting training celegans classifier for ${NUM_STEPS} steps..."
   # python "${git_repo}/research/gan/bio_gan/classification/train.py" \
@@ -168,14 +171,24 @@ if [[ "$gan_type" == "classification" ]]; then
     # --alsologtostderr
   # Banner "Finished training celegans classifier for ${NUM_STEPS} steps."
 
-  # Run evaluation.
-  Banner "Starting evaluating of celegans classifier..."
+  # Run inference.
+  # Banner "Starting inference with celegans classifier..."
+  # python "${git_repo}/research/gan/bio_gan/classification/train.py" \
+    # --train_log_dir=${CLASSIFICATION_TRAIN_DIR} \
+    # --dataset_dir=${CLASSIFICATION_DATASET_DIR} \
+    # --mode="predict" \
+    # --num_predictions=11250 \
+    # --alsologtostderr
+  # Banner "Finished inference with celegans classifier."
+
+  # Run visualization
+  Banner "Starting visualization with celegans classifier..."
   python "${git_repo}/research/gan/bio_gan/classification/train.py" \
     --train_log_dir=${CLASSIFICATION_TRAIN_DIR} \
     --dataset_dir=${CLASSIFICATION_DATASET_DIR} \
-    --max_number_of_steps=${NUM_STEPS} \
+    --mode="visualize" \
     --alsologtostderr
-  Banner "Finished evaluating celegans classifier."
+  Banner "Finished visualize with celegans classifier."
 fi
 
 # Run conditional GAN.

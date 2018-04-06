@@ -19,7 +19,8 @@ from __future__ import division
 from __future__ import print_function
 
 import os
-
+import numpy as np
+from PIL import Image
 
 import tensorflow as tf
 
@@ -29,21 +30,22 @@ import data_provider
 class DataProviderTest(tf.test.TestCase):
 
   def test_celegans_data_reading(self):
-    dataset_dir = "./celegans-ros-newdata"
+    dataset_dir = "./celegans-ros-data"
     # dataset_dir = "./celegans-mnist-data"
 
     batch_size = 10
-    images, onehot, labels, num_samples = data_provider.provide_data(
-        'test', batch_size, dataset_dir, mode="classification")
+    images, labels, num_samples = data_provider.provide_data(
+        'train', batch_size, dataset_dir, mode="classification")
 
     with self.test_session() as sess:
       with tf.contrib.slim.queues.QueueRunners(sess):
-        # images, labels = sess.run([images, labels])
-        labels = sess.run([onehot, labels])
-        # self.assertEqual(images.shape, (batch_size, 128, 128, 1))
-        # self.assertEqual(labels.shape, (batch_size, 2))
-        print (onehot)
-        print (labels)
+        images, labels = sess.run([images, labels])
+        for image, cnt in zip(images, range(len(images))):
+            image = np.array(image[:,:,0])
+            image = image * 128 + 128
+            image = Image.fromarray(image.astype(np.uint8))
+            image.save("test{}.jpg".format(cnt))
+
 
 if __name__ == '__main__':
   tf.test.main()

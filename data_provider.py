@@ -27,6 +27,15 @@ import celegans
 
 slim = tf.contrib.slim
 
+def data_augmentation(image):
+    image = tf.image.random_flip_up_down(image)
+    image = tf.image.random_flip_left_right(image)
+    image = tf.image.random_brightness(image, max_delta=32. / 255.)
+    image = tf.image.random_contrast(image, lower=0.5, upper=1.5)
+    image = tf.minimum(image, 1.0)
+    image = tf.maximum(image, 0.0)
+
+    return image
 
 def provide_data(split_name, batch_size, dataset_dir, num_readers=1,
                  num_threads=1, mode=""):
@@ -56,23 +65,29 @@ def provide_data(split_name, batch_size, dataset_dir, num_readers=1,
       num_readers=num_readers,
       common_queue_capacity=2 * batch_size,
       common_queue_min=batch_size,
-      shuffle=(split_name == 'train'))
+      shuffle=(split_name == 'train' or split_name == 'unlabeled'))
   [image, label] = provider.get(['image', 'label'])
 
   # Resize image to an acceptable size
   old_size = image.shape
+  base_size = 128
   if mode == "multiple":
-    width = 256
-    height = 128
+    width = base_size * 2
+    height = base_size
   else:
-    width = 128
-    height = 128
-  if mode != "classification" or \
-          (old_size[0] == height and old_size[1] == width):
+    width = base_size
+    height = base_size
+  if old_size[0] != height or old_size[1] != width:
     image = tf.image.resize_images(image, [height, width])
-  print ("resize image from {} to {}".format(old_size, image.shape))
+    print ("resize image from {} to {}".format(old_size, image.shape))
 
-  # Preprocess the images.
+  # Data augmentation.
+  if mode == "classification" and split_name == "train":
+      image = tf.to_float(image) / 255.0
+      image = data_augmentation(image)
+      image = tf.cast(image * 255.0, tf.uint8)
+
+  # Change the images to [-1.0, 1.0).
   image = (tf.to_float(image) - 128.0) / 128.0
 
   # Creates a QueueRunner for the pre-fetching operation.
