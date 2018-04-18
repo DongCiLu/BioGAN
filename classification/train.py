@@ -63,8 +63,47 @@ FLAGS = flags.FLAGS
 def input_fn(split):
   images, labels, _ = data_provider.provide_data(
               split, FLAGS.batch_size, FLAGS.dataset_dir, 
-              num_threads=4, mode="classification")
+              num_threads=1, mode="classification")
   return (images, labels)
+
+def input_fn_visualization():
+  image_size = 128
+  occ_size = 32
+  stride_size = 4
+  n_channels = 1
+  n_images = (int((image_size - occ_size) / stride_size)) ** 2 + 1;
+  # n_images = 1;
+  print("number of images for visualization: {}".format(n_images))
+  images = np.empty(shape=(n_images, image_size, image_size, n_channels),
+          dtype=np.float32)
+  image_occlusion = Image.new('L', (occ_size, occ_size))
+  for x in range(occ_size):
+      for y in range(occ_size):
+          image_occlusion.putpixel((x, y), 210)
+  base_image = Image.open('real_base.jpg')
+  image_cnt = 0
+  image_array = np.array(base_image)
+  image_array = (image_array - 128.0) / 128.0
+  image_array = np.float32(image_array)
+  image_array = np.expand_dims(image_array, axis=2)
+  images[image_cnt] = image_array
+  image_cnt += 1
+
+  for x in range(0, image_size - occ_size, stride_size):
+      for y in range(0, image_size - occ_size, stride_size):
+          occluded_image = base_image.copy()
+          occluded_image.paste(image_occlusion, (x, y))
+          # occluded_image.save('occlusion/occ_{}_{}.jpg'.format(x, y))
+          image_array = np.array(occluded_image)
+          image_array = (image_array - 128.0) / 128.0
+          image_array = np.float32(image_array)
+          image_array = np.expand_dims(image_array, axis=2)
+          images[image_cnt] = image_array
+          image_cnt += 1
+
+  image_queue = tf.estimator.inputs.numpy_input_fn(
+          images, batch_size=FLAGS.batch_size, shuffle=False, num_epochs=1)
+  return image_queue
 
 _leaky_relu = lambda x: tf.nn.leaky_relu(x, alpha=0.01)
 
@@ -74,7 +113,10 @@ def cnn_model(features, labels, mode):
   learning_rate = 1e-5
   with tf.contrib.framework.arg_scope(
       [layers.conv2d, layers.fully_connected],
-      activation_fn=_leaky_relu, normalizer_fn=layers.batch_norm):
+      activation_fn=_leaky_relu):
+      # normalizer_fn=layers.batch_norm,
+      # normalizer_params={'is_training':(mode==tf.estimator.ModeKeys.TRAIN),
+                         # 'updates_collections': None}):
       # activation_fn=tf.nn.leaky_relu, normalizer_fn=None):
     base_size = 1024
     conv1 = layers.conv2d(features, int(base_size / 32), 
@@ -102,6 +144,7 @@ def cnn_model(features, labels, mode):
               'conv1': conv1,
               'class': predicted_classes,
               'prob': tf.nn.softmax(logits),
+              'float_features': features,
               'features': data_provider.float_image_to_uint8(features)
           })
 
@@ -192,8 +235,8 @@ def main(_):
   classifier = tf.estimator.Estimator(
           model_fn=cnn_model, 
           model_dir=FLAGS.train_log_dir,
-          # warm_start_from=None)
-          warm_start_from=ws)
+          warm_start_from=None)
+          # warm_start_from=ws)
   # debug_hook = tf_debug.TensorBoardDebugHook("dgx-dl03:7006")
 
   if FLAGS.mode == 'train':
@@ -212,27 +255,48 @@ def main(_):
         tf.gfile.MakeDirs("{}/{}".format(
             FLAGS.prediction_dir, "non-rosettes"))
 
+      ros_cnt = 0
       predictions = classifier.predict(input_fn=lambda:input_fn('predict'))
       for pred, cnt in zip(predictions, range(FLAGS.num_predictions)):
           rosette_image = np.array(pred['features'])[:,:,0]
           rosette_image = Image.fromarray(rosette_image)
           if pred['class'] == 1:
-              rosette_image.save('{}/rosettes/test_{}.jpg'.format(
-                  FLAGS.prediction_dir, cnt))
+              ros_cnt += 1
+              rosette_image.save('{}/rosettes/test_{}_{}.jpg'.format(
+                  FLAGS.prediction_dir, cnt, pred['prob']))
           else:
-              rosette_image.save('{}/non-rosettes/test_{}.jpg'.format(
-                  FLAGS.prediction_dir, cnt))
+              rosette_image.save('{}/non-rosettes/test_{}_{}.jpg'.format(
+                  FLAGS.prediction_dir, cnt, pred['prob']))
+
+      print('number of rosettes in the dataset: {}'.format(ros_cnt))
 
   elif FLAGS.mode == 'visualize':
+      '''
       weights = classifier.get_variable_value("Conv/weights")
       visualization_stack(weights, "weights")
       predictions = classifier.predict(input_fn=lambda:input_fn('predict'))
       for pred, cnt in zip(predictions, range(FLAGS.num_predictions)):
           conv1 = pred['conv1']
-          print ("*****************{}".format(pred['prob']))
           visualization_stack(conv1, "activations")
           # only print activation for one instance
           break
+      '''
+      if not tf.gfile.Exists('{}/visual'.format(FLAGS.prediction_dir)):
+        tf.gfile.MakeDirs("{}/visual".format(FLAGS.prediction_dir))
+
+      predictions = classifier.predict(input_fn_visualization())
+      for pred, cnt in zip(predictions, range(1000)):
+          prob = pred['prob']
+          pred_class = pred['class']
+          print("{}: {}".format(pred_class, prob))
+          rosette_image = np.array(pred['features'])[:,:,0]
+          if cnt == 0:
+              print("------------------------------------------")
+              print(rosette_image)
+          rosette_image = Image.fromarray(rosette_image)
+          rosette_image.save('{}/visual/test_{}_{}.jpg'.format(
+              FLAGS.prediction_dir, cnt, prob))
+      
   
 if __name__ == '__main__':
   tf.logging.set_verbosity(tf.logging.INFO)

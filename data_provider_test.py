@@ -41,10 +41,14 @@ class DataProviderTest(tf.test.TestCase):
       with tf.contrib.slim.queues.QueueRunners(sess):
         images, labels = sess.run([images, labels])
         for image, cnt in zip(images, range(len(images))):
+            print(image)
+            break
+        '''
             image = np.array(image[:,:,0])
             image = image * 128 + 128
             image = Image.fromarray(image.astype(np.uint8))
             image.save("test{}.jpg".format(cnt))
+        '''
 
 
 if __name__ == '__main__':
