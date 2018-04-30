@@ -44,7 +44,8 @@ flags.DEFINE_string('train_log_dir', '/tmp/mnist/',
 
 flags.DEFINE_string('dataset_dir', None, 'Location of data.')
 
-flags.DEFINE_string('mode', 'train', 'Possible mode: [train predict visualize].')
+flags.DEFINE_string('mode', 'train', 
+                    'Possible mode: [train predict visualize].')
 
 flags.DEFINE_integer('max_number_of_steps', 20000,
                      'The maximum number of gradient steps.')
@@ -61,10 +62,11 @@ flags.DEFINE_string('prediction_dir', 'predicted_rosettes',
 FLAGS = flags.FLAGS
 
 def input_fn(split):
-  images, labels, _ = data_provider.provide_data(
+  images, labels, filenames, _ = data_provider.provide_data(
               split, FLAGS.batch_size, FLAGS.dataset_dir, 
               num_threads=1, mode="classification")
-  return (images, labels)
+  features = {'images': images, 'filenames': filenames}
+  return (features, labels)
 
 def input_fn_visualization():
   image_size = 128
@@ -111,15 +113,23 @@ def cnn_model(features, labels, mode):
   n_classes = 2
   trainable = True
   learning_rate = 1e-5
+  images = features['images']
+  filenames = features['filenames']
+
+  if mode == tf.estimator.ModeKeys.TRAIN:
+      norm_params={'is_training':True}
+  else:
+      norm_params={'is_training':False,
+                   'updates_collections': None}
+
   with tf.contrib.framework.arg_scope(
       [layers.conv2d, layers.fully_connected],
-      activation_fn=_leaky_relu):
-      # normalizer_fn=layers.batch_norm,
-      # normalizer_params={'is_training':(mode==tf.estimator.ModeKeys.TRAIN),
-                         # 'updates_collections': None}):
+      activation_fn=_leaky_relu,
+      normalizer_fn=layers.batch_norm,
+      normalizer_params=norm_params):
       # activation_fn=tf.nn.leaky_relu, normalizer_fn=None):
     base_size = 1024
-    conv1 = layers.conv2d(features, int(base_size / 32), 
+    conv1 = layers.conv2d(images, int(base_size / 32), 
             [4, 4], stride=2, trainable=trainable)
     conv2 = layers.conv2d(conv1, int(base_size / 16), 
             [4, 4], stride=2, trainable=trainable)
@@ -144,8 +154,8 @@ def cnn_model(features, labels, mode):
               'conv1': conv1,
               'class': predicted_classes,
               'prob': tf.nn.softmax(logits),
-              'float_features': features,
-              'features': data_provider.float_image_to_uint8(features)
+              'images': data_provider.float_image_to_uint8(images),
+              'filenames': filenames
           })
 
     groundtruth_classes = tf.argmax(labels, 1)
@@ -153,13 +163,25 @@ def cnn_model(features, labels, mode):
             onehot_labels=labels, logits=logits)
     if mode == tf.estimator.ModeKeys.TRAIN:
       optimizer = tf.train.AdamOptimizer(learning_rate=learning_rate)
-      train_op = optimizer.minimize(loss, 
-          global_step=tf.train.get_global_step())
-      return tf.estimator.EstimatorSpec(mode, loss=loss, train_op=train_op)
+      update_ops = tf.get_collection(tf.GraphKeys.UPDATE_OPS)
+      with tf.control_dependencies(update_ops):
+          train_op = optimizer.minimize(loss, 
+              global_step=tf.train.get_global_step())
+          return tf.estimator.EstimatorSpec(
+                  mode, loss=loss, train_op=train_op)
+
+    precision = tf.metrics.precision(
+          labels=groundtruth_classes, predictions=predicted_classes)
+    recall = tf.metrics.recall(
+          labels=groundtruth_classes, predictions=predicted_classes)
+    # f1_score = tf.scalar_mul(2, tf.divide(tf.multiply(precision, recall), tf.add(precision, recall)))
 
     eval_metric_ops = {
-      'accuracy':tf.metrics.accuracy(
-          labels=groundtruth_classes, predictions=predicted_classes)
+      'eval/accuracy': tf.metrics.accuracy(
+          labels=groundtruth_classes, predictions=predicted_classes),
+      'eval/precision': precision,
+      'eval/recall': recall
+      # 'f1_score': f1_score
     }
     return tf.estimator.EstimatorSpec(
         mode=mode, loss=loss, eval_metric_ops=eval_metric_ops)
@@ -180,7 +202,6 @@ def get_grid_dim(x):
   if len(factors) % 2 == 0:
     i = int(len(factors) / 2)
     return factors[i], factors[i - 1]
-
   i = len(factors) // 2
   return factors[i], factors[i]
 
@@ -235,8 +256,8 @@ def main(_):
   classifier = tf.estimator.Estimator(
           model_fn=cnn_model, 
           model_dir=FLAGS.train_log_dir,
-          warm_start_from=None)
-          # warm_start_from=ws)
+          # warm_start_from=None)
+          warm_start_from=ws)
   # debug_hook = tf_debug.TensorBoardDebugHook("dgx-dl03:7006")
 
   if FLAGS.mode == 'train':
@@ -256,19 +277,24 @@ def main(_):
             FLAGS.prediction_dir, "non-rosettes"))
 
       ros_cnt = 0
+      total_cnt = 0
       predictions = classifier.predict(input_fn=lambda:input_fn('predict'))
       for pred, cnt in zip(predictions, range(FLAGS.num_predictions)):
-          rosette_image = np.array(pred['features'])[:,:,0]
+          rosette_image = np.array(pred['images'])[:,:,0]
           rosette_image = Image.fromarray(rosette_image)
+          fn_dot_index = pred['filenames'].rfind('.')
+          fn_prefix = pred['filenames'][0:fn_dot_index]
+          total_cnt += 1
           if pred['class'] == 1:
               ros_cnt += 1
-              rosette_image.save('{}/rosettes/test_{}_{}.jpg'.format(
-                  FLAGS.prediction_dir, cnt, pred['prob']))
+              rosette_image.save('{}/rosettes/{}_{}.jpg'.format(
+                  FLAGS.prediction_dir, fn_prefix, pred['prob']))
           else:
-              rosette_image.save('{}/non-rosettes/test_{}_{}.jpg'.format(
-                  FLAGS.prediction_dir, cnt, pred['prob']))
+              rosette_image.save('{}/non-rosettes/{}_{}.jpg'.format(
+                  FLAGS.prediction_dir, fn_prefix, pred['prob']))
 
-      print('number of rosettes in the dataset: {}'.format(ros_cnt))
+      print('number of rosettes in the dataset: {}/{}'
+              .format(ros_cnt, total_cnt))
 
   elif FLAGS.mode == 'visualize':
       '''
@@ -289,13 +315,12 @@ def main(_):
           prob = pred['prob']
           pred_class = pred['class']
           print("{}: {}".format(pred_class, prob))
-          rosette_image = np.array(pred['features'])[:,:,0]
-          if cnt == 0:
-              print("------------------------------------------")
-              print(rosette_image)
+          rosette_image = np.array(pred['images'])[:,:,0]
+          fn_dot_index = pred['filenames'].rfind('.')
+          fn_prefix = pred['filenames'][0:fn_dot_index]
           rosette_image = Image.fromarray(rosette_image)
-          rosette_image.save('{}/visual/test_{}_{}.jpg'.format(
-              FLAGS.prediction_dir, cnt, prob))
+          rosette_image.save('{}/visual/{}_{}.jpg'.format(
+              FLAGS.prediction_dir, fn_prefix, prob))
       
   
 if __name__ == '__main__':

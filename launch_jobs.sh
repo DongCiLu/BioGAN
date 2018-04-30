@@ -157,11 +157,11 @@ fi
 # Run classifier
 if [[ "$gan_type" == "classification" ]]; then
   # CLASSIFICATION_DATASET_DIR="celegans-ros-data"
-  VERSION_NUMBER="-raw2"
+  VERSION_NUMBER="-trans1"
   CLASSIFICATION_DATASET_DIR="celegans-ros-data"
   CLASSIFICATION_TRAIN_DIR="${TRAIN_DIR}/classification${VERSION_NUMBER}"
   CLASSIFICATION_EVAL_DIR="${EVAL_DIR}/classification${VERSION_NUMBER}"
-  NUM_STEPS=10000
+  NUM_STEPS=100000
   # Run training.
   Banner "Starting training celegans classifier for ${NUM_STEPS} steps..."
   python "${git_repo}/research/gan/bio_gan/classification/train.py" \
@@ -177,7 +177,8 @@ if [[ "$gan_type" == "classification" ]]; then
     # --train_log_dir=${CLASSIFICATION_TRAIN_DIR} \
     # --dataset_dir=${CLASSIFICATION_DATASET_DIR} \
     # --mode="predict" \
-    # --num_predictions=11250 \
+    # --num_predictions=128 \
+    # --batch_size=1 \
     # --alsologtostderr
   # Banner "Finished inference with celegans classifier."
 

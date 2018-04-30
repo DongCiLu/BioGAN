@@ -33,7 +33,7 @@ slim = tf.contrib.slim
 _FILE_PATTERN = 'celegans-%s.tfrecord'
 
 # _SPLITS_TO_SIZES = {'train': 150, 'test': 51, 'predict': 124}
-_SPLITS_TO_SIZES = {'unlabeled': 11250, 'train': 190, 'test': 122, 'predict': 0}
+_SPLITS_TO_SIZES = {'unlabeled': 11250, 'train': 190, 'test': 122, 'predict': 11250}
 # _SPLITS_TO_SIZES = {'train': 11250, 'test': 0, 'predict': 0}
 
 _NUM_CLASSES = 2
@@ -78,6 +78,8 @@ def get_split(split_name, dataset_dir, file_pattern=None, reader=None, mode=""):
       'image/format': tf.FixedLenFeature((), tf.string, default_value='raw'),
       'image/class/label': tf.FixedLenFeature(
           [1], tf.int64, default_value=tf.zeros([1], dtype=tf.int64)),
+      'image/filename': tf.FixedLenFeature((), tf.string, default_value='no_filename'),
+      # 'image/filename': tf.VarLenFeature(dtype=tf.string),
   }
 
   base_size = 128
@@ -91,6 +93,7 @@ def get_split(split_name, dataset_dir, file_pattern=None, reader=None, mode=""):
   items_to_handlers = {
       'image': slim.tfexample_decoder.Image(shape=[height, width, 1], channels=1),
       'label': slim.tfexample_decoder.Tensor('image/class/label', shape=[]),
+      'filename': slim.tfexample_decoder.Tensor('image/filename'),
   }
 
   decoder = slim.tfexample_decoder.TFExampleDecoder(
@@ -101,7 +104,7 @@ def get_split(split_name, dataset_dir, file_pattern=None, reader=None, mode=""):
     labels_to_names = dataset_utils.read_label_file(dataset_dir)
 
   return slim.dataset.Dataset(
-      data_sources=file_pattern,
+      data_sources=file_pattern, 
       reader=reader,
       decoder=decoder,
       num_samples=_SPLITS_TO_SIZES[split_name],

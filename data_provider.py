@@ -66,7 +66,7 @@ def provide_data(split_name, batch_size, dataset_dir, num_readers=1,
       common_queue_capacity=2 * batch_size,
       common_queue_min=batch_size,
       shuffle=(split_name == 'train' or split_name == 'unlabeled'))
-  [image, label] = provider.get(['image', 'label'])
+  [image, label, filename] = provider.get(['image', 'label', 'filename'])
 
   # Resize image to an acceptable size
   old_size = image.shape
@@ -91,8 +91,8 @@ def provide_data(split_name, batch_size, dataset_dir, num_readers=1,
   image = (tf.to_float(image) - 128.0) / 128.0
 
   # Creates a QueueRunner for the pre-fetching operation.
-  images, labels = tf.train.batch(
-      [image, label],
+  images, labels, filenames = tf.train.batch(
+      [image, label, filename],
       batch_size=batch_size,
       num_threads=num_threads,
       capacity=5 * batch_size)
@@ -102,8 +102,7 @@ def provide_data(split_name, batch_size, dataset_dir, num_readers=1,
   print ("image dimension: {}".format(images.shape))
   print ("label dimension: {}".format(one_hot_labels.shape))
   print ("number of samples: {}".format(dataset.num_samples))
-  # return images, one_hot_labels, labels, dataset.num_samples
-  return images, one_hot_labels, dataset.num_samples
+  return images, one_hot_labels, filenames, dataset.num_samples
 
 def float_image_to_uint8(image):
   """Convert float image in [-1, 1) to [0, 255] uint8.

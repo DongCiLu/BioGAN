@@ -34,14 +34,14 @@ class DataProviderTest(tf.test.TestCase):
     # dataset_dir = "./celegans-mnist-data"
 
     batch_size = 10
-    images, labels, num_samples = data_provider.provide_data(
+    images, labels, filenames, num_samples = data_provider.provide_data(
         'train', batch_size, dataset_dir, mode="classification")
 
     with self.test_session() as sess:
       with tf.contrib.slim.queues.QueueRunners(sess):
-        images, labels = sess.run([images, labels])
+        images, labels, filenames = sess.run([images, labels, filenames])
         for image, cnt in zip(images, range(len(images))):
-            print(image)
+            print(image, filenames)
             break
         '''
             image = np.array(image[:,:,0])
