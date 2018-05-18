@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 # ==============================================================================
-"""Trains a generator on MNIST data."""
+"""Trains a classfier on Celegans data."""
 
 from __future__ import absolute_import
 from __future__ import division
@@ -23,6 +23,7 @@ import functools
 import os
 import math
 from PIL import Image
+from PIL import ImageDraw
 import matplotlib as mpl
 mpl.use("Agg")
 import matplotlib.pyplot as plt
@@ -44,6 +45,9 @@ flags.DEFINE_string('train_log_dir', '/tmp/mnist/',
 
 flags.DEFINE_string('dataset_dir', None, 'Location of data.')
 
+flags.DEFINE_string('hyper_mode', 'regular', 
+                    'Possible mode: [regular tiny].')
+
 flags.DEFINE_string('mode', 'train', 
                     'Possible mode: [train predict visualize].')
 
@@ -59,38 +63,37 @@ flags.DEFINE_integer('num_predictions', 11250,
 flags.DEFINE_string('prediction_dir', 'predicted_rosettes',
                      'directories to save predicted images.')
 
+flags.DEFINE_string('visualization_dir', 'visualization',
+                     'directories to save visualization images.')
+
 FLAGS = flags.FLAGS
 
-def input_fn(split):
+def input_fn(split, mode):
+  print("hyper mode: {}".format(mode))
   images, labels, filenames, _ = data_provider.provide_data(
               split, FLAGS.batch_size, FLAGS.dataset_dir, 
-              num_threads=1, mode="classification")
+              num_threads=1, mode=mode)
   features = {'images': images, 'filenames': filenames}
   return (features, labels)
 
-def input_fn_visualization():
+def input_fn_visualization_occ(base_name):
   image_size = 128
   occ_size = 32
   stride_size = 4
   n_channels = 1
-  n_images = (int((image_size - occ_size) / stride_size)) ** 2 + 1;
+  occlusion_val = 0
+  n_images = (int((image_size - occ_size) / stride_size)) ** 2;
   # n_images = 1;
   print("number of images for visualization: {}".format(n_images))
   images = np.empty(shape=(n_images, image_size, image_size, n_channels),
           dtype=np.float32)
+  filenames = np.empty(shape=(n_images), dtype='str')
   image_occlusion = Image.new('L', (occ_size, occ_size))
   for x in range(occ_size):
       for y in range(occ_size):
-          image_occlusion.putpixel((x, y), 210)
-  base_image = Image.open('real_base.jpg')
+          image_occlusion.putpixel((x, y), occlusion_val)
+  base_image = Image.open(base_name)
   image_cnt = 0
-  image_array = np.array(base_image)
-  image_array = (image_array - 128.0) / 128.0
-  image_array = np.float32(image_array)
-  image_array = np.expand_dims(image_array, axis=2)
-  images[image_cnt] = image_array
-  image_cnt += 1
-
   for x in range(0, image_size - occ_size, stride_size):
       for y in range(0, image_size - occ_size, stride_size):
           occluded_image = base_image.copy()
@@ -101,11 +104,42 @@ def input_fn_visualization():
           image_array = np.float32(image_array)
           image_array = np.expand_dims(image_array, axis=2)
           images[image_cnt] = image_array
+          filenames[image_cnt] = 'occ_{}_{}.jpg'.format(x, y)
           image_cnt += 1
-
+  features = {'images': images, 'filenames': filenames}
   image_queue = tf.estimator.inputs.numpy_input_fn(
-          images, batch_size=FLAGS.batch_size, shuffle=False, num_epochs=1)
+          features, batch_size=FLAGS.batch_size, shuffle=False, num_epochs=1)
   return image_queue
+  
+def input_fn_visualization_patch(base_name):
+  image_size = 128
+  patch_size = 32
+  stride_size = 4
+  n_channels = 1
+  n_images = (int((image_size - patch_size) / stride_size)) ** 2;
+  print("number of images for visualization: {}".format(n_images))
+  images = np.empty(shape=(n_images, patch_size, patch_size, n_channels),
+          dtype=np.float32)
+  # filenames = np.empty(shape=(n_images), dtype='str')
+  filenames = np.empty(shape=(n_images), dtype=np.int32)
+  base_image = Image.open(base_name)
+  image_cnt = 0
+  for x in range(0, image_size - patch_size, stride_size):
+      for y in range(0, image_size - patch_size, stride_size):
+          patch = base_image.crop((x, y, x + patch_size, y + patch_size))
+          image_array = np.array(patch)
+          image_array = (image_array - 128.0) / 128.0
+          image_array = np.float32(image_array)
+          image_array = np.expand_dims(image_array, axis=2)
+          images[image_cnt] = image_array
+          # filenames[image_cnt] = 'patch_{}_{}.jpg'.format(x, y)
+          filenames[image_cnt] = x * 10000 + y # magic encoding
+          image_cnt += 1
+  features = {'images': images, 'filenames': filenames}
+  image_queue = tf.estimator.inputs.numpy_input_fn(
+          features, batch_size=FLAGS.batch_size, shuffle=False, num_epochs=1)
+  return image_queue
+
 
 _leaky_relu = lambda x: tf.nn.leaky_relu(x, alpha=0.01)
 
@@ -115,24 +149,31 @@ def cnn_model(features, labels, mode):
   learning_rate = 1e-5
   images = features['images']
   filenames = features['filenames']
-
+  # setup batch normalization
   if mode == tf.estimator.ModeKeys.TRAIN:
       norm_params={'is_training':True}
   else:
       norm_params={'is_training':False,
                    'updates_collections': None}
-
+  # create the network
   with tf.contrib.framework.arg_scope(
       [layers.conv2d, layers.fully_connected],
       activation_fn=_leaky_relu,
       normalizer_fn=layers.batch_norm,
       normalizer_params=norm_params):
       # activation_fn=tf.nn.leaky_relu, normalizer_fn=None):
-    base_size = 1024
-    conv1 = layers.conv2d(images, int(base_size / 32), 
-            [4, 4], stride=2, trainable=trainable)
-    conv2 = layers.conv2d(conv1, int(base_size / 16), 
-            [4, 4], stride=2, trainable=trainable)
+    if FLAGS.hyper_mode == "regular":
+        print("set up the network in regular mode")
+        base_size = 1024
+        conv1 = layers.conv2d(images, int(base_size / 32), 
+                [4, 4], stride=2, trainable=trainable)
+        conv2 = layers.conv2d(conv1, int(base_size / 16), 
+                [4, 4], stride=2, trainable=trainable)
+    elif FLAGS.hyper_mode == "tiny":
+        print("set up the network in tiny mode")
+        # bypass first two layer.
+        base_size = int(1024 / 4)
+        conv2 = images
     conv3 = layers.conv2d(conv2, int(base_size / 8), 
             [4, 4], stride=2, trainable=trainable)
     conv4 = layers.conv2d(conv3, int(base_size / 4), 
@@ -146,12 +187,17 @@ def cnn_model(features, labels, mode):
     logits = layers.fully_connected(
             fc1_dropout, n_classes, activation_fn=None)
 
+    if FLAGS.hyper_mode == "regular":
+        visual_sample = conv1
+    elif FLAGS.hyper_mode == "tiny":
+        visual_sample = conv3
+
     predicted_classes = tf.argmax(logits, 1)
     if mode == tf.estimator.ModeKeys.PREDICT:
       return tf.estimator.EstimatorSpec(
           mode=mode,
           predictions={
-              'conv1': conv1,
+              'visual_sample': visual_sample,
               'class': predicted_classes,
               'prob': tf.nn.softmax(logits),
               'images': data_provider.float_image_to_uint8(images),
@@ -174,7 +220,6 @@ def cnn_model(features, labels, mode):
           labels=groundtruth_classes, predictions=predicted_classes)
     recall = tf.metrics.recall(
           labels=groundtruth_classes, predictions=predicted_classes)
-    # f1_score = tf.scalar_mul(2, tf.divide(tf.multiply(precision, recall), tf.add(precision, recall)))
 
     eval_metric_ops = {
       'eval/accuracy': tf.metrics.accuracy(
@@ -205,7 +250,7 @@ def get_grid_dim(x):
   i = len(factors) // 2
   return factors[i], factors[i]
 
-def visualization_stack(imgs, mode):
+def save_visual_stack(imgs, mode, visual_dir):
   num_slices = imgs.shape[-1]
   vmin = np.min(imgs)
   vmax = np.max(imgs)
@@ -213,7 +258,7 @@ def visualization_stack(imgs, mode):
   fig, axes = plt.subplots(min([grid_r, grid_c]), max([grid_r, grid_c]))
   for l, ax in enumerate(axes.flat):
       if mode == "weights":
-          img = imgs[:, :, 0, l] 
+          img = imgs[:, :, 0, l]  
           ax.imshow(img, vmin=vmin, vmax=vmax, 
                   interpolation='nearest', cmap='gray')
       elif mode == "activations":
@@ -224,7 +269,7 @@ def visualization_stack(imgs, mode):
           raise ValueError('Image stack mode error!')
       ax.set_xticks([])
       ax.set_yticks([])
-  plt.savefig("{}.png".format(mode), bbox_inches='tight')
+  plt.savefig("{}/{}.png".format(visual_dir, mode), bbox_inches='tight')
 
 def main(_):
   if not tf.gfile.Exists(FLAGS.train_log_dir):
@@ -256,14 +301,16 @@ def main(_):
   classifier = tf.estimator.Estimator(
           model_fn=cnn_model, 
           model_dir=FLAGS.train_log_dir,
-          # warm_start_from=None)
-          warm_start_from=ws)
+          warm_start_from=None)
+          # warm_start_from=ws)
   # debug_hook = tf_debug.TensorBoardDebugHook("dgx-dl03:7006")
 
   if FLAGS.mode == 'train':
-      train_spec = tf.estimator.TrainSpec(input_fn=lambda: input_fn('train'),
+      train_spec = tf.estimator.TrainSpec(input_fn=
+              lambda: input_fn('train', FLAGS.hyper_mode),
               max_steps=FLAGS.max_number_of_steps)
-      eval_spec = tf.estimator.EvalSpec(input_fn=lambda: input_fn('test'),
+      eval_spec = tf.estimator.EvalSpec(input_fn=
+              lambda: input_fn('test', FLAGS.hyper_mode),
               throttle_secs=5, start_delay_secs=5)
 
       tf.estimator.train_and_evaluate(classifier, train_spec, eval_spec)
@@ -278,7 +325,8 @@ def main(_):
 
       ros_cnt = 0
       total_cnt = 0
-      predictions = classifier.predict(input_fn=lambda:input_fn('predict'))
+      predictions = classifier.predict(input_fn=
+              lambda:input_fn('predict', FLAGS.hyper_mode))
       for pred, cnt in zip(predictions, range(FLAGS.num_predictions)):
           rosette_image = np.array(pred['images'])[:,:,0]
           rosette_image = Image.fromarray(rosette_image)
@@ -297,31 +345,49 @@ def main(_):
               .format(ros_cnt, total_cnt))
 
   elif FLAGS.mode == 'visualize':
-      '''
-      weights = classifier.get_variable_value("Conv/weights")
-      visualization_stack(weights, "weights")
-      predictions = classifier.predict(input_fn=lambda:input_fn('predict'))
-      for pred, cnt in zip(predictions, range(FLAGS.num_predictions)):
-          conv1 = pred['conv1']
-          visualization_stack(conv1, "activations")
-          # only print activation for one instance
-          break
-      '''
-      if not tf.gfile.Exists('{}/visual'.format(FLAGS.prediction_dir)):
-        tf.gfile.MakeDirs("{}/visual".format(FLAGS.prediction_dir))
+      if not tf.gfile.Exists('{}'.format(FLAGS.visualization_dir)):
+        tf.gfile.MakeDirs('{}'.format(FLAGS.visualization_dir))
 
-      predictions = classifier.predict(input_fn_visualization())
-      for pred, cnt in zip(predictions, range(1000)):
+      weights = classifier.get_variable_value("Conv/weights")
+      save_visual_stack(weights, "weights", FLAGS.visualization_dir)
+      predictions = classifier.predict(input_fn=
+              lambda:input_fn('predict', FLAGS.hyper_mode))
+      for pred, cnt in zip(predictions, range(FLAGS.num_predictions)):
+          visual_sample = pred['visual_sample']
+          save_visual_stack(visual_sample, "activations", 
+                  FLAGS.visualization_dir)
+          # only print activation for one layer
+          break
+
+      base_prefix = 'base_6'
+      base_name = '{}.jpg'.format(base_prefix)
+      threshold = 0.9
+      base_image = Image.open(base_name)
+      rgb_base_image = Image.new("RGB", base_image.size)
+      rgb_base_image.paste(base_image)
+      draw = ImageDraw.Draw(rgb_base_image)
+      line_cnt = int((128 - 32) / 4)
+      # predictions = classifier.predict(
+            # input_fn_visualization_occ(base_name))
+      predictions = classifier.predict(
+            input_fn_visualization_patch(base_name))
+      for pred in predictions:
+          encode = pred['filenames']
           prob = pred['prob']
           pred_class = pred['class']
-          print("{}: {}".format(pred_class, prob))
+          x = encode / 10000
+          y = encode % 10000
+          if (prob[0] > threshold) :
+              draw.rectangle([x, y, x + 32, y + 32], outline=(255,0,0))
+          print("Prediction for {}: {}, {}".format(
+              pred['filenames'], pred_class, prob))
           rosette_image = np.array(pred['images'])[:,:,0]
-          fn_dot_index = pred['filenames'].rfind('.')
-          fn_prefix = pred['filenames'][0:fn_dot_index]
           rosette_image = Image.fromarray(rosette_image)
-          rosette_image.save('{}/visual/{}_{}.jpg'.format(
-              FLAGS.prediction_dir, fn_prefix, prob))
-      
+          rosette_image.save('{}/{}_{}_{}.jpg'.format(
+              FLAGS.visualization_dir, pred['filenames'], pred_class, prob))
+      del draw
+      rgb_base_image.save('{}/{}_{}.jpg'.format(
+          FLAGS.visualization_dir, base_prefix, threshold))
   
 if __name__ == '__main__':
   tf.logging.set_verbosity(tf.logging.INFO)

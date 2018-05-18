@@ -74,6 +74,9 @@ def provide_data(split_name, batch_size, dataset_dir, num_readers=1,
   if mode == "multiple":
     width = base_size * 2
     height = base_size
+  elif mode == "tiny":
+    width = 32
+    height = 32
   else:
     width = base_size
     height = base_size
@@ -82,7 +85,8 @@ def provide_data(split_name, batch_size, dataset_dir, num_readers=1,
     print ("resize image from {} to {}".format(old_size, image.shape))
 
   # Data augmentation.
-  if mode == "classification" and split_name == "train":
+  if (mode == "classification" or mode == "tiny") and split_name == "train":
+      print("enable data augmentation")
       image = tf.to_float(image) / 255.0
       image = data_augmentation(image)
       image = tf.cast(image * 255.0, tf.uint8)

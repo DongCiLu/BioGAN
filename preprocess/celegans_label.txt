@@ -1,1 +1,2 @@
-all
+rosette
+non_rosette
