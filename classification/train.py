@@ -68,6 +68,8 @@ flags.DEFINE_string('visualization_dir', 'visualization',
 
 FLAGS = flags.FLAGS
 
+Encoding_para = 10000 # for encoding visualization coordinates
+
 def input_fn(split, mode):
   print("hyper mode: {}".format(mode))
   images, labels, filenames, _ = data_provider.provide_data(
@@ -133,7 +135,8 @@ def input_fn_visualization_patch(base_name):
           image_array = np.expand_dims(image_array, axis=2)
           images[image_cnt] = image_array
           # filenames[image_cnt] = 'patch_{}_{}.jpg'.format(x, y)
-          filenames[image_cnt] = x * 10000 + y # magic encoding
+          # magic encoding, using filename to save x and y coordinates
+          filenames[image_cnt] = x * Encoding_para + y 
           image_cnt += 1
   features = {'images': images, 'filenames': filenames}
   image_queue = tf.estimator.inputs.numpy_input_fn(
@@ -250,7 +253,13 @@ def get_grid_dim(x):
   i = len(factors) // 2
   return factors[i], factors[i]
 
-def save_visual_stack(imgs, mode, visual_dir):
+def get_prefix(name):
+    dir_index = name.rfind('/')
+    extension_index = name.rfind('.')
+    prefix = name[dir_index + 1 : extension_index]
+    return prefix
+
+def save_visual_stack(imgs, mode):
   num_slices = imgs.shape[-1]
   vmin = np.min(imgs)
   vmax = np.max(imgs)
@@ -269,7 +278,30 @@ def save_visual_stack(imgs, mode, visual_dir):
           raise ValueError('Image stack mode error!')
       ax.set_xticks([])
       ax.set_yticks([])
-  plt.savefig("{}/{}.png".format(visual_dir, mode), bbox_inches='tight')
+  plt.savefig("{}/{}.png".format(
+      FLAGS.visualization_dir, mode), bbox_inches='tight')
+
+def save_visual_image(base_name, predictions, thresholds):
+  base_image = Image.open(base_name)
+  rgb_base_images = []
+  draws = []
+  for threshold in thresholds:
+      rgb_base_images.append(Image.new("RGB", base_image.size))
+      rgb_base_images[-1].paste(base_image)
+      draws.append(ImageDraw.Draw(rgb_base_images[-1]))
+  for pred in predictions:
+      encode = pred['filenames']
+      prob = pred['prob']
+      pred_class = pred['class']
+      x = encode / Encoding_para
+      y = encode % Encoding_para
+      for index, threshold in enumerate(thresholds):
+          if (prob[0] > threshold) :
+              draws[index].rectangle(
+                      [x, y, x + 32, y + 32], outline=(255,0,0))
+  for rgb_base_image, threshold in zip(rgb_base_images, thresholds):
+      rgb_base_image.save('{}/{}_{}.jpg'.format(
+          FLAGS.visualization_dir, get_prefix(base_name), threshold))
 
 def main(_):
   if not tf.gfile.Exists(FLAGS.train_log_dir):
@@ -330,8 +362,7 @@ def main(_):
       for pred, cnt in zip(predictions, range(FLAGS.num_predictions)):
           rosette_image = np.array(pred['images'])[:,:,0]
           rosette_image = Image.fromarray(rosette_image)
-          fn_dot_index = pred['filenames'].rfind('.')
-          fn_prefix = pred['filenames'][0:fn_dot_index]
+          fn_prefix = get_prefix(pred['filenames'])
           total_cnt += 1
           if pred['class'] == 1:
               ros_cnt += 1
@@ -349,45 +380,26 @@ def main(_):
         tf.gfile.MakeDirs('{}'.format(FLAGS.visualization_dir))
 
       weights = classifier.get_variable_value("Conv/weights")
-      save_visual_stack(weights, "weights", FLAGS.visualization_dir)
+      save_visual_stack(weights, "weights")
       predictions = classifier.predict(input_fn=
               lambda:input_fn('predict', FLAGS.hyper_mode))
       for pred, cnt in zip(predictions, range(FLAGS.num_predictions)):
           visual_sample = pred['visual_sample']
-          save_visual_stack(visual_sample, "activations", 
-                  FLAGS.visualization_dir)
+          save_visual_stack(visual_sample, "activations")
           # only print activation for one layer
           break
 
-      base_prefix = 'base_6'
-      base_name = '{}.jpg'.format(base_prefix)
-      threshold = 0.9
-      base_image = Image.open(base_name)
-      rgb_base_image = Image.new("RGB", base_image.size)
-      rgb_base_image.paste(base_image)
-      draw = ImageDraw.Draw(rgb_base_image)
-      line_cnt = int((128 - 32) / 4)
-      # predictions = classifier.predict(
-            # input_fn_visualization_occ(base_name))
-      predictions = classifier.predict(
-            input_fn_visualization_patch(base_name))
-      for pred in predictions:
-          encode = pred['filenames']
-          prob = pred['prob']
-          pred_class = pred['class']
-          x = encode / 10000
-          y = encode % 10000
-          if (prob[0] > threshold) :
-              draw.rectangle([x, y, x + 32, y + 32], outline=(255,0,0))
-          print("Prediction for {}: {}, {}".format(
-              pred['filenames'], pred_class, prob))
-          rosette_image = np.array(pred['images'])[:,:,0]
-          rosette_image = Image.fromarray(rosette_image)
-          rosette_image.save('{}/{}_{}_{}.jpg'.format(
-              FLAGS.visualization_dir, pred['filenames'], pred_class, prob))
-      del draw
-      rgb_base_image.save('{}/{}_{}.jpg'.format(
-          FLAGS.visualization_dir, base_prefix, threshold))
+      visual_sample_dir = 'visual_sample'
+      thresholds = [0.75, 0.9]
+      # visualize the image one by one, throughput is low
+      for subdir, dirs, files in os.walk(visual_sample_dir):
+          for f in files:
+              filename = os.path.join(subdir, f)
+              # predictions = classifier.predict(
+                    # input_fn_visualization_occ(filename))
+              predictions = classifier.predict(
+                    input_fn_visualization_patch(filename))
+              save_visual_image(filename, predictions, thresholds)
   
 if __name__ == '__main__':
   tf.logging.set_verbosity(tf.logging.INFO)
