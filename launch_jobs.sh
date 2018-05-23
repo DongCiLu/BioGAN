@@ -163,14 +163,14 @@ if [[ "$gan_type" == "tiny" ]]; then
   CLASSIFICATION_EVAL_DIR="${EVAL_DIR}/classification${VERSION_NUMBER}"
   NUM_STEPS=10000
   # Run training.
-  # Banner "Starting training celegans classifier for ${NUM_STEPS} steps..."
-  # python "${git_repo}/research/gan/bio_gan/classification/train.py" \
-    # --train_log_dir=${CLASSIFICATION_TRAIN_DIR} \
-    # --dataset_dir=${CLASSIFICATION_DATASET_DIR} \
-    # --hyper_mode="tiny" \
-    # --max_number_of_steps=${NUM_STEPS} \
-    # --alsologtostderr
-  # Banner "Finished training celegans classifier for ${NUM_STEPS} steps."
+  Banner "Starting training celegans classifier for ${NUM_STEPS} steps..."
+  python "${git_repo}/research/gan/bio_gan/classification/train.py" \
+    --train_log_dir=${CLASSIFICATION_TRAIN_DIR} \
+    --dataset_dir=${CLASSIFICATION_DATASET_DIR} \
+    --hyper_mode="tiny" \
+    --max_number_of_steps=${NUM_STEPS} \
+    --alsologtostderr
+  Banner "Finished training celegans classifier for ${NUM_STEPS} steps."
 
   # Run visualization
   Banner "Starting visualization with celegans classifier..."
@@ -179,7 +179,6 @@ if [[ "$gan_type" == "tiny" ]]; then
     --dataset_dir=${CLASSIFICATION_DATASET_DIR} \
     --hyper_mode="tiny" \
     --mode="visualize" \
-    --alsologtostderr
   Banner "Finished visualize with celegans classifier."
 fi
 
