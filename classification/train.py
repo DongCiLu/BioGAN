@@ -289,6 +289,7 @@ def save_visual_image(base_name, predictions, thresholds):
         rgb_base_images.append(Image.new("RGB", base_image.size))
         rgb_base_images[-1].paste(base_image)
         draws.append(ImageDraw.Draw(rgb_base_images[-1]))
+    has_rosette = False
     for pred in predictions:
         encode = pred['filenames']
         prob = pred['prob']
@@ -297,11 +298,14 @@ def save_visual_image(base_name, predictions, thresholds):
         y = encode % Encoding_para
         for index, threshold in enumerate(thresholds):
             if (prob[0] > threshold) :
+                has_rosette = True
                 draws[index].rectangle(
                         [x, y, x + 32, y + 32], outline=(255,0,0))
-    for rgb_base_image, threshold in zip(rgb_base_images, thresholds):
-        rgb_base_image.save('{}/{}_{}.jpg'.format(
-            FLAGS.visualization_dir, get_prefix(base_name), threshold))
+    # discover mode (1 threshold) or test mode (multiple threshold)
+    if has_rosette or len(thresholds) > 1: 
+        for rgb_base_image, threshold in zip(rgb_base_images, thresholds):
+            rgb_base_image.save('{}/{}_{}.jpg'.format(
+                FLAGS.visualization_dir, get_prefix(base_name), threshold))
   
 def main(_):
     if not tf.gfile.Exists(FLAGS.train_log_dir):
