@@ -34,8 +34,8 @@ _FILE_PATTERN = 'celegans-%s.tfrecord'
 
 # _SPLITS_TO_SIZES = {'train': 150, 'test': 51, 'predict': 124}
 # _SPLITS_TO_SIZES = {'unlabeled': 11250, 'train': 190, 'test': 122, 'predict': 11250}
-_SPLITS_TO_SIZES = {'train': 220, 'test': 46, 'predict' : 46}
-# _SPLITS_TO_SIZES = {'train': 11250, 'test': 0, 'predict': 0}
+_SPLITS_TO_SIZES = {'unlabeled': 180000, 'train': 220, 'test': 46, 'predict' : 46}
+# _SPLITS_TO_SIZES = {'train': 521, 'test': 253, 'predict' : 0}
 
 _NUM_CLASSES = 2
 
@@ -88,7 +88,7 @@ def get_split(split_name, dataset_dir,
     if mode == "multiple":
       width = base_size * 2
       height = base_size
-    elif mode == "tiny":
+    elif mode == "tiny" or mode == "tinygan":
       width = 32
       height = 32
     else:

@@ -60,6 +60,7 @@ def _learning_rate(gan_type):
     # (generator learning rates, discriminator learning rate)
     return {
         'unconditional': (1e-4, 1e-5),
+        'tinygan': (1e-4, 1e-5),
         'acgan': (1e-4, 1e-4),
         'multiple': (1e-4, 1e-4),
         'conditional': (1e-4, 1e-4),
@@ -76,7 +77,7 @@ def main(_):
     with tf.name_scope('inputs'):
       with tf.device('/cpu:0'): 
         split_name = 'unlabeled'
-        images, one_hot_labels, _ = data_provider.provide_data(
+        images, one_hot_labels, filenames, _ = data_provider.provide_data(
             split_name, FLAGS.batch_size, FLAGS.dataset_dir, 
             num_threads=4, mode=FLAGS.gan_type)
   
@@ -87,6 +88,14 @@ def main(_):
       gan_model = tfgan.gan_model(
           generator_fn=networks.unconditional_generator,
           discriminator_fn=networks.unconditional_discriminator,
+          real_data=images,
+          generator_inputs=tf.random_normal(
+              [FLAGS.batch_size, FLAGS.noise_dims]))
+      print("Finished create unconditional gan model!")
+    elif FLAGS.gan_type == 'tinygan':
+      gan_model = tfgan.gan_model(
+          generator_fn=networks.tinygan_generator,
+          discriminator_fn=networks.tinygan_discriminator,
           real_data=images,
           generator_inputs=tf.random_normal(
               [FLAGS.batch_size, FLAGS.noise_dims]))

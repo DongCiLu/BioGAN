@@ -28,7 +28,7 @@ tfgan = tf.contrib.gan
 
 
 def _generator_helper(
-      noise, is_conditional, one_hot_labels, weight_decay):
+      noise, is_conditional, one_hot_labels, weight_decay, tinymode=False):
     """Core MNIST generator.
   
     This function is reused between the different GAN modes (unconditional,
@@ -57,8 +57,9 @@ def _generator_helper(
       net = tf.reshape(net, [-1, 8, 8, int(base_size / 2)])
       net = layers.conv2d_transpose(net, int(base_size / 4), [4, 4], stride=2)
       net = layers.conv2d_transpose(net, int(base_size / 8), [4, 4], stride=2)
-      net = layers.conv2d_transpose(net, int(base_size / 16), [4, 4], stride=2)
-      net = layers.conv2d_transpose(net, int(base_size / 32), [4, 4], stride=2)
+      if not tinymode:
+          net = layers.conv2d_transpose(net, int(base_size / 16), [4, 4], stride=2)
+          net = layers.conv2d_transpose(net, int(base_size / 32), [4, 4], stride=2)
       net = layers.conv2d(
           net, 1, [4, 4], normalizer_fn=None, activation_fn=tf.tanh)
   
@@ -128,6 +129,21 @@ def unconditional_generator(noise, weight_decay=2.5e-5):
     # return tf.tanh(image)
     return _generator_helper(noise, False, None, weight_decay)
   
+def tinygan_generator(noise, weight_decay=2.5e-5):
+    """Generator to produce unconditional MNIST images.
+  
+    Args:
+      noise: A single Tensor representing noise.
+      weight_decay: The value of the l2 weight decay.
+  
+    Returns:
+      A generated image in the range [-1, 1].
+    """
+    # image, _ = dcgan.generator(noise, final_size=128, num_outputs=1)
+  
+    # return tf.tanh(image)
+    tinymode = True
+    return _generator_helper(noise, False, None, weight_decay, tinymode)
   
 def conditional_generator(inputs, weight_decay=2.5e-5):
     """Generator to produce MNIST images conditioned on class.
@@ -169,7 +185,7 @@ def infogan_generator(inputs, categorical_dim, weight_decay=2.5e-5):
 _leaky_relu = lambda x: tf.nn.leaky_relu(x, alpha=0.01)
   
   
-def _discriminator_helper(img, is_conditional, one_hot_labels, weight_decay):
+def _discriminator_helper(img, is_conditional, one_hot_labels, weight_decay, tinymode=False):
     """Core MNIST discriminator.
   
     This function is reused between the different GAN modes (unconditional,
@@ -192,9 +208,14 @@ def _discriminator_helper(img, is_conditional, one_hot_labels, weight_decay):
         activation_fn=tf.nn.leaky_relu, normalizer_fn=layers.batch_norm,
         weights_regularizer=layers.l2_regularizer(weight_decay),
         biases_regularizer=layers.l2_regularizer(weight_decay)):
-      base_size = 1024
-      net = layers.conv2d(img, int(base_size / 32), [4, 4], stride=2)
-      net = layers.conv2d(net, int(base_size / 16), [4, 4], stride=2)
+      if not tinymode:
+          base_size = 1024
+          net = layers.conv2d(img, int(base_size / 32), [4, 4], stride=2)
+          net = layers.conv2d(net, int(base_size / 16), [4, 4], stride=2)
+      else:
+          base_size = int(1024 / 4)
+          # base_size = 1024
+          net = img
       net = layers.conv2d(net, int(base_size / 8), [4, 4], stride=2)
       net = layers.conv2d(net, int(base_size / 4), [4, 4], stride=2)
       net = layers.conv2d(net, int(base_size / 2), [4, 4], stride=2)
@@ -205,7 +226,6 @@ def _discriminator_helper(img, is_conditional, one_hot_labels, weight_decay):
               net, base_size, normalizer_fn=layers.layer_norm)
   
       return net
-  
   
 def multiple_discriminator(img, unused_conditioning, weight_decay=2.5e-5):
     """Discriminator network on unconditional MNIST digits.
@@ -262,6 +282,25 @@ def unconditional_discriminator(img, unused_conditioning, weight_decay=2.5e-5):
     net = _discriminator_helper(img, False, None, weight_decay)
     return layers.linear(net, 1)
   
+def tinygan_discriminator(img, unused_conditioning, weight_decay=2.5e-5):
+    """Discriminator network on unconditional MNIST digits.
+  
+    Args:
+      img: Real or generated MNIST digits. Should be in the range [-1, 1].
+      unused_conditioning: The TFGAN API can help with conditional GANs, which
+        would require extra `condition` information to both the generator and the
+        discriminator. Since this example is not conditional, we do not use this
+        argument.
+      weight_decay: The L2 weight decay.
+  
+    Returns:
+      Logits for the probability that the image is real.
+    """
+    # logits, _ = dcgan.discriminator(img)
+    # return logits
+    tinymode = True
+    net = _discriminator_helper(img, False, None, weight_decay, tinymode)
+    return layers.linear(net, 1)
   
 def conditional_discriminator(img, conditioning, weight_decay=2.5e-5):
     """Conditional discriminator network on MNIST digits.

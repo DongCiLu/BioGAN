@@ -60,6 +60,9 @@ flags.DEFINE_integer('max_eval_steps', 20,
 flags.DEFINE_integer('num_predictions', 11250,
                      'number of images to predict labels.')
 
+flags.DEFINE_integer('warm_start', 0,
+                     'cold start or warm start.')
+
 flags.DEFINE_string('prediction_dir', 'predicted_rosettes',
                      'directories to save predicted images.')
 
@@ -176,6 +179,7 @@ def cnn_model(features, labels, mode):
           print("set up the network in tiny mode")
           # bypass first two layer.
           base_size = int(1024 / 4)
+          # base_size = 1024
           conv2 = images
       conv3 = layers.conv2d(conv2, int(base_size / 8), 
               [4, 4], stride=2, trainable=trainable)
@@ -311,16 +315,10 @@ def main(_):
     if not tf.gfile.Exists(FLAGS.train_log_dir):
       tf.gfile.MakeDirs(FLAGS.train_log_dir)
   
-    # ws_file = "celegans-model/classification_nobn"
-    ws_file = "celegans-model/unconditional3"
-    ws = tf.estimator.WarmStartSettings(
-            ckpt_to_initialize_from=ws_file, 
-            # vars_to_warm_start=".*weights.*")
-            # vars_to_warm_start="^(?!.*(BatchNorm))")
-            vars_to_warm_start =
-                    # "(Conv.*|fully_connected)/weights.*",
-                    "((Conv.*|fully_connected)/weights.*)|Conv.*/BatchNorm.*",
-            var_name_to_prev_var_name={
+    if FLAGS.hyper_mode == 'regular':
+        # ws_file = "celegans-model/classification_nobn"
+        ws_file = "celegans-model/unconditional3"
+        var_names = {
                 "Conv/weights": "Discriminator/Conv/weights",
                 "Conv_1/weights": "Discriminator/Conv_1/weights",
                 "Conv_2/weights": "Discriminator/Conv_2/weights",
@@ -332,13 +330,35 @@ def main(_):
                 "Conv_3/BatchNorm/beta": "Discriminator/Conv_3/BatchNorm/beta",
                 "Conv_4/BatchNorm/beta": "Discriminator/Conv_4/BatchNorm/beta",
                 "fully_connected/weights": 
-                      "Discriminator/fully_connected/weights"})
-  
+                      "Discriminator/fully_connected/weights"}
+    elif FLAGS.hyper_mode == 'tiny':
+        ws_file = "celegans-model/tinygan-test"
+        var_names = {
+                "Conv/weights": "Discriminator/Conv/weights",
+                "Conv_1/weights": "Discriminator/Conv_1/weights",
+                "Conv_2/weights": "Discriminator/Conv_2/weights",
+                "Conv/BatchNorm/beta": "Discriminator/Conv/BatchNorm/beta",
+                "Conv_1/BatchNorm/beta": "Discriminator/Conv_1/BatchNorm/beta",
+                "Conv_2/BatchNorm/beta": "Discriminator/Conv_2/BatchNorm/beta",
+                "fully_connected/weights": 
+                      "Discriminator/fully_connected/weights"}
+
+    ws = tf.estimator.WarmStartSettings(
+            ckpt_to_initialize_from=ws_file, 
+            # vars_to_warm_start=".*weights.*")
+            # vars_to_warm_start="^(?!.*(BatchNorm))")
+            vars_to_warm_start =
+                    # "(Conv.*|fully_connected)/weights.*",
+                    "((Conv.*|fully_connected)/weights.*)|Conv.*/BatchNorm.*",
+            var_name_to_prev_var_name=var_names)
+
+    if FLAGS.warm_start == 0:
+        ws = None
+
     classifier = tf.estimator.Estimator(
             model_fn=cnn_model, 
             model_dir=FLAGS.train_log_dir,
-            warm_start_from=None)
-            # warm_start_from=ws)
+            warm_start_from=ws)
     # debug_hook = tf_debug.TensorBoardDebugHook("dgx-dl03:7006")
   
     if FLAGS.mode == 'train':

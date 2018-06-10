@@ -40,7 +40,7 @@ set -e
 # Type of GAN to run. Right now, options are `unconditional`, `conditional`, or
 # `infogan`.
 gan_type=$1
-if ! [[ "$gan_type" =~ ^(unconditional|conditional|infogan|multiple|classification|temp|tiny) ]]; then
+if ! [[ "$gan_type" =~ ^(unconditional|conditional|infogan|multiple|classification|temp|tiny|tinygan) ]]; then
   echo "'gan_type' must be one of: 'unconditional', 'conditional', 'infogan', 'multiple', 'classification'."
   exit
 fi
@@ -125,6 +125,25 @@ if [[ "$gan_type" == "unconditional" ]]; then
   # Banner "Finished unconditional evaluation. See ${UNCONDITIONAL_EVAL_DIR} for output images."
 fi
 
+
+# Run tiny GAN.
+if [[ "$gan_type" == "tinygan" ]]; then
+  DATASET_DIR="celegans-tiny-unsupervised"
+  VERSION_NUMBER="test"
+  UNCONDITIONAL_TRAIN_DIR="${TRAIN_DIR}/tinygan-${VERSION_NUMBER}"
+  UNCONDITIONAL_EVAL_DIR="${EVAL_DIR}/tinygan-${VERSION_NUMBER}"
+  NUM_STEPS=100000
+  # Run training.
+  Banner "Starting training tiny GAN for ${NUM_STEPS} steps..."
+  python "${git_repo}/research/gan/bio_gan/train.py" \
+    --train_log_dir=${UNCONDITIONAL_TRAIN_DIR} \
+    --dataset_dir=${DATASET_DIR} \
+    --max_number_of_steps=${NUM_STEPS} \
+    --gan_type="tinygan" \
+    --alsologtostderr
+  Banner "Finished training tiny GAN ${NUM_STEPS} steps."
+fi
+
 # Run multiple GAN
 if [[ "$gan_type" == "multiple" ]]; then
   MULTIPLE_FACTOR=1
@@ -157,10 +176,10 @@ fi
 # classifier for small network
 if [[ "$gan_type" == "tiny" ]]; then
   # CLASSIFICATION_DATASET_DIR="celegans-ros-data"
-  VERSION_NUMBER="-test"
+  VERSION_NUMBER="raw"
   CLASSIFICATION_DATASET_DIR="celegans-tiny-data"
-  CLASSIFICATION_TRAIN_DIR="${TRAIN_DIR}/classification${VERSION_NUMBER}"
-  CLASSIFICATION_EVAL_DIR="${EVAL_DIR}/classification${VERSION_NUMBER}"
+  CLASSIFICATION_TRAIN_DIR="${TRAIN_DIR}/tiny-${VERSION_NUMBER}"
+  CLASSIFICATION_EVAL_DIR="${EVAL_DIR}/tiny-${VERSION_NUMBER}"
   NUM_STEPS=10000
   # Run training.
   Banner "Starting training celegans classifier for ${NUM_STEPS} steps..."
@@ -169,6 +188,7 @@ if [[ "$gan_type" == "tiny" ]]; then
     --dataset_dir=${CLASSIFICATION_DATASET_DIR} \
     --hyper_mode="tiny" \
     --max_number_of_steps=${NUM_STEPS} \
+    # --warm_start=1 \
     --alsologtostderr
   Banner "Finished training celegans classifier for ${NUM_STEPS} steps."
 
@@ -185,20 +205,21 @@ fi
 # Run classifier
 if [[ "$gan_type" == "classification" ]]; then
   # CLASSIFICATION_DATASET_DIR="celegans-ros-data"
-  VERSION_NUMBER="-test"
-  CLASSIFICATION_DATASET_DIR="celegans-ros-data"
+  VERSION_NUMBER="-trans"
+  CLASSIFICATION_DATASET_DIR="celegans-aros-data"
   CLASSIFICATION_TRAIN_DIR="${TRAIN_DIR}/classification${VERSION_NUMBER}"
   CLASSIFICATION_EVAL_DIR="${EVAL_DIR}/classification${VERSION_NUMBER}"
   NUM_STEPS=100000
   # Run training.
-  # Banner "Starting training celegans classifier for ${NUM_STEPS} steps..."
-  # python "${git_repo}/research/gan/bio_gan/classification/train.py" \
-    # --train_log_dir=${CLASSIFICATION_TRAIN_DIR} \
-    # --dataset_dir=${CLASSIFICATION_DATASET_DIR} \
-    # --hyper_mode="regular" \
-    # --max_number_of_steps=${NUM_STEPS} \
-    # --alsologtostderr
-  # Banner "Finished training celegans classifier for ${NUM_STEPS} steps."
+  Banner "Starting training celegans classifier for ${NUM_STEPS} steps..."
+  python "${git_repo}/research/gan/bio_gan/classification/train.py" \
+    --train_log_dir=${CLASSIFICATION_TRAIN_DIR} \
+    --dataset_dir=${CLASSIFICATION_DATASET_DIR} \
+    --hyper_mode="regular" \
+    --max_number_of_steps=${NUM_STEPS} \
+    --warm_start=1 \
+    --alsologtostderr
+  Banner "Finished training celegans classifier for ${NUM_STEPS} steps."
 
   # Run inference.
   # Banner "Starting inference with celegans classifier..."
@@ -212,13 +233,13 @@ if [[ "$gan_type" == "classification" ]]; then
   # Banner "Finished inference with celegans classifier."
 
   # Run visualization
-  Banner "Starting visualization with celegans classifier..."
-  python "${git_repo}/research/gan/bio_gan/classification/train.py" \
-    --train_log_dir=${CLASSIFICATION_TRAIN_DIR} \
-    --dataset_dir=${CLASSIFICATION_DATASET_DIR} \
-    --mode="visualize" \
-    --alsologtostderr
-  Banner "Finished visualize with celegans classifier."
+  # Banner "Starting visualization with celegans classifier..."
+  # python "${git_repo}/research/gan/bio_gan/classification/train.py" \
+    # --train_log_dir=${CLASSIFICATION_TRAIN_DIR} \
+    # --dataset_dir=${CLASSIFICATION_DATASET_DIR} \
+    # --mode="visualize" \
+    # --alsologtostderr
+  # Banner "Finished visualize with celegans classifier."
 fi
 
 # Run conditional GAN.
