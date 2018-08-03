@@ -92,7 +92,8 @@ def input_fn_visualization_occ(base_name):
     print("number of images for visualization: {}".format(n_images))
     images = np.empty(shape=(n_images, image_size, image_size, n_channels),
             dtype=np.float32)
-    filenames = np.empty(shape=(n_images), dtype='str')
+    # filenames = np.empty(shape=(n_images), dtype='str')
+    filenames = np.empty(shape=(n_images), dtype=np.int32)
     image_occlusion = Image.new('L', (occ_size, occ_size))
     for x in range(occ_size):
         for y in range(occ_size):
@@ -109,7 +110,8 @@ def input_fn_visualization_occ(base_name):
             image_array = np.float32(image_array)
             image_array = np.expand_dims(image_array, axis=2)
             images[image_cnt] = image_array
-            filenames[image_cnt] = 'occ_{}_{}.jpg'.format(x, y)
+            # magic encoding, using filename to save x and y coordinates
+            filenames[image_cnt] = x * Encoding_para + y 
             image_cnt += 1
     features = {'images': images, 'filenames': filenames}
     image_queue = tf.estimator.inputs.numpy_input_fn(
@@ -301,6 +303,7 @@ def save_visual_image(base_name, predictions, thresholds):
         x = encode / Encoding_para
         y = encode % Encoding_para
         for index, threshold in enumerate(thresholds):
+            print("{},{}: {}".format(int(x), int(y), prob[0]))
             if (prob[0] > threshold) :
                 has_rosette = True
                 draws[index].rectangle(
@@ -402,7 +405,9 @@ def main(_):
     elif FLAGS.mode == 'visualize':
         if not tf.gfile.Exists('{}'.format(FLAGS.visualization_dir)):
           tf.gfile.MakeDirs('{}'.format(FLAGS.visualization_dir))
+        visual_input = 'visual_input'
   
+        # visualize weight and activation
         weights = classifier.get_variable_value("Conv/weights")
         save_visual_stack(weights, "weights")
         predictions = classifier.predict(input_fn=
@@ -413,12 +418,14 @@ def main(_):
             # only print activation for one layer
             break
   
-        visual_input = 'visual_input'
+        # visualize occulation & patch
         thresholds = [0.9]
         # visualize the image one by one, throughput is low
         for subdir, dirs, files in os.walk(visual_input):
             for f in files:
                 filename = os.path.join(subdir, f)
+                # occulation still uses 128x128 network,
+                # however, patch uses 32x32 network
                 # predictions = classifier.predict(
                       # input_fn_visualization_occ(filename))
                 predictions = classifier.predict(
