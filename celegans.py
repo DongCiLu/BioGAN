@@ -33,8 +33,9 @@ slim = tf.contrib.slim
 _FILE_PATTERN = 'celegans-%s.tfrecord'
 
 # size for 128x128 dataset
-_SPLITS_TO_SIZES = {'unlabeled': 11250, 'train': 521, 'test': 253, 'predict': 253}
-# _SPLITS_TO_SIZES = {'unlabeled': 11250, 'train': 174, 'test': 253, 'predict': 11250}
+# _SPLITS_TO_SIZES = {'unlabeled': 11250, 'train': 521, 'test': 253, 'predict': 253}
+# _SPLITS_TO_SIZES = {'unlabeled': 11250, 'train': 10, 'test': 253, 'predict': 11250}
+_SPLITS_TO_SIZES = {'unlabeled': 11250, 'train': 7, 'test': 253, 'predict': 11250}
 
 # size for 32x32 dataset
 # _SPLITS_TO_SIZES = {'unlabeled': 180000, 'train': 220, 'test': 69, 'predict' : 69}

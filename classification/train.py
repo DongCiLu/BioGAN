@@ -320,7 +320,7 @@ def main(_):
   
     if FLAGS.hyper_mode == 'regular':
         # ws_file = "celegans-model/classification_nobn"
-        ws_file = "celegans-model/unconditional3"
+        ws_file = "gan_model_for_transfer/gan_128"
         var_names = {
                 "Conv/weights": "Discriminator/Conv/weights",
                 "Conv_1/weights": "Discriminator/Conv_1/weights",
@@ -335,7 +335,7 @@ def main(_):
                 "fully_connected/weights": 
                       "Discriminator/fully_connected/weights"}
     elif FLAGS.hyper_mode == 'tiny':
-        ws_file = "celegans-model/tinygan-test"
+        ws_file = "gan_model_for_transfer/gan_32"
         var_names = {
                 "Conv/weights": "Discriminator/Conv/weights",
                 "Conv_1/weights": "Discriminator/Conv_1/weights",
@@ -407,16 +407,19 @@ def main(_):
           tf.gfile.MakeDirs('{}'.format(FLAGS.visualization_dir))
         visual_input = 'visual_input'
   
-        # visualize weight and activation
+        # visualize weight only
         weights = classifier.get_variable_value("Conv/weights")
         save_visual_stack(weights, "weights")
         predictions = classifier.predict(input_fn=
                 lambda:input_fn('predict', FLAGS.hyper_mode))
+        # we move activation visualization below with occulation & patch
+        '''
         for pred, cnt in zip(predictions, range(FLAGS.num_predictions)):
             visual_sample = pred['visual_sample']
             save_visual_stack(visual_sample, "activations")
             # only print activation for one layer
             break
+        '''
   
         # visualize occulation & patch
         thresholds = [0.9]
@@ -430,7 +433,12 @@ def main(_):
                       # input_fn_visualization_occ(filename))
                 predictions = classifier.predict(
                       input_fn_visualization_patch(filename))
-                save_visual_image(filename, predictions, thresholds)
+                for pred in predictions:
+                    visual_sample = pred['visual_sample']
+                    save_visual_stack(visual_sample, "activations")
+                    # only print activation for one layer
+                    break
+                # save_visual_image(filename, predictions, thresholds)
     
 if __name__ == '__main__':
     tf.logging.set_verbosity(tf.logging.INFO)
