@@ -67,7 +67,6 @@ def _learning_rate(gan_type):
         'infogan': (0.001, 9e-5),
     }[gan_type]
   
-  
 def main(_):
     if not tf.gfile.Exists(FLAGS.train_log_dir):
       tf.gfile.MakeDirs(FLAGS.train_log_dir)

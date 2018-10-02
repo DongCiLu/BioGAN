@@ -203,7 +203,7 @@ fi
 
 # Run classifier
 if [[ "$gan_type" == "classification" ]]; then
-  VERSION_NUMBER="raw_3_1_0.02"
+  VERSION_NUMBER="trans_1.0"
   CLASSIFICATION_DATASET_DIR="celegans-128-data"
   CLASSIFICATION_TRAIN_DIR="${TRAIN_DIR}/classification-${VERSION_NUMBER}"
   CLASSIFICATION_EVAL_DIR="${EVAL_DIR}/classification-${VERSION_NUMBER}"
@@ -215,7 +215,7 @@ if [[ "$gan_type" == "classification" ]]; then
     --dataset_dir=${CLASSIFICATION_DATASET_DIR} \
     --hyper_mode="regular" \
     --max_number_of_steps=${NUM_STEPS} \
-    --warm_start=0
+    --warm_start=1
   Banner "Finished training celegans classifier for ${NUM_STEPS} steps."
 
   # Run inference.

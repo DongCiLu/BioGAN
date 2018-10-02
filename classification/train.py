@@ -235,7 +235,6 @@ def cnn_model(features, labels, mode):
             labels=groundtruth_classes, predictions=predicted_classes),
         'eval/precision': precision,
         'eval/recall': recall
-        # 'f1_score': f1_score
       }
       return tf.estimator.EstimatorSpec(
           mode=mode, loss=loss, eval_metric_ops=eval_metric_ops)
@@ -370,7 +369,7 @@ def main(_):
                 max_steps=FLAGS.max_number_of_steps)
         eval_spec = tf.estimator.EvalSpec(input_fn=
                 lambda: input_fn('test', FLAGS.hyper_mode),
-                throttle_secs=5, start_delay_secs=5)
+                throttle_secs=20, start_delay_secs=20)
   
         tf.estimator.train_and_evaluate(classifier, train_spec, eval_spec)
   

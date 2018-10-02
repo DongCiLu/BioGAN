@@ -29,17 +29,104 @@ from datasets import dataset_utils
 
 slim = tf.contrib.slim
 
-# _FILE_PATTERN = 'celegans_%s.tfrecord'
-_FILE_PATTERN = 'celegans-%s.tfrecord'
+_DATASET_CONFIG = "128_1.0"
+
+if _DATASET_CONFIG == "128_1.0":
+    _FILE_PATTERN = "celegans-%s_1.0.tfrecord"
+    _SPLITS_TO_SIZES = {'unlabeled': 11250, 
+                        'train': 1063, 
+                        'test': 523, 
+                        'predict': 11250}
+elif _DATASET_CONFIG == "128_0.9": 
+    _FILE_PATTERN = "celegans-%s_0.9.tfrecord"
+    _SPLITS_TO_SIZES = {'unlabeled': 11250, 
+                        'train': 949, 
+                        'test': 523, 
+                        'predict': 11250}
+elif _DATASET_CONFIG == "128_0.8": 
+    _FILE_PATTERN = "celegans-%s_0.8.tfrecord"
+    _SPLITS_TO_SIZES = {'unlabeled': 11250, 
+                        'train': 833, 
+                        'test': 523, 
+                        'predict': 11250}
+elif _DATASET_CONFIG == "128_0.7": 
+    _FILE_PATTERN = "celegans-%s_0.7.tfrecord"
+    _SPLITS_TO_SIZES = {'unlabeled': 11250, 
+                        'train': 729, 
+                        'test': 523, 
+                        'predict': 11250}
+elif _DATASET_CONFIG == "128_0.6": 
+    _FILE_PATTERN = "celegans-%s_0.6.tfrecord"
+    _SPLITS_TO_SIZES = {'unlabeled': 11250, 
+                        'train': 653, 
+                        'test': 523, 
+                        'predict': 11250}
+elif _DATASET_CONFIG == "128_0.5": 
+    _FILE_PATTERN = "celegans-%s_0.5.tfrecord"
+    _SPLITS_TO_SIZES = {'unlabeled': 11250, 
+                        'train': 527, 
+                        'test': 523, 
+                        'predict': 11250}
+elif _DATASET_CONFIG == "128_0.4": 
+    _FILE_PATTERN = "celegans-%s_0.4.tfrecord"
+    _SPLITS_TO_SIZES = {'unlabeled': 11250, 
+                        'train': 431, 
+                        'test': 523, 
+                        'predict': 11250}
+elif _DATASET_CONFIG == "128_0.3": 
+    _FILE_PATTERN = "celegans-%s_0.3.tfrecord"
+    _SPLITS_TO_SIZES = {'unlabeled': 11250, 
+                        'train': 347, 
+                        'test': 523, 
+                        'predict': 11250}
+elif _DATASET_CONFIG == "128_0.2": 
+    _FILE_PATTERN = "celegans-%s_0.2.tfrecord"
+    _SPLITS_TO_SIZES = {'unlabeled': 11250, 
+                        'train': 203, 
+                        'test': 523, 
+                        'predict': 11250}
+elif _DATASET_CONFIG == "128_0.1": 
+    _FILE_PATTERN = "celegans-%s_0.1.tfrecord"
+    _SPLITS_TO_SIZES = {'unlabeled': 11250, 
+                        'train': 100, 
+                        'test': 523, 
+                        'predict': 11250}
+elif _DATASET_CONFIG == "128_0.05": 
+    _FILE_PATTERN = "celegans-%s_0.05.tfrecord"
+    _SPLITS_TO_SIZES = {'unlabeled': 11250, 
+                        'train': 53, 
+                        'test': 523, 
+                        'predict': 11250}
+elif _DATASET_CONFIG == "128_0.02": 
+    _FILE_PATTERN = "celegans-%s_0.02.tfrecord"
+    _SPLITS_TO_SIZES = {'unlabeled': 11250, 
+                        'train': 28, 
+                        'test': 523, 
+                        'predict': 11250}
+elif _DATASET_CONFIG == "128_0.01": 
+    _FILE_PATTERN = "celegans-%s_0.01.tfrecord"
+    _SPLITS_TO_SIZES = {'unlabeled': 11250, 
+                        'train': 10, 
+                        'test': 523, 
+                        'predict': 11250}
+elif _DATASET_CONFIG == "32_1.0": 
+    _FILE_PATTERN = "tiny-%s_1.0.tfrecord"
+    _SPLITS_TO_SIZES = {'unlabeled': 180000, 
+                        'train': 220, 
+                        'test': 69, 
+                        'predict': 69}
+elif _DATASET_CONFIG == "32_0.3333": 
+    _FILE_PATTERN = "tiny-%s_0.3333.tfrecord"
+    _SPLITS_TO_SIZES = {'unlabeled': 180000, 
+                        'train': 74, 
+                        'test': 69, 
+                        'predict': 69}
+else:
+    _FILE_PATTERN = ""
+    _SPLITS_TO_SIZES = {'unlabeled': 0, 'train': 0, 'test': 0, 'predict': 0}
 
 # size for 128x128 dataset
 # _SPLITS_TO_SIZES = {'unlabeled': 11250, 'train': 521, 'test': 253, 'predict': 253}
-# _SPLITS_TO_SIZES = {'unlabeled': 11250, 'train': 10, 'test': 253, 'predict': 11250}
-_SPLITS_TO_SIZES = {'unlabeled': 11250, 'train': 7, 'test': 253, 'predict': 11250}
-
-# size for 32x32 dataset
-# _SPLITS_TO_SIZES = {'unlabeled': 180000, 'train': 220, 'test': 69, 'predict' : 69}
-# _SPLITS_TO_SIZES = {'unlabeled': 180000, 'train': 74, 'test': 69, 'predict' : 69}
 
 _NUM_CLASSES = 2
 
