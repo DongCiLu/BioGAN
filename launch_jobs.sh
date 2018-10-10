@@ -203,19 +203,21 @@ fi
 
 # Run classifier
 if [[ "$gan_type" == "classification" ]]; then
-  VERSION_NUMBER="trans_1.0"
+  VERSION_NUMBER="raw_1to1old"
   CLASSIFICATION_DATASET_DIR="celegans-128-data"
   CLASSIFICATION_TRAIN_DIR="${TRAIN_DIR}/classification-${VERSION_NUMBER}"
   CLASSIFICATION_EVAL_DIR="${EVAL_DIR}/classification-${VERSION_NUMBER}"
-  NUM_STEPS=20000
+  NUM_STEPS=100000
   # Run training.
   Banner "Starting training celegans classifier for ${NUM_STEPS} steps..."
   python "${git_repo}/research/gan/bio_gan/classification/train.py" \
     --train_log_dir=${CLASSIFICATION_TRAIN_DIR} \
     --dataset_dir=${CLASSIFICATION_DATASET_DIR} \
+    --data_config="128_1.0" \
     --hyper_mode="regular" \
+    --network="dconvnet" \
     --max_number_of_steps=${NUM_STEPS} \
-    --warm_start=1
+    --warm_start=0
   Banner "Finished training celegans classifier for ${NUM_STEPS} steps."
 
   # Run inference.

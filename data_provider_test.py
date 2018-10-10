@@ -24,25 +24,25 @@ from PIL import Image
 
 import tensorflow as tf
 
+import celegans
 import data_provider
-
 
 class DataProviderTest(tf.test.TestCase):
 
   def test_celegans_data_reading(self):
-    dataset_dir = "./celegans-ros-data"
+    dataset_dir = "./celegans-128-data"
     # dataset_dir = "./celegans-mnist-data"
-
+    # celegans.config_dataset("128_1to1old")
     batch_size = 10
-    images, labels, filenames, num_samples = data_provider.provide_data(
-        'train', batch_size, dataset_dir, mode="classification")
+    images, labels, filenames, num_samples = \
+            data_provider.provide_data(
+            'train', batch_size, dataset_dir, 
+            mode="classification", data_config="128_1.0")
 
     with self.test_session() as sess:
       with tf.contrib.slim.queues.QueueRunners(sess):
-        images, labels, filenames = sess.run([images, labels, filenames])
-        for image, cnt in zip(images, range(len(images))):
-            print(image, filenames)
-            break
+        images, labels, filenames = \
+                sess.run([images, labels, filenames])
         '''
             image = np.array(image[:,:,0])
             image = image * 128 + 128

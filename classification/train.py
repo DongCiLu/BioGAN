@@ -34,6 +34,8 @@ from tensorflow.python import debug as tf_debug
 from tensorflow.python.framework import ops
 
 import data_provider
+import slim
+from slim.nets import resnet_v2
 
 flags = tf.flags
 
@@ -45,11 +47,16 @@ flags.DEFINE_string('train_log_dir', '/tmp/mnist/',
 
 flags.DEFINE_string('dataset_dir', None, 'Location of data.')
 
+flags.DEFINE_string('data_config', None, 'Dataset parameters.')
+
 flags.DEFINE_string('hyper_mode', 'regular', 
                     'Possible mode: [regular tiny].')
 
 flags.DEFINE_string('mode', 'train', 
                     'Possible mode: [train predict visualize].')
+
+flags.DEFINE_string('network', 'dconvnet', 
+                    'Possible network: [dconvnet resnet].')
 
 flags.DEFINE_integer('max_number_of_steps', 20000,
                      'The maximum number of gradient steps.')
@@ -77,7 +84,8 @@ def input_fn(split, mode):
     print("hyper mode: {}".format(mode))
     images, labels, filenames, _ = data_provider.provide_data(
                 split, FLAGS.batch_size, FLAGS.dataset_dir, 
-                num_threads=1, mode=mode)
+                num_threads=1, mode=mode, 
+                data_config=FLAGS.data_config)
     features = {'images': images, 'filenames': filenames}
     return (features, labels)
   
@@ -150,19 +158,8 @@ def input_fn_visualization_patch(base_name):
   
   
 _leaky_relu = lambda x: tf.nn.leaky_relu(x, alpha=0.01)
-  
-def cnn_model(features, labels, mode):
-    n_classes = 2
-    trainable = True
-    learning_rate = 1e-5
-    images = features['images']
-    filenames = features['filenames']
-    # setup batch normalization
-    if mode == tf.estimator.ModeKeys.TRAIN:
-        norm_params={'is_training':True}
-    else:
-        norm_params={'is_training':False,
-                     'updates_collections': None}
+
+def dconvnet(norm_params, images, mode, n_classes, trainable):
     # create the network
     with tf.contrib.framework.arg_scope(
         [layers.conv2d, layers.fully_connected],
@@ -200,9 +197,33 @@ def cnn_model(features, labels, mode):
           visual_sample = conv1
       elif FLAGS.hyper_mode == "tiny":
           visual_sample = conv3
+      
+      return logits, visual_sample
   
-      predicted_classes = tf.argmax(logits, 1)
-      if mode == tf.estimator.ModeKeys.PREDICT:
+def cnn_model(features, labels, mode):
+    n_classes = 2
+    trainable = True
+    learning_rate = 1e-5
+    images = features['images']
+    filenames = features['filenames']
+    # setup batch normalization
+    if mode == tf.estimator.ModeKeys.TRAIN:
+        norm_params={'is_training':True}
+    else:
+        norm_params={'is_training':False,
+                     'updates_collections': None}
+
+    if FLAGS.network == 'dconvnet':
+        logits, visual_sample = dconvnet(
+                norm_params, images, mode, n_classes, trainable)
+    elif FLAGS.network == 'resnet':
+        logits, end_points = resnet_v2.resnet_v2_50(inputs=images,
+                num_classes=n_classes,
+                is_training=(mode==tf.estimator.ModeKeys.TRAIN))
+        visual_sample = None
+
+    predicted_classes = tf.argmax(logits, 1)
+    if mode == tf.estimator.ModeKeys.PREDICT:
         return tf.estimator.EstimatorSpec(
             mode=mode,
             predictions={
@@ -212,32 +233,32 @@ def cnn_model(features, labels, mode):
                 'images': data_provider.float_image_to_uint8(images),
                 'filenames': filenames
             })
-  
-      groundtruth_classes = tf.argmax(labels, 1)
-      loss = tf.losses.softmax_cross_entropy(
-              onehot_labels=labels, logits=logits)
-      if mode == tf.estimator.ModeKeys.TRAIN:
+
+    groundtruth_classes = tf.argmax(labels, 1)
+    loss = tf.losses.softmax_cross_entropy(
+          onehot_labels=labels, logits=logits)
+    if mode == tf.estimator.ModeKeys.TRAIN:
         optimizer = tf.train.AdamOptimizer(learning_rate=learning_rate)
         update_ops = tf.get_collection(tf.GraphKeys.UPDATE_OPS)
         with tf.control_dependencies(update_ops):
             train_op = optimizer.minimize(loss, 
-                global_step=tf.train.get_global_step())
+                    global_step=tf.train.get_global_step())
             return tf.estimator.EstimatorSpec(
                     mode, loss=loss, train_op=train_op)
-  
-      precision = tf.metrics.precision(
-            labels=groundtruth_classes, predictions=predicted_classes)
-      recall = tf.metrics.recall(
-            labels=groundtruth_classes, predictions=predicted_classes)
-  
-      eval_metric_ops = {
-        'eval/accuracy': tf.metrics.accuracy(
-            labels=groundtruth_classes, predictions=predicted_classes),
-        'eval/precision': precision,
-        'eval/recall': recall
-      }
-      return tf.estimator.EstimatorSpec(
-          mode=mode, loss=loss, eval_metric_ops=eval_metric_ops)
+
+    precision = tf.metrics.precision(
+        labels=groundtruth_classes, predictions=predicted_classes)
+    recall = tf.metrics.recall(
+        labels=groundtruth_classes, predictions=predicted_classes)
+
+    eval_metric_ops = {
+    'eval/accuracy': tf.metrics.accuracy(
+        labels=groundtruth_classes, predictions=predicted_classes),
+    'eval/precision': precision,
+    'eval/recall': recall
+    }
+    return tf.estimator.EstimatorSpec(
+      mode=mode, loss=loss, eval_metric_ops=eval_metric_ops)
   
 def prime_powers(n):
     factors = set()
@@ -369,7 +390,7 @@ def main(_):
                 max_steps=FLAGS.max_number_of_steps)
         eval_spec = tf.estimator.EvalSpec(input_fn=
                 lambda: input_fn('test', FLAGS.hyper_mode),
-                throttle_secs=20, start_delay_secs=20)
+                throttle_secs=40, start_delay_secs=40)
   
         tf.estimator.train_and_evaluate(classifier, train_spec, eval_spec)
   

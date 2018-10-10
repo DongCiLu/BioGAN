@@ -38,7 +38,7 @@ def data_augmentation(image):
     return image
 
 def provide_data(split_name, batch_size, dataset_dir, num_readers=1,
-                 num_threads=1, mode=""):
+                 num_threads=1, mode="", data_config=""):
     """Provides batches of MNIST digits.
   
     Args:
@@ -57,8 +57,8 @@ def provide_data(split_name, batch_size, dataset_dir, num_readers=1,
     Raises:
       ValueError: If `split_name` is not either 'train' or 'test'.
     """
-    dataset = celegans.get_split(split_name, 
-            dataset_dir=dataset_dir, mode=mode)
+    dataset = celegans.get_split(split_name, dataset_dir=dataset_dir, 
+            mode=mode, data_config=data_config)
     provider = slim.dataset_data_provider.DatasetDataProvider(
         dataset,
         num_readers=num_readers,
