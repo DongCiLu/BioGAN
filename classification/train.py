@@ -84,7 +84,7 @@ def input_fn(split, mode):
     print("hyper mode: {}".format(mode))
     images, labels, filenames, _ = data_provider.provide_data(
                 split, FLAGS.batch_size, FLAGS.dataset_dir, 
-                num_threads=1, mode=mode, 
+                num_threads=4, mode=mode, 
                 data_config=FLAGS.data_config)
     features = {'images': images, 'filenames': filenames}
     return (features, labels)

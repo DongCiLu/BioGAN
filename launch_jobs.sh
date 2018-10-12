@@ -176,7 +176,7 @@ fi
 # classifier for small network
 if [[ "$gan_type" == "tiny" ]]; then
   VERSION_NUMBER="trans20k"
-  CLASSIFICATION_DATASET_DIR="celegans-32-data"
+  CLASSIFICATION_DATASET_DIR="celegans-32-supervised"
   CLASSIFICATION_TRAIN_DIR="${TRAIN_DIR}/tiny-${VERSION_NUMBER}"
   CLASSIFICATION_EVAL_DIR="${EVAL_DIR}/tiny-${VERSION_NUMBER}"
   NUM_STEPS=20000
@@ -203,17 +203,17 @@ fi
 
 # Run classifier
 if [[ "$gan_type" == "classification" ]]; then
-  VERSION_NUMBER="raw_1to1old"
-  CLASSIFICATION_DATASET_DIR="celegans-128-data"
+  VERSION_NUMBER="raw_1test"
+  CLASSIFICATION_DATASET_DIR="celegans-128-supervised"
   CLASSIFICATION_TRAIN_DIR="${TRAIN_DIR}/classification-${VERSION_NUMBER}"
   CLASSIFICATION_EVAL_DIR="${EVAL_DIR}/classification-${VERSION_NUMBER}"
-  NUM_STEPS=100000
+  NUM_STEPS=100
   # Run training.
   Banner "Starting training celegans classifier for ${NUM_STEPS} steps..."
   python "${git_repo}/research/gan/bio_gan/classification/train.py" \
     --train_log_dir=${CLASSIFICATION_TRAIN_DIR} \
     --dataset_dir=${CLASSIFICATION_DATASET_DIR} \
-    --data_config="128_1.0" \
+    --data_config="128_1to3_0.01" \
     --hyper_mode="regular" \
     --network="dconvnet" \
     --max_number_of_steps=${NUM_STEPS} \
