@@ -39,6 +39,7 @@ _ITEMS_TO_DESCRIPTIONS = {
     'label': 'A single integer between 08 and 19',
 }
 
+'''
 def config_dataset(data_config):
     if data_config == "128_default":
         _FILE_PATTERN = "celegans-%s.tfrecord"
@@ -148,58 +149,181 @@ def config_dataset(data_config):
                             'train': 11, 
                             'test': 526, 
                             'predict': 11250}
-    elif data_config == "32_1to3_1.0": 
-        _FILE_PATTERN = "celegans-%s_1to3_1.0.tfrecord"
+
+    elif data_config == "32_1to3_1.0_1": 
+        _FILE_PATTERN = "celegans-%s_1to3_1.0_1.tfrecord"
         _SPLITS_TO_SIZES = {'unlabeled': 180000, 
                             'train': 193, 
                             'test': 96, 
                             'predict': 69}
-    elif data_config == "32_1to3_0.9": 
-        _FILE_PATTERN = "celegans-%s_1to3_0.9.tfrecord"
+    elif data_config == "32_1to3_0.9_1": 
+        _FILE_PATTERN = "celegans-%s_1to3_0.9_1.tfrecord"
         _SPLITS_TO_SIZES = {'unlabeled': 180000, 
                             'train': 174, 
                             'test': 96, 
                             'predict': 69}
-    elif data_config == "32_1to3_0.5": 
-        _FILE_PATTERN = "celegans-%s_1to3_0.5.tfrecord"
+    elif data_config == "32_1to3_0.5_1": 
+        _FILE_PATTERN = "celegans-%s_1to3_0.5_1.tfrecord"
         _SPLITS_TO_SIZES = {'unlabeled': 180000, 
-                            'train': 174, 
+                            'train': 97, 
                             'test': 96, 
                             'predict': 69}
-    elif data_config == "32_1to3_0.2": 
-        _FILE_PATTERN = "celegans-%s_1to3_0.2.tfrecord"
+    elif data_config == "32_1to3_0.2_1": 
+        _FILE_PATTERN = "celegans-%s_1to3_0.2_1.tfrecord"
         _SPLITS_TO_SIZES = {'unlabeled': 180000, 
                             'train': 38, 
                             'test': 96, 
                             'predict': 69}
-    elif data_config == "32_1to3_0.1": 
-        _FILE_PATTERN = "celegans-%s_1to3_0.1.tfrecord"
+    elif data_config == "32_1to3_0.1_1": 
+        _FILE_PATTERN = "celegans-%s_1to3_0.1_1.tfrecord"
         _SPLITS_TO_SIZES = {'unlabeled': 180000, 
                             'train': 19, 
                             'test': 96, 
                             'predict': 69}
-    elif data_config == "32_1to3_0.05": 
-        _FILE_PATTERN = "celegans-%s_1to3_0.05.tfrecord"
+    elif data_config == "32_1to3_0.05_1": 
+        _FILE_PATTERN = "celegans-%s_1to3_0.05_1.tfrecord"
         _SPLITS_TO_SIZES = {'unlabeled': 180000, 
                             'train': 10, 
                             'test': 96, 
                             'predict': 69}
-    elif data_config == "32_1to3_0.02": 
-        _FILE_PATTERN = "celegans-%s_1to3_0.02.tfrecord"
+    elif data_config == "32_1to3_0.02_1": 
+        _FILE_PATTERN = "celegans-%s_1to3_0.02_1.tfrecord"
         _SPLITS_TO_SIZES = {'unlabeled': 180000, 
                             'train': 4, 
                             'test': 96, 
                             'predict': 69}
-    elif data_config == "32_1to3_0.01": 
-        _FILE_PATTERN = "celegans-%s_1to3_0.01.tfrecord"
+    elif data_config == "32_1to3_0.01_1": 
+        _FILE_PATTERN = "celegans-%s_1to3_0.01_1.tfrecord"
         _SPLITS_TO_SIZES = {'unlabeled': 180000, 
-                            'train': 3, 
+                            'train': 2, 
                             'test': 96, 
                             'predict': 69}
+
+    elif data_config == "32_1to3_1.0_2": 
+        _FILE_PATTERN = "celegans-%s_1to3_1.0_2.tfrecord"
+        _SPLITS_TO_SIZES = {'unlabeled': 180000, 
+                            'train': 207, 
+                            'test': 82, 
+                            'predict': 69}
+    elif data_config == "32_1to3_0.9_2": 
+        _FILE_PATTERN = "celegans-%s_1to3_0.9_2.tfrecord"
+        _SPLITS_TO_SIZES = {'unlabeled': 180000, 
+                            'train': 186, 
+                            'test': 82, 
+                            'predict': 69}
+    elif data_config == "32_1to3_0.5_2": 
+        _FILE_PATTERN = "celegans-%s_1to3_0.5_2.tfrecord"
+        _SPLITS_TO_SIZES = {'unlabeled': 180000, 
+                            'train': 104, 
+                            'test': 82, 
+                            'predict': 69}
+    elif data_config == "32_1to3_0.2_2": 
+        _FILE_PATTERN = "celegans-%s_1to3_0.2_2.tfrecord"
+        _SPLITS_TO_SIZES = {'unlabeled': 180000, 
+                            'train': 42, 
+                            'test': 82, 
+                            'predict': 69}
+    elif data_config == "32_1to3_0.1_2": 
+        _FILE_PATTERN = "celegans-%s_1to3_0.1_2.tfrecord"
+        _SPLITS_TO_SIZES = {'unlabeled': 180000, 
+                            'train': 21, 
+                            'test': 82, 
+                            'predict': 69}
+    elif data_config == "32_1to3_0.05_2": 
+        _FILE_PATTERN = "celegans-%s_1to3_0.05_2.tfrecord"
+        _SPLITS_TO_SIZES = {'unlabeled': 180000, 
+                            'train': 10, 
+                            'test': 82, 
+                            'predict': 69}
+    elif data_config == "32_1to3_0.02_2": 
+        _FILE_PATTERN = "celegans-%s_1to3_0.02_2.tfrecord"
+        _SPLITS_TO_SIZES = {'unlabeled': 180000, 
+                            'train': 4, 
+                            'test': 82, 
+                            'predict': 69}
+    elif data_config == "32_1to3_0.01_2": 
+        _FILE_PATTERN = "celegans-%s_1to3_0.01_2.tfrecord"
+        _SPLITS_TO_SIZES = {'unlabeled': 180000, 
+                            'train': 2, 
+                            'test': 82, 
+                            'predict': 69}
+
+    elif data_config == "32_1to3_1.0_3": 
+        _FILE_PATTERN = "celegans-%s_1to3_1.0_3.tfrecord"
+        _SPLITS_TO_SIZES = {'unlabeled': 180000, 
+                            'train': 178, 
+                            'test': 111, 
+                            'predict': 69}
+    elif data_config == "32_1to3_0.9_3": 
+        _FILE_PATTERN = "celegans-%s_1to3_0.9_3.tfrecord"
+        _SPLITS_TO_SIZES = {'unlabeled': 180000, 
+                            'train': 160, 
+                            'test': 111, 
+                            'predict': 69}
+    elif data_config == "32_1to3_0.5_3": 
+        _FILE_PATTERN = "celegans-%s_1to3_0.5_3.tfrecord"
+        _SPLITS_TO_SIZES = {'unlabeled': 180000, 
+                            'train': 90, 
+                            'test': 111, 
+                            'predict': 69}
+    elif data_config == "32_1to3_0.2_3": 
+        _FILE_PATTERN = "celegans-%s_1to3_0.2_3.tfrecord"
+        _SPLITS_TO_SIZES = {'unlabeled': 180000, 
+                            'train': 35, 
+                            'test': 111, 
+                            'predict': 69}
+    elif data_config == "32_1to3_0.1_3": 
+        _FILE_PATTERN = "celegans-%s_1to3_0.1_3.tfrecord"
+        _SPLITS_TO_SIZES = {'unlabeled': 180000, 
+                            'train': 18, 
+                            'test': 111, 
+                            'predict': 69}
+    elif data_config == "32_1to3_0.05_3": 
+        _FILE_PATTERN = "celegans-%s_1to3_0.05_3.tfrecord"
+        _SPLITS_TO_SIZES = {'unlabeled': 180000, 
+                            'train': 9, 
+                            'test': 111, 
+                            'predict': 69}
+    elif data_config == "32_1to3_0.02_3": 
+        _FILE_PATTERN = "celegans-%s_1to3_0.02_3.tfrecord"
+        _SPLITS_TO_SIZES = {'unlabeled': 180000, 
+                            'train': 4, 
+                            'test': 111, 
+                            'predict': 69}
+    elif data_config == "32_1to3_0.01_3": 
+        _FILE_PATTERN = "celegans-%s_1to3_0.01_3.tfrecord"
+        _SPLITS_TO_SIZES = {'unlabeled': 180000, 
+                            'train': 1, 
+                            'test': 111, 
+                            'predict': 69}
+    
     else:
         _FILE_PATTERN = ""
         _SPLITS_TO_SIZES = {'unlabeled': 0, 'train': 0, 'test': 0, 'predict': 0}
 
+    return _FILE_PATTERN, _SPLITS_TO_SIZES
+'''
+
+def config_dataset(data_config):
+    segs = data_config.split('_')
+    network_size = segs[0]
+    ros_ratio = segs[1]
+    train_ratio = segs[2]
+    dataset_no = segs[3]
+    train_size = segs[4]
+    test_size = segs[5]
+    if network_size == "128":
+        unlabeled_size = 11250
+    elif network_size == "32":
+        unlabeled_size = 180000
+    _FILE_PATTERN = "celegans-%s" + "_{}_{}_{}.tfrecord".format(
+            ros_ratio, train_ratio, dataset_no)
+    _SPLITS_TO_SIZES = {'unlabeled': unlabeled_size, 
+                        'train': train_size, 
+                        'test': test_size, 
+                        'predict': test_size}
+
+    print ("---------------".format(_FILE_PATTERN))
     return _FILE_PATTERN, _SPLITS_TO_SIZES
 
 def get_split(split_name, dataset_dir, 

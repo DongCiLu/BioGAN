@@ -14,27 +14,7 @@
 # ==============================================================================
 #!/bin/bash
 #
-# This script performs the following operations:
-# 1. Downloads the MNIST dataset.
-# 2. Trains an unconditional, conditional, or InfoGAN model on the MNIST
-#    training set.
-# 3. Evaluates the models and writes sample images to disk.
-#
-# These examples are intended to be fast. For better final results, tune
-# hyperparameters or train longer.
-#
-# NOTE: Each training step takes about 0.5 second with a batch size of 32 on
-# CPU. On GPU, it takes ~5 milliseconds.
-#
-# With the default batch size and number of steps, train times are:
-#
-#   unconditional: CPU: 800  steps, ~10 min   GPU: 800  steps, ~1 min
-#   conditional:   CPU: 2000 steps, ~20 min   GPU: 2000 steps, ~2 min
-#   infogan:       CPU: 3000 steps, ~20 min   GPU: 3000 steps, ~6 min
-#
-# Usage:
-# cd models/research/gan/mnist
-# ./launch_jobs.sh ${gan_type} ${git_repo}
+# ./batch_jobs.sh ${network_size} ${gpu_unit}
 set -e
 
 
@@ -50,8 +30,8 @@ git_repo="/data/Tensorflow-models"
 
 gpu_unit=$2
 if [[ "$gpu_unit" == "" ]]; then
-    echo "use default gpu (GPU3)."
-    gpu_unit=3
+    echo "use default gpu (GPU2)."
+    gpu_unit=2
 fi
 
 export CUDA_VISIBLE_DEVICES=$gpu_unit
@@ -76,9 +56,11 @@ Banner () {
 CLASSIFICATION_DATASET_DIR="celegans-${network_size}-supervised"
 NUM_STEPS=50000
 training_mode=("raw" "trans") # without or with transfer learning
-dataset_ratio=("1to1" "1to3") # rosette to non-rosette ratio
-train_ratio=(1.0 0.9 0.5 0.2 0.1 0.05 0.02 0.01) # how many training data we will use to train the network, in percentage.
-exp_id=(1 2 3 4 5) # 5 experiments for each parameter settings
+# dataset_ratio=("1to1" "1to3") # rosette to non-rosette ratio
+dataset_ratio=("1to1") # datasets folder has been set to 1to1 for now
+train_src_dir_no=("1" "2" "3") # src dir to select training data
+train_ratio=(1.0 0.9 0.8 0.7 0.6 0.5 0.4 0.3 0.2 0.1) # how many training data we will use to train the network, in percentage.
+exp_id=(1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20) # 5 experiments for each parameter settings
 
 # training_mode=("raw" "trans") # without or with transfer learning
 # dataset_ratio=("1to1" "1to3") # rosette to non-rosette ratio
@@ -100,50 +82,53 @@ do
     fi
     for j in "${dataset_ratio[@]}"
     do
-        for k in "${train_ratio[@]}"
+        for n in "${train_src_dir_no[@]}"
         do
-            for l in "${exp_id[@]}"
+            for k in "${train_ratio[@]}"
             do
-                ID="${i}_${j}_${k}_exp${l}"
-                CLASSIFICATION_TRAIN_DIR="${TRAIN_DIR}/${network_size}-${ID}"
-                CLASSIFICATION_EVAL_DIR="${EVAL_DIR}/${network_size}-${ID}"
-                DATA_CONFIG="128_${j}_${k}"
+                for l in "${exp_id[@]}"
+                do
+                    ID="${i}_${j}_${k}_${n}_exp${l}"
+                    CLASSIFICATION_TRAIN_DIR="${TRAIN_DIR}/${network_size}-${ID}"
+                    CLASSIFICATION_EVAL_DIR="${EVAL_DIR}/${network_size}-${ID}"
+                    DATA_CONFIG="${network_size}_${j}_${k}_${n}"
 
-                # Prepare data.
-                Banner "Preparing data..."
-                base_dir="datasets/classification/supervised_${network_size}"
-                rm -rf "${base_dir}/train/"
-                rm -rf "${base_dir}/test/"
-                rm -rf "${base_dir}/tfrecord/"
-                python "seperate_data.py" ${network_size} ${j} ${k}
-                mkdir "${base_dir}/tfrecord/"
-                python "build_image_data.py" \
-                    --train_directory "${base_dir}/train" \
-                    --validation_directory "${base_dir}/test" \
-                    --output_directory "${base_dir}/tfrecord" \
-                    --labels_file "${base_dir}/celegans_label.txt"
-                mv "${base_dir}/tfrecord/train-00000-of-00001" \
-                    "${base_dir}/tfrecord/celegans-train_${j}_${k}.tfrecord"
-                mv "${base_dir}/tfrecord/validation-00000-of-00001" \
-                    "${base_dir}/tfrecord/celegans-test_${j}_${k}.tfrecord"
+                    # Prepare data.
+                    Banner "Preparing data..."
+                    base_dir="datasets/classification/supervised_${network_size}"
+                    rm -rf "${base_dir}/train/" # we dont redo testset
+                    rm -rf "${base_dir}/tfrecord/"
+                    python "seperate_data.py" ${network_size} ${j} "train"${n} ${k} 
+                    exp_train_size=$( find "${base_dir}/train" -type f | wc -l )
+                    exp_test_size=$( find "${base_dir}/test"${n}/ -type f | wc -l )
+                    mkdir "${base_dir}/tfrecord/"
+                    python "build_image_data.py" \
+                        --train_directory "${base_dir}/train/" \
+                        --validation_directory "${base_dir}/test${n}/" \
+                        --output_directory "${base_dir}/tfrecord" \
+                        --labels_file "${base_dir}/celegans_label.txt"
+                    mv "${base_dir}/tfrecord/train-00000-of-00001" \
+                        "${base_dir}/tfrecord/celegans-train_${j}_${k}_${n}.tfrecord"
+                    mv "${base_dir}/tfrecord/validation-00000-of-00001" \
+                        "${base_dir}/tfrecord/celegans-test_${j}_${k}_${n}.tfrecord"
 
-                # Run training.
-                Banner "Starting training classifier for ${NUM_STEPS} steps..."
-                python "classification/train.py" \
-                    --train_log_dir=${CLASSIFICATION_TRAIN_DIR} \
-                    --dataset_dir=${CLASSIFICATION_DATASET_DIR} \
-                    --data_config=${DATA_CONFIG} \
-                    --hyper_mode=${HYPER_MODE} \
-                    --network="dconvnet" \
-                    --max_number_of_steps=${NUM_STEPS} \
-                    --warm_start=${WARM_START_PARA}
-                Banner "Finished training classifier ${ID} for ${NUM_STEPS} steps."
+                    # Run training.
+                    Banner "Starting training classifier for ${NUM_STEPS} steps..."
+                    python "classification/train.py" \
+                        --train_log_dir=${CLASSIFICATION_TRAIN_DIR} \
+                        --dataset_dir=${CLASSIFICATION_DATASET_DIR} \
+                        --data_config="${DATA_CONFIG}_${exp_train_size}_${exp_test_size}" \
+                        --hyper_mode=${HYPER_MODE} \
+                        --network="dconvnet" \
+                        --max_number_of_steps=${NUM_STEPS} \
+                        --warm_start=${WARM_START_PARA}
+                    Banner "Finished training classifier ${ID} for ${NUM_STEPS} steps."
 
-                # Clean up.
-                Banner "Cleaning up..."
-                rm -rf "${base_dir}/train/"
-                rm -rf "${base_dir}/test/"
-                rm -rf "${base_dir}/tfrecord/"
+                    # Clean up.
+                    Banner "Cleaning up..."
+                    rm -rf "${base_dir}/train/"
+                    rm -rf "${base_dir}/tfrecord/"
+                done
             done
         done
     done
