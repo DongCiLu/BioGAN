@@ -378,10 +378,15 @@ def main(_):
     if FLAGS.warm_start == 0:
         ws = None
 
+    session_config = tf.ConfigProto()
+    session_config.gpu_options.allow_growth=True
+    run_config = tf.estimator.RunConfig(session_config=session_config)
+
     classifier = tf.estimator.Estimator(
             model_fn=cnn_model, 
             model_dir=FLAGS.train_log_dir,
-            warm_start_from=ws)
+            warm_start_from=ws,
+            config=run_config)
     # debug_hook = tf_debug.TensorBoardDebugHook("dgx-dl03:7006")
   
     if FLAGS.mode == 'train':

@@ -50,8 +50,8 @@ git_repo="/data/Tensorflow-models"
 
 gpu_unit=$2
 if [[ "$gpu_unit" == "" ]]; then
-    echo "use default gpu (GPU3)."
-    gpu_unit=3
+    echo "use default gpu (GPU1)."
+    gpu_unit=1
 fi
 
 export CUDA_VISIBLE_DEVICES=$gpu_unit
@@ -76,14 +76,10 @@ Banner () {
 CLASSIFICATION_DATASET_DIR="celegans-${network_size}-supervised"
 NUM_STEPS=50000
 training_mode=("raw" "trans") # without or with transfer learning
-dataset_ratio=("1to1" "1to3") # rosette to non-rosette ratio
-train_ratio=(1.0 0.9 0.5 0.2 0.1 0.05 0.02 0.01) # how many training data we will use to train the network, in percentage.
-exp_id=(1 2 3 4 5) # 5 experiments for each parameter settings
-
-# training_mode=("raw" "trans") # without or with transfer learning
 # dataset_ratio=("1to1" "1to3") # rosette to non-rosette ratio
-# train_ratio=(1.0 0.1) # how many training data we will use to train the network, in percentage.
-# exp_id=(1 2) # 5 experiments for each parameter settings
+dataset_ratio=("1to3") # set to 1:3 for now
+train_ratio=(1.0 0.9 0.8 0.7 0.6 0.5 0.4 0.3 0.2 0.1) # how many training data we will use to train the network, in percentage.
+exp_id=(1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20) # 5 experiments for each parameter settings
 
 if [[ "${network_size}" == 128 ]]; then
     HYPER_MODE="regular"
@@ -107,7 +103,7 @@ do
                 ID="${i}_${j}_${k}_exp${l}"
                 CLASSIFICATION_TRAIN_DIR="${TRAIN_DIR}/${network_size}-${ID}"
                 CLASSIFICATION_EVAL_DIR="${EVAL_DIR}/${network_size}-${ID}"
-                DATA_CONFIG="128_${j}_${k}"
+                DATA_CONFIG="${network_size}_${j}_${k}_1" # dataset number is 1
 
                 # Prepare data.
                 Banner "Preparing data..."
@@ -115,7 +111,9 @@ do
                 rm -rf "${base_dir}/train/"
                 rm -rf "${base_dir}/test/"
                 rm -rf "${base_dir}/tfrecord/"
-                python "seperate_data.py" ${network_size} ${j} ${k}
+                python "seperate_data_nonfixtest.py" ${network_size} ${j} ${k}
+                exp_train_size=$( find "${base_dir}/train" -type f | wc -l )
+                exp_test_size=$( find "${base_dir}/test" -type f | wc -l )
                 mkdir "${base_dir}/tfrecord/"
                 python "build_image_data.py" \
                     --train_directory "${base_dir}/train" \
@@ -123,16 +121,16 @@ do
                     --output_directory "${base_dir}/tfrecord" \
                     --labels_file "${base_dir}/celegans_label.txt"
                 mv "${base_dir}/tfrecord/train-00000-of-00001" \
-                    "${base_dir}/tfrecord/celegans-train_${j}_${k}.tfrecord"
+                    "${base_dir}/tfrecord/celegans-train_${j}_${k}_1.tfrecord"
                 mv "${base_dir}/tfrecord/validation-00000-of-00001" \
-                    "${base_dir}/tfrecord/celegans-test_${j}_${k}.tfrecord"
+                    "${base_dir}/tfrecord/celegans-test_${j}_${k}_1.tfrecord"
 
                 # Run training.
                 Banner "Starting training classifier for ${NUM_STEPS} steps..."
                 python "classification/train.py" \
                     --train_log_dir=${CLASSIFICATION_TRAIN_DIR} \
                     --dataset_dir=${CLASSIFICATION_DATASET_DIR} \
-                    --data_config=${DATA_CONFIG} \
+                    --data_config=${DATA_CONFIG}_${exp_train_size}_${exp_test_size} \
                     --hyper_mode=${HYPER_MODE} \
                     --network="dconvnet" \
                     --max_number_of_steps=${NUM_STEPS} \

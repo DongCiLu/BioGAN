@@ -60,14 +60,8 @@ if __name__ == '__main__':
         ros_src_dir = "datasets/classification/supervised_128/data/ros"
         nros_src_dir = "datasets/classification/supervised_128/data/nros"
         dst_dir = "datasets/classification/supervised_128"
-        ros_total = 386
-        nros_total = 1192
-    elif args.network_size == 32:
-        ros_src_dir = "datasets/classification/supervised_32/data/ros"
-        nros_src_dir = "datasets/classification/supervised_32/data/nros"
-        dst_dir = "datasets/classification/supervised_32"
-        ros_total = 78
-        nros_total = 211
+        ros_total = 130
+        nros_total = 389
 
     if args.ros_nros_ratio == '1to3':
         ros_percentage = 1.0

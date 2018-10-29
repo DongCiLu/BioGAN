@@ -30,8 +30,8 @@ git_repo="/data/Tensorflow-models"
 
 gpu_unit=$2
 if [[ "$gpu_unit" == "" ]]; then
-    echo "use default gpu (GPU2)."
-    gpu_unit=2
+    echo "use default gpu (GPU1)."
+    gpu_unit=1
 fi
 
 export CUDA_VISIBLE_DEVICES=$gpu_unit

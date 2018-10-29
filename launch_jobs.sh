@@ -54,8 +54,8 @@ fi
 
 gpu_unit=$3
 if [[ "$gpu_unit" == "" ]]; then
-    echo "use default gpu (GPU3)."
-    gpu_unit=3
+    echo "use default gpu (GPU1)."
+    gpu_unit=1
 fi
 
 export CUDA_VISIBLE_DEVICES=$gpu_unit
