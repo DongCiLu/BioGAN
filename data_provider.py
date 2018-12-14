@@ -38,7 +38,7 @@ def data_augmentation(image):
     return image
 
 def provide_data(split_name, batch_size, dataset_dir, num_readers=1,
-                 num_threads=1, mode="", data_config=""):
+                 num_threads=1, mode=""):
     """Provides batches of MNIST digits.
   
     Args:
@@ -57,8 +57,7 @@ def provide_data(split_name, batch_size, dataset_dir, num_readers=1,
     Raises:
       ValueError: If `split_name` is not either 'train' or 'test'.
     """
-    dataset = celegans.get_split(split_name, dataset_dir=dataset_dir, 
-            mode=mode, data_config=data_config)
+    dataset = celegans.get_split(split_name, dataset_dir=dataset_dir, mode=mode)
     provider = slim.dataset_data_provider.DatasetDataProvider(
         dataset,
         num_readers=num_readers,
@@ -66,6 +65,10 @@ def provide_data(split_name, batch_size, dataset_dir, num_readers=1,
         common_queue_min=batch_size,
         shuffle=(split_name == 'train' or split_name == 'unlabeled'))
     [image, label, filename] = provider.get(['image', 'label', 'filename'])
+
+    # Change batch size of custom evaluate to 1
+    if mode == "custom_evaluate":
+        batch_size = 1
   
     # Resize image to an acceptable size
     old_size = image.shape
@@ -87,7 +90,7 @@ def provide_data(split_name, batch_size, dataset_dir, num_readers=1,
       print ("resize image from {} to {}".format(old_size, image.shape))
   
     # Data augmentation.
-    if (mode == "classification" or mode == "tiny") and split_name == "train":
+    if (mode == "regular" or mode == "tiny") and split_name == "train":
         print("enable data augmentation")
         image = tf.to_float(image) / 255.0
         image = data_augmentation(image)
@@ -108,7 +111,7 @@ def provide_data(split_name, batch_size, dataset_dir, num_readers=1,
     print ("image dimension: {}".format(images.shape))
     print ("label dimension: {}".format(one_hot_labels.shape))
     print ("number of samples: {}".format(dataset.num_samples))
-    return images, one_hot_labels, filenames, dataset.num_samples
+    return images, one_hot_labels, filenames, labels
   
 def float_image_to_uint8(image):
     """Convert float image in [-1, 1) to [0, 255] uint8.

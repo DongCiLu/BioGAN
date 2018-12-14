@@ -25,6 +25,7 @@ from __future__ import print_function
 import os
 import tensorflow as tf
 from datasets import dataset_utils
+from termcolor import colored
 
 slim = tf.contrib.slim
 
@@ -52,18 +53,18 @@ def config_dataset(data_config):
         unlabeled_size = 45000
     elif network_size == "32":
         unlabeled_size = 180000
+    global _FILE_PATTERN
+    global _SPLITS_TO_SIZES
     _FILE_PATTERN = "celegans-%s" + "_{}_{}_{}.tfrecord".format(
             ros_ratio, train_ratio, dataset_no)
     _SPLITS_TO_SIZES = {'unlabeled': unlabeled_size, 
-                        'train': train_size, 
-                        'test': test_size, 
-                        'predict': test_size}
+                        'train': int(train_size), 
+                        'test': int(test_size), 
+                        'predict': int(test_size)}
 
-    print ("---------------".format(_FILE_PATTERN))
     return _FILE_PATTERN, _SPLITS_TO_SIZES
 
-def get_split(split_name, dataset_dir, 
-        file_pattern=None, reader=None, mode="", data_config=""):
+def get_split(split_name, dataset_dir, file_pattern=None, reader=None, mode=""):
     """Gets a dataset tuple with instructions for reading MNIST.
   
     Args:
@@ -81,14 +82,11 @@ def get_split(split_name, dataset_dir,
       ValueError: if `split_name` is not a valid train/test split.
     """
 
-    _FILE_PATTERN, _SPLITS_TO_SIZES = config_dataset(data_config)
-  
     if split_name not in _SPLITS_TO_SIZES:
       raise ValueError('split name %s was not recognized.' % split_name)
   
     if not file_pattern:
       file_pattern = _FILE_PATTERN
-    print("Reading dataset with file pattern: {}".format(_FILE_PATTERN))
     file_pattern = os.path.join(dataset_dir, file_pattern % split_name)
   
     # Allowing None in the signature so that dataset_factory can use the default.

@@ -24,9 +24,9 @@ import os
 import math
 from PIL import Image
 from PIL import ImageDraw
-import matplotlib as mpl
-mpl.use("Agg")
-import matplotlib.pyplot as plt
+# import matplotlib as mpl
+# mpl.use("Agg")
+# import matplotlib.pyplot as plt
 import numpy as np
 import tensorflow as tf
 layers = tf.contrib.layers
@@ -34,7 +34,11 @@ from tensorflow.python import debug as tf_debug
 from tensorflow.python.framework import ops
 
 import data_provider
+import celegans
 import slim
+import triplet_loss
+from termcolor import colored
+from sklearn.neighbors import KNeighborsClassifier
 from slim.nets import resnet_v2
 
 flags = tf.flags
@@ -53,7 +57,13 @@ flags.DEFINE_string('hyper_mode', 'regular',
                     'Possible mode: [regular tiny].')
 
 flags.DEFINE_string('mode', 'train', 
-                    'Possible mode: [train predict visualize].')
+                    'Possible mode: [train triplet_train predict visualize].')
+
+flags.DEFINE_string('triplet_mining_method', 'batchall', 
+        'Which triplet mining method to use: batchall or batchhard.')
+
+flags.DEFINE_float('triplet_margin', 0.2, 
+        'Value of margin used for triplet loss.')
 
 flags.DEFINE_string('network', 'dconvnet', 
                     'Possible network: [dconvnet resnet].')
@@ -82,11 +92,11 @@ Encoding_para = 10000 # for encoding visualization coordinates
 
 def input_fn(split, mode):
     print("hyper mode: {}".format(mode))
-    images, labels, filenames, _ = data_provider.provide_data(
+    images, labels, filenames, ax_labels = data_provider.provide_data(
                 split, FLAGS.batch_size, FLAGS.dataset_dir, 
-                num_threads=4, mode=mode, 
-                data_config=FLAGS.data_config)
-    features = {'images': images, 'filenames': filenames}
+                num_threads=4, mode=mode)
+    features = {'images': images, 'filenames': filenames, 
+            'ax_labels': ax_labels}
     return (features, labels)
   
 def input_fn_visualization_occ(base_name):
@@ -206,6 +216,7 @@ def cnn_model(features, labels, mode):
     learning_rate = 1e-5
     images = features['images']
     filenames = features['filenames']
+    ax_labels = features['ax_labels']
     # setup batch normalization
     if mode == tf.estimator.ModeKeys.TRAIN:
         norm_params={'is_training':True}
@@ -231,12 +242,27 @@ def cnn_model(features, labels, mode):
                 'class': predicted_classes,
                 'prob': tf.nn.softmax(logits),
                 'images': data_provider.float_image_to_uint8(images),
-                'filenames': filenames
+                'filenames': filenames,
+                'embedding': logits,
+                'gt_class' : ax_labels,
             })
 
     groundtruth_classes = tf.argmax(labels, 1)
-    loss = tf.losses.softmax_cross_entropy(
-          onehot_labels=labels, logits=logits)
+    if FLAGS.mode == "triplet_train":
+        if FLAGS.triplet_mining_method == "batchall":
+            loss, fraction_positive_triplets, num_valid_triplets = \
+                    triplet_loss.batch_all_triplet_loss(
+                    ax_labels, logits, FLAGS.triplet_margin)
+        elif FLAGS.triplet_mining_method == "batchhard":
+            loss = triplet_loss.batch_hard_triplet_loss(
+                    ax_labels, logits, FLAGS.triplet_margin)
+        else:
+            "ERROR: Wrong Triplet loss mining method, using softmax"
+            loss = tf.losses.softmax_cross_entropy(
+                    onehot_labels=labels, logits=logits)
+    else:
+        loss = tf.losses.softmax_cross_entropy(
+              onehot_labels=labels, logits=logits)
     if mode == tf.estimator.ModeKeys.TRAIN:
         optimizer = tf.train.AdamOptimizer(learning_rate=learning_rate)
         update_ops = tf.get_collection(tf.GraphKeys.UPDATE_OPS)
@@ -334,6 +360,32 @@ def save_visual_image(base_name, predictions, thresholds):
             rgb_base_image.save('{}/{}_{}.jpg'.format(
                 FLAGS.visualization_dir, get_prefix(base_name), threshold))
   
+def build_knn_classifier(predictions): 
+    # collect embeddings of all training data
+    train_embeddings = []
+    train_labels = []
+    for pred, _ in zip(predictions, range(celegans._SPLITS_TO_SIZES['train'])):
+        train_embeddings.append(pred['embedding'])
+        train_labels.append(pred['gt_class'])
+    knn = KNeighborsClassifier(n_neighbors=5)
+    knn.fit(train_embeddings, train_labels)
+    return knn
+    
+def customized_knn_evaluation(predictions, knn): 
+    accuracy = 0
+    test_embeddings = []
+    test_labels = []
+    for pred, _ in zip(predictions, range(celegans._SPLITS_TO_SIZES['test'])):
+        test_embeddings.append(pred['embedding'])
+        test_labels.append(pred['gt_class'])
+    test_predictions = knn.predict(test_embeddings)
+    for test_prediction, test_label in zip(test_predictions, test_labels):
+        if (test_prediction == test_label):
+            accuracy += 1
+    accuracy = float(accuracy) / celegans._SPLITS_TO_SIZES['test']
+    print(colored("Final accuracy after {} experiments is: {}".format(
+        celegans._SPLITS_TO_SIZES['test'], accuracy), 'blue'))
+
 def main(_):
     if not tf.gfile.Exists(FLAGS.train_log_dir):
       tf.gfile.MakeDirs(FLAGS.train_log_dir)
@@ -389,6 +441,9 @@ def main(_):
             config=run_config)
     # debug_hook = tf_debug.TensorBoardDebugHook("dgx-dl03:7006")
   
+    # config dataset first
+    celegans.config_dataset(FLAGS.data_config)
+  
     if FLAGS.mode == 'train':
         train_spec = tf.estimator.TrainSpec(input_fn=
                 lambda: input_fn('train', FLAGS.hyper_mode),
@@ -398,6 +453,26 @@ def main(_):
                 throttle_secs=40, start_delay_secs=40)
   
         tf.estimator.train_and_evaluate(classifier, train_spec, eval_spec)
+
+    elif FLAGS.mode == 'triplet_train':
+        # only works for clean model
+        number_of_iterations = 10
+        steps_per_iteration = FLAGS.max_number_of_steps / number_of_iterations
+
+        for iteration in range(number_of_iterations):
+            # 2. train the network with triplets
+            classifier.train(input_fn=lambda: input_fn('train', 
+                FLAGS.hyper_mode), steps=steps_per_iteration)
+
+            # 3. create knn classifier with network embeddings of training data
+            training_embeddings = classifier.predict(
+                    input_fn=lambda:input_fn('train', 'custom_evaluate'))
+            knn = build_knn_classifier(training_embeddings)
+
+            # 4. get network embeddings of testing data and classify with knn
+            testing_embeddings = classifier.predict(
+                    input_fn=lambda:input_fn('test', 'custom_evaluate'))
+            customized_knn_evaluation(testing_embeddings, knn)
   
     elif FLAGS.mode == 'predict':
         if not tf.gfile.Exists(FLAGS.prediction_dir):

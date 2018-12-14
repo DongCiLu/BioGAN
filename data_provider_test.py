@@ -30,25 +30,21 @@ import data_provider
 class DataProviderTest(tf.test.TestCase):
 
   def test_celegans_data_reading(self):
-    dataset_dir = "./celegans-128-data"
-    # dataset_dir = "./celegans-mnist-data"
-    # celegans.config_dataset("128_1to1old")
-    batch_size = 10
-    images, labels, filenames, num_samples = \
+    dataset_dir = "./celegans-128-supervised"
+    batch_size = 1
+    images, labels, filenames, ax_labels = \
             data_provider.provide_data(
             'train', batch_size, dataset_dir, 
-            mode="classification", data_config="128_1.0")
+            mode="classification", data_config="128_1to3_1.0_1_1118_356")
 
     with self.test_session() as sess:
       with tf.contrib.slim.queues.QueueRunners(sess):
-        images, labels, filenames = \
-                sess.run([images, labels, filenames])
-        '''
-            image = np.array(image[:,:,0])
-            image = image * 128 + 128
-            image = Image.fromarray(image.astype(np.uint8))
-            image.save("test{}.jpg".format(cnt))
-        '''
+        images, labels, filenames, ax_labels = \
+                sess.run([images, labels, filenames, ax_labels])
+        print (images.shape)
+        print (labels.shape)
+        print (filenames.shape)
+        print (ax_labels.shape)
 
 
 if __name__ == '__main__':
