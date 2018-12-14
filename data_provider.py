@@ -73,6 +73,9 @@ def provide_data(split_name, batch_size, dataset_dir, num_readers=1,
     if mode == "multiple":
       width = base_size * 2
       height = base_size
+    elif mode == "medium" or mode == "mediumgan":
+      width = 64
+      height = 64
     elif mode == "tiny" or mode == "tinygan":
       width = 32
       height = 32

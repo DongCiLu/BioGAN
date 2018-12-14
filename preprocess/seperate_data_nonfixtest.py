@@ -61,7 +61,9 @@ if __name__ == '__main__':
         nros_src_dir = "datasets/classification/supervised_128/data/nros"
         dst_dir = "datasets/classification/supervised_128"
         ros_total = 130
-        nros_total = 389
+        nros_total = 385
+        # ros_total = 386
+        # nros_total = 1192
 
     if args.ros_nros_ratio == '1to3':
         ros_percentage = 1.0

@@ -47,28 +47,28 @@ if __name__ == '__main__':
 
     if args.train_dir == 'train1':
         if args.ros_nros_ratio == "1to3":
-            # ros_total = 51
-            # nros_total = 142
-            ros_total = 24
-            nros_total = 72
+             ros_total = 51
+             nros_total = 142
+#            ros_total = 24
+#            nros_total = 72
         elif args.ros_nros_ratio == "1to1":
             ros_total = 51
             nros_total = 51
     elif args.train_dir == 'train2':
         if args.ros_nros_ratio == "1to3":
-            # ros_total = 58
-            # nros_total = 149
-            ros_total = 29
-            nros_total = 87
+            ros_total = 58
+            nros_total = 149
+#            ros_total = 29
+#            nros_total = 87
         elif args.ros_nros_ratio == "1to1":
             ros_total = 58
             nros_total = 58
     elif args.train_dir == 'train3':
         if args.ros_nros_ratio == "1to3":
-            # ros_total = 47
-            # nros_total = 131
-            ros_total = 23
-            nros_total = 69
+             ros_total = 47
+             nros_total = 131
+#            ros_total = 23
+#            nros_total = 69
         elif args.ros_nros_ratio == "1to1":
             ros_total = 47
             nros_total = 47

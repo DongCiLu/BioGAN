@@ -20,8 +20,8 @@ set -e
 
 ### IMPORTANT: network of same size can only have 1 running instance at a time #
 network_size=$1
-if ! [[ "$network_size" =~ ^(128|32) ]]; then
-    echo "'network_size' must be one of: 128 or 32."
+if ! [[ "$network_size" =~ ^(128|64|32) ]]; then
+    echo "'network_size' must be one of: 128 or 64 or 32."
     exit
 fi
 
@@ -54,15 +54,12 @@ Banner () {
 
 # parameter list for batch mode
 CLASSIFICATION_DATASET_DIR="celegans-${network_size}-supervised"
-NUM_STEPS=100000
+NUM_STEPS=50000
 training_mode=("raw" "trans") # without or with transfer learning
 # dataset_ratio=("1to1" "1to3") # rosette to non-rosette ratio
 dataset_ratio=("1to3") # datasets folder has been set to 1to3 for now
-#train_src_dir_no=("1" "2" "3") # src dir to select training data
-train_src_dir_no=("2") # src dir to select training data
-#train_ratio=(1.0 0.9 0.8 0.7 0.6 0.5 0.4 0.3 0.2 0.1) # how many training data we will use to train the network, in percentage.
-
-train_ratio=(0.05 0.01)
+train_src_dir_no=("1" "2" "3") # src dir to select training data
+train_ratio=(1.0 0.9 0.8 0.7 0.6 0.5 0.4 0.3 0.2 0.1) # how many training data we will use to train the network, in percentage.
 exp_id=(1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20) # 5 experiments for each parameter settings
 
 # training_mode=("raw" "trans") # without or with transfer learning
@@ -72,6 +69,8 @@ exp_id=(1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20) # 5 experiments for 
 
 if [[ "${network_size}" == 128 ]]; then
     HYPER_MODE="regular"
+elif [[ "${network_size}" == 64 ]]; then
+   HYPER_MODE="medium"
 else
     HYPER_MODE="tiny"
 fi
