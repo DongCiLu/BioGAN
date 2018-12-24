@@ -65,6 +65,9 @@ flags.DEFINE_string('triplet_mining_method', 'batchall',
 flags.DEFINE_float('triplet_margin', 0.2, 
         'Value of margin used for triplet loss.')
 
+flags.DEFINE_float('learning_rate', 1e-5, 
+        'Learning rate used for training.')
+
 flags.DEFINE_string('network', 'dconvnet', 
                     'Possible network: [dconvnet resnet].')
 
@@ -213,7 +216,7 @@ def dconvnet(norm_params, images, mode, n_classes, trainable):
 def cnn_model(features, labels, mode):
     n_classes = 2
     trainable = True
-    learning_rate = 1e-5
+    learning_rate = FLAGS.learning_rate
     images = features['images']
     filenames = features['filenames']
     ax_labels = features['ax_labels']
