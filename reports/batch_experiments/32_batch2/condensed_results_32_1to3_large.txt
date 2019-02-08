@@ -1,0 +1,480 @@
+INFO:tensorflow:Saving dict for global step 50000: eval/accuracy = 0.8853125, eval/precision = 0.9138817, eval/recall = 0.9277947, global_step = 50000, loss = 0.30930597
+[0;32mFinished training classifier raw_1to3_1.0_1_exp1 for 50000 steps.[0m
+INFO:tensorflow:Saving dict for global step 50000: eval/accuracy = 0.864375, eval/precision = 0.8883798, eval/recall = 0.9277947, global_step = 50000, loss = 0.30148798
+[0;32mFinished training classifier raw_1to3_1.0_1_exp2 for 50000 steps.[0m
+INFO:tensorflow:Saving dict for global step 50000: eval/accuracy = 0.9065625, eval/precision = 0.94091713, eval/recall = 0.9282297, global_step = 50000, loss = 0.28811553
+[0;32mFinished training classifier raw_1to3_1.0_1_exp3 for 50000 steps.[0m
+INFO:tensorflow:Saving dict for global step 50000: eval/accuracy = 0.8959375, eval/precision = 0.90386194, eval/recall = 0.9569378, global_step = 50000, loss = 0.2978264
+[0;32mFinished training classifier raw_1to3_1.0_1_exp4 for 50000 steps.[0m
+INFO:tensorflow:Saving dict for global step 50000: eval/accuracy = 0.9275, eval/precision = 0.95588887, eval/recall = 0.94258374, global_step = 50000, loss = 0.2881633
+[0;32mFinished training classifier raw_1to3_1.0_1_exp5 for 50000 steps.[0m
+INFO:tensorflow:Saving dict for global step 50000: eval/accuracy = 0.895625, eval/precision = 0.9150824, eval/recall = 0.94214875, global_step = 50000, loss = 0.3077029
+[0;32mFinished training classifier raw_1to3_0.9_1_exp1 for 50000 steps.[0m
+INFO:tensorflow:Saving dict for global step 50000: eval/accuracy = 0.8753125, eval/precision = 0.890304, eval/recall = 0.94258374, global_step = 50000, loss = 0.3428193
+[0;32mFinished training classifier raw_1to3_0.9_1_exp2 for 50000 steps.[0m
+INFO:tensorflow:Saving dict for global step 50000: eval/accuracy = 0.8746875, eval/precision = 0.9007601, eval/recall = 0.9277947, global_step = 50000, loss = 0.28304067
+[0;32mFinished training classifier raw_1to3_0.9_1_exp3 for 50000 steps.[0m
+INFO:tensorflow:Saving dict for global step 50000: eval/accuracy = 0.90625, eval/precision = 0.940891, eval/recall = 0.9277947, global_step = 50000, loss = 0.2889595
+[0;32mFinished training classifier raw_1to3_0.9_1_exp4 for 50000 steps.[0m
+INFO:tensorflow:Saving dict for global step 50000: eval/accuracy = 0.90625, eval/precision = 0.92841834, eval/recall = 0.94214875, global_step = 50000, loss = 0.28819835
+[0;32mFinished training classifier raw_1to3_0.9_1_exp5 for 50000 steps.[0m
+INFO:tensorflow:Saving dict for global step 50000: eval/accuracy = 0.8540625, eval/precision = 0.8868243, eval/recall = 0.91344064, global_step = 50000, loss = 0.34297287
+[0;32mFinished training classifier raw_1to3_0.5_1_exp1 for 50000 steps.[0m
+INFO:tensorflow:Saving dict for global step 50000: eval/accuracy = 0.895625, eval/precision = 0.9395973, eval/recall = 0.91344064, global_step = 50000, loss = 0.33958972
+[0;32mFinished training classifier raw_1to3_0.5_1_exp2 for 50000 steps.[0m
+INFO:tensorflow:Saving dict for global step 50000: eval/accuracy = 0.8234375, eval/precision = 0.8609492, eval/recall = 0.8995215, global_step = 50000, loss = 0.36282575
+[0;32mFinished training classifier raw_1to3_0.5_1_exp3 for 50000 steps.[0m
+INFO:tensorflow:Saving dict for global step 50000: eval/accuracy = 0.875, eval/precision = 0.8899384, eval/recall = 0.94258374, global_step = 50000, loss = 0.3127051
+[0;32mFinished training classifier raw_1to3_0.5_1_exp4 for 50000 steps.[0m
+INFO:tensorflow:Saving dict for global step 50000: eval/accuracy = 0.9059375, eval/precision = 0.89423835, eval/recall = 0.98564595, global_step = 50000, loss = 0.29463032
+[0;32mFinished training classifier raw_1to3_0.5_1_exp5 for 50000 steps.[0m
+INFO:tensorflow:Saving dict for global step 50000: eval/accuracy = 0.864375, eval/precision = 0.8997, eval/recall = 0.91300565, global_step = 50000, loss = 0.3579555
+[0;32mFinished training classifier raw_1to3_0.2_1_exp1 for 50000 steps.[0m
+INFO:tensorflow:Saving dict for global step 50000: eval/accuracy = 0.780625, eval/precision = 0.81523883, eval/recall = 0.8982166, global_step = 50000, loss = 0.4431187
+[0;32mFinished training classifier raw_1to3_0.2_1_exp2 for 50000 steps.[0m
+INFO:tensorflow:Saving dict for global step 50000: eval/accuracy = 0.885625, eval/precision = 0.8917714, eval/recall = 0.9569378, global_step = 50000, loss = 0.36615178
+[0;32mFinished training classifier raw_1to3_0.2_1_exp3 for 50000 steps.[0m
+INFO:tensorflow:Saving dict for global step 50000: eval/accuracy = 0.8853125, eval/precision = 0.9386921, eval/recall = 0.89908653, global_step = 50000, loss = 0.3137853
+[0;32mFinished training classifier raw_1to3_0.2_1_exp4 for 50000 steps.[0m
+INFO:tensorflow:Saving dict for global step 50000: eval/accuracy = 0.8753125, eval/precision = 0.870226, eval/recall = 0.97129184, global_step = 50000, loss = 0.31872737
+[0;32mFinished training classifier raw_1to3_0.2_1_exp5 for 50000 steps.[0m
+INFO:tensorflow:Saving dict for global step 50000: eval/accuracy = 0.8121875, eval/precision = 0.90390104, eval/recall = 0.8264463, global_step = 50000, loss = 0.4414881
+[0;32mFinished training classifier raw_1to3_0.1_1_exp1 for 50000 steps.[0m
+INFO:tensorflow:Saving dict for global step 50000: eval/accuracy = 0.811875, eval/precision = 0.8305415, eval/recall = 0.9273597, global_step = 50000, loss = 0.4364571
+[0;32mFinished training classifier raw_1to3_0.1_1_exp2 for 50000 steps.[0m
+INFO:tensorflow:Saving dict for global step 50000: eval/accuracy = 0.864375, eval/precision = 0.8779895, eval/recall = 0.94214875, global_step = 50000, loss = 0.37319034
+[0;32mFinished training classifier raw_1to3_0.1_1_exp3 for 50000 steps.[0m
+INFO:tensorflow:Saving dict for global step 50000: eval/accuracy = 0.75, eval/precision = 0.82572794, eval/recall = 0.8264463, global_step = 50000, loss = 0.47943047
+[0;32mFinished training classifier raw_1to3_0.1_1_exp4 for 50000 steps.[0m
+INFO:tensorflow:Saving dict for global step 50000: eval/accuracy = 0.8753125, eval/precision = 0.96705997, eval/recall = 0.8555894, global_step = 50000, loss = 0.36059558
+[0;32mFinished training classifier raw_1to3_0.1_1_exp5 for 50000 steps.[0m
+INFO:tensorflow:Saving dict for global step 50000: eval/accuracy = 0.8228125, eval/precision = 0.89327884, eval/recall = 0.8555894, global_step = 50000, loss = 0.43751326
+[0;32mFinished training classifier raw_1to3_0.05_1_exp1 for 50000 steps.[0m
+INFO:tensorflow:Saving dict for global step 50000: eval/accuracy = 0.7190625, eval/precision = 0.7836305, eval/recall = 0.84123534, global_step = 50000, loss = 0.49630305
+[0;32mFinished training classifier raw_1to3_0.05_1_exp2 for 50000 steps.[0m
+INFO:tensorflow:Saving dict for global step 50000: eval/accuracy = 0.844375, eval/precision = 0.96537465, eval/recall = 0.8125272, global_step = 50000, loss = 0.40628925
+[0;32mFinished training classifier raw_1to3_0.05_1_exp3 for 50000 steps.[0m
+INFO:tensorflow:Saving dict for global step 50000: eval/accuracy = 0.73875, eval/precision = 0.9061632, eval/recall = 0.70987386, global_step = 50000, loss = 0.49612954
+[0;32mFinished training classifier raw_1to3_0.05_1_exp4 for 50000 steps.[0m
+INFO:tensorflow:Saving dict for global step 50000: eval/accuracy = 0.8434375, eval/precision = 0.84550345, eval/recall = 0.9569378, global_step = 50000, loss = 0.38671884
+[0;32mFinished training classifier raw_1to3_0.05_1_exp5 for 50000 steps.[0m
+INFO:tensorflow:Saving dict for global step 50000: eval/accuracy = 0.75, eval/precision = 0.7844402, eval/recall = 0.89908653, global_step = 50000, loss = 0.47842106
+[0;32mFinished training classifier raw_1to3_0.02_1_exp1 for 50000 steps.[0m
+INFO:tensorflow:Saving dict for global step 50000: eval/accuracy = 0.7709375, eval/precision = 0.7762879, eval/recall = 0.9569378, global_step = 50000, loss = 0.5110218
+[0;32mFinished training classifier raw_1to3_0.02_1_exp2 for 50000 steps.[0m
+INFO:tensorflow:Saving dict for global step 50000: eval/accuracy = 0.7396875, eval/precision = 0.7817064, eval/recall = 0.8847325, global_step = 50000, loss = 0.5470519
+[0;32mFinished training classifier raw_1to3_0.02_1_exp3 for 50000 steps.[0m
+INFO:tensorflow:Saving dict for global step 50000: eval/accuracy = 0.7084375, eval/precision = 0.77298164, eval/recall = 0.84123534, global_step = 50000, loss = 0.5334461
+[0;32mFinished training classifier raw_1to3_0.02_1_exp4 for 50000 steps.[0m
+INFO:tensorflow:Saving dict for global step 50000: eval/accuracy = 0.78125, eval/precision = 0.8423983, eval/recall = 0.8555894, global_step = 50000, loss = 0.46694335
+[0;32mFinished training classifier raw_1to3_0.02_1_exp5 for 50000 steps.[0m
+INFO:tensorflow:Saving dict for global step 50000: eval/accuracy = 0.813125, eval/precision = 0.9044223, eval/recall = 0.8273162, global_step = 50000, loss = 0.4620656
+[0;32mFinished training classifier raw_1to3_0.01_1_exp1 for 50000 steps.[0m
+INFO:tensorflow:Saving dict for global step 50000: eval/accuracy = 0.3971875, eval/precision = 1.0, eval/recall = 0.16093954, global_step = 50000, loss = 0.88184035
+[0;32mFinished training classifier raw_1to3_0.01_1_exp2 for 50000 steps.[0m
+INFO:tensorflow:Saving dict for global step 50000: eval/accuracy = 0.426875, eval/precision = 0.68350434, eval/recall = 0.37668553, global_step = 50000, loss = 0.77504426
+[0;32mFinished training classifier raw_1to3_0.01_1_exp3 for 50000 steps.[0m
+INFO:tensorflow:Saving dict for global step 50000: eval/accuracy = 0.6159375, eval/precision = 0.79689234, eval/recall = 0.6246194, global_step = 50000, loss = 0.6647116
+[0;32mFinished training classifier raw_1to3_0.01_1_exp4 for 50000 steps.[0m
+INFO:tensorflow:Saving dict for global step 50000: eval/accuracy = 0.8346875, eval/precision = 0.96529967, eval/recall = 0.79860806, global_step = 50000, loss = 0.44982356
+[0;32mFinished training classifier raw_1to3_0.01_1_exp5 for 50000 steps.[0m
+INFO:tensorflow:Saving dict for global step 50000: eval/accuracy = 0.865625, eval/precision = 0.9044327, eval/recall = 0.9193882, global_step = 50000, loss = 0.31838357
+[0;32mFinished training classifier raw_1to3_1.0_2_exp1 for 50000 steps.[0m
+INFO:tensorflow:Saving dict for global step 50000: eval/accuracy = 0.9025, eval/precision = 0.9219063, eval/recall = 0.9516329, global_step = 50000, loss = 0.30363727
+[0;32mFinished training classifier raw_1to3_1.0_2_exp2 for 50000 steps.[0m
+INFO:tensorflow:Saving dict for global step 50000: eval/accuracy = 0.926875, eval/precision = 0.9242718, eval/recall = 0.98387766, global_step = 50000, loss = 0.29068542
+[0;32mFinished training classifier raw_1to3_1.0_2_exp3 for 50000 steps.[0m
+INFO:tensorflow:Saving dict for global step 50000: eval/accuracy = 0.9265625, eval/precision = 0.92391306, eval/recall = 0.98387766, global_step = 50000, loss = 0.29766938
+[0;32mFinished training classifier raw_1to3_1.0_2_exp4 for 50000 steps.[0m
+INFO:tensorflow:Saving dict for global step 50000: eval/accuracy = 0.9146875, eval/precision = 0.92310727, eval/recall = 0.96775526, global_step = 50000, loss = 0.26675016
+[0;32mFinished training classifier raw_1to3_1.0_2_exp5 for 50000 steps.[0m
+INFO:tensorflow:Saving dict for global step 50000: eval/accuracy = 0.865625, eval/precision = 0.8919984, eval/recall = 0.9355105, global_step = 50000, loss = 0.29668218
+[0;32mFinished training classifier raw_1to3_0.9_2_exp1 for 50000 steps.[0m
+INFO:tensorflow:Saving dict for global step 50000: eval/accuracy = 0.9025, eval/precision = 0.89709765, eval/recall = 0.98387766, global_step = 50000, loss = 0.29785106
+[0;32mFinished training classifier raw_1to3_0.9_2_exp2 for 50000 steps.[0m
+INFO:tensorflow:Saving dict for global step 50000: eval/accuracy = 0.9021875, eval/precision = 0.9087733, eval/recall = 0.96775526, global_step = 50000, loss = 0.29897445
+[0;32mFinished training classifier raw_1to3_0.9_2_exp3 for 50000 steps.[0m
+INFO:tensorflow:Saving dict for global step 50000: eval/accuracy = 0.93875, eval/precision = 0.952013, eval/recall = 0.96775526, global_step = 50000, loss = 0.26769072
+[0;32mFinished training classifier raw_1to3_0.9_2_exp4 for 50000 steps.[0m
+INFO:tensorflow:Saving dict for global step 50000: eval/accuracy = 0.9025, eval/precision = 0.89709765, eval/recall = 0.98387766, global_step = 50000, loss = 0.29980257
+[0;32mFinished training classifier raw_1to3_0.9_2_exp5 for 50000 steps.[0m
+INFO:tensorflow:Saving dict for global step 50000: eval/accuracy = 0.8903125, eval/precision = 0.90772873, eval/recall = 0.9516329, global_step = 50000, loss = 0.33648896
+[0;32mFinished training classifier raw_1to3_0.5_2_exp1 for 50000 steps.[0m
+INFO:tensorflow:Saving dict for global step 50000: eval/accuracy = 0.9021875, eval/precision = 0.9087733, eval/recall = 0.96775526, global_step = 50000, loss = 0.3141575
+[0;32mFinished training classifier raw_1to3_0.5_2_exp2 for 50000 steps.[0m
+INFO:tensorflow:Saving dict for global step 50000: eval/accuracy = 0.89, eval/precision = 0.9073709, eval/recall = 0.9516329, global_step = 50000, loss = 0.31665993
+[0;32mFinished training classifier raw_1to3_0.5_2_exp3 for 50000 steps.[0m
+INFO:tensorflow:Saving dict for global step 50000: eval/accuracy = 0.926875, eval/precision = 0.9666809, eval/recall = 0.9355105, global_step = 50000, loss = 0.29415646
+[0;32mFinished training classifier raw_1to3_0.5_2_exp4 for 50000 steps.[0m
+INFO:tensorflow:Saving dict for global step 50000: eval/accuracy = 0.9390625, eval/precision = 0.96722686, eval/recall = 0.9516329, global_step = 50000, loss = 0.3019422
+[0;32mFinished training classifier raw_1to3_0.5_2_exp5 for 50000 steps.[0m
+INFO:tensorflow:Saving dict for global step 50000: eval/accuracy = 0.75625, eval/precision = 0.8750572, eval/recall = 0.79040927, global_step = 50000, loss = 0.4771452
+[0;32mFinished training classifier raw_1to3_0.2_2_exp1 for 50000 steps.[0m
+INFO:tensorflow:Saving dict for global step 50000: eval/accuracy = 0.85375, eval/precision = 0.90326583, eval/recall = 0.90326583, global_step = 50000, loss = 0.36814278
+[0;32mFinished training classifier raw_1to3_0.2_2_exp2 for 50000 steps.[0m
+INFO:tensorflow:Saving dict for global step 50000: eval/accuracy = 0.8290625, eval/precision = 0.8746998, eval/recall = 0.90326583, global_step = 50000, loss = 0.34756213
+[0;32mFinished training classifier raw_1to3_0.2_2_exp3 for 50000 steps.[0m
+INFO:tensorflow:Saving dict for global step 50000: eval/accuracy = 0.8659375, eval/precision = 0.89235014, eval/recall = 0.9355105, global_step = 50000, loss = 0.34723672
+[0;32mFinished training classifier raw_1to3_0.2_2_exp4 for 50000 steps.[0m
+INFO:tensorflow:Saving dict for global step 50000: eval/accuracy = 0.85375, eval/precision = 0.87883496, eval/recall = 0.9355105, global_step = 50000, loss = 0.34338492
+[0;32mFinished training classifier raw_1to3_0.2_2_exp5 for 50000 steps.[0m
+INFO:tensorflow:Saving dict for global step 50000: eval/accuracy = 0.8171875, eval/precision = 0.84063894, eval/recall = 0.9355105, global_step = 50000, loss = 0.42143863
+[0;32mFinished training classifier raw_1to3_0.1_2_exp1 for 50000 steps.[0m
+INFO:tensorflow:Saving dict for global step 50000: eval/accuracy = 0.8290625, eval/precision = 0.863354, eval/recall = 0.9193882, global_step = 50000, loss = 0.3778887
+[0;32mFinished training classifier raw_1to3_0.1_2_exp2 for 50000 steps.[0m
+INFO:tensorflow:Saving dict for global step 50000: eval/accuracy = 0.829375, eval/precision = 0.8529966, eval/recall = 0.9355105, global_step = 50000, loss = 0.4114872
+[0;32mFinished training classifier raw_1to3_0.1_2_exp3 for 50000 steps.[0m
+INFO:tensorflow:Saving dict for global step 50000: eval/accuracy = 0.8659375, eval/precision = 0.8806427, eval/recall = 0.9516329, global_step = 50000, loss = 0.34698403
+[0;32mFinished training classifier raw_1to3_0.1_2_exp4 for 50000 steps.[0m
+INFO:tensorflow:Saving dict for global step 50000: eval/accuracy = 0.7925, eval/precision = 0.82584476, eval/recall = 0.9193882, global_step = 50000, loss = 0.41081333
+[0;32mFinished training classifier raw_1to3_0.1_2_exp5 for 50000 steps.[0m
+INFO:tensorflow:Saving dict for global step 50000: eval/accuracy = 0.74375, eval/precision = 0.77314657, eval/recall = 0.9355105, global_step = 50000, loss = 0.57091707
+[0;32mFinished training classifier raw_1to3_0.05_2_exp1 for 50000 steps.[0m
+INFO:tensorflow:Saving dict for global step 50000: eval/accuracy = 0.8290625, eval/precision = 0.8426061, eval/recall = 0.9516329, global_step = 50000, loss = 0.42900503
+[0;32mFinished training classifier raw_1to3_0.05_2_exp2 for 50000 steps.[0m
+INFO:tensorflow:Saving dict for global step 50000: eval/accuracy = 0.74375, eval/precision = 0.8251322, eval/recall = 0.83877635, global_step = 50000, loss = 0.49535877
+[0;32mFinished training classifier raw_1to3_0.05_2_exp3 for 50000 steps.[0m
+INFO:tensorflow:Saving dict for global step 50000: eval/accuracy = 0.6340625, eval/precision = 0.7351168, eval/recall = 0.8065316, global_step = 50000, loss = 0.70623416
+[0;32mFinished training classifier raw_1to3_0.05_2_exp4 for 50000 steps.[0m
+INFO:tensorflow:Saving dict for global step 50000: eval/accuracy = 0.8046875, eval/precision = 0.80242753, eval/recall = 0.98387766, global_step = 50000, loss = 0.41671184
+[0;32mFinished training classifier raw_1to3_0.05_2_exp5 for 50000 steps.[0m
+INFO:tensorflow:Saving dict for global step 50000: eval/accuracy = 0.719375, eval/precision = 0.93284005, eval/recall = 0.6775527, global_step = 50000, loss = 0.5438
+[0;32mFinished training classifier raw_1to3_0.02_2_exp1 for 50000 steps.[0m
+INFO:tensorflow:Saving dict for global step 50000: eval/accuracy = 0.7925, eval/precision = 0.78462535, eval/recall = 1.0, global_step = 50000, loss = 0.45942086
+[0;32mFinished training classifier raw_1to3_0.02_2_exp2 for 50000 steps.[0m
+INFO:tensorflow:Saving dict for global step 50000: eval/accuracy = 0.7315625, eval/precision = 0.7855051, eval/recall = 0.88714343, global_step = 50000, loss = 0.52550334
+[0;32mFinished training classifier raw_1to3_0.02_2_exp3 for 50000 steps.[0m
+INFO:tensorflow:Saving dict for global step 50000: eval/accuracy = 0.7928125, eval/precision = 0.8814075, eval/recall = 0.83877635, global_step = 50000, loss = 0.47357652
+[0;32mFinished training classifier raw_1to3_0.02_2_exp4 for 50000 steps.[0m
+INFO:tensorflow:Saving dict for global step 50000: eval/accuracy = 0.7803125, eval/precision = 0.77482384, eval/recall = 1.0, global_step = 50000, loss = 0.50898767
+[0;32mFinished training classifier raw_1to3_0.02_2_exp5 for 50000 steps.[0m
+INFO:tensorflow:Saving dict for global step 50000: eval/accuracy = 0.7196875, eval/precision = 0.8679884, eval/recall = 0.7420422, global_step = 50000, loss = 0.5646935
+[0;32mFinished training classifier raw_1to3_0.01_2_exp1 for 50000 steps.[0m
+INFO:tensorflow:Saving dict for global step 50000: eval/accuracy = 0.8171875, eval/precision = 1.0, eval/recall = 0.7581645, global_step = 50000, loss = 0.4704871
+[0;32mFinished training classifier raw_1to3_0.01_2_exp2 for 50000 steps.[0m
+INFO:tensorflow:Saving dict for global step 50000: eval/accuracy = 0.4875, eval/precision = 0.7772242, eval/recall = 0.4514262, global_step = 50000, loss = 0.75095797
+[0;32mFinished training classifier raw_1to3_0.01_2_exp3 for 50000 steps.[0m
+INFO:tensorflow:Saving dict for global step 50000: eval/accuracy = 0.731875, eval/precision = 1.0, eval/recall = 0.64530796, global_step = 50000, loss = 0.555531
+[0;32mFinished training classifier raw_1to3_0.01_2_exp4 for 50000 steps.[0m
+INFO:tensorflow:Saving dict for global step 50000: eval/accuracy = 0.7075, eval/precision = 1.0, eval/recall = 0.6130633, global_step = 50000, loss = 0.6119795
+[0;32mFinished training classifier raw_1to3_0.01_2_exp5 for 50000 steps.[0m
+INFO:tensorflow:Saving dict for global step 50000: eval/accuracy = 0.8825, eval/precision = 0.89392084, eval/recall = 0.94971824, global_step = 50000, loss = 0.3348633
+[0;32mFinished training classifier raw_1to3_1.0_3_exp1 for 50000 steps.[0m
+INFO:tensorflow:Saving dict for global step 50000: eval/accuracy = 0.846875, eval/precision = 0.86238533, eval/recall = 0.9371478, global_step = 50000, loss = 0.33937073
+[0;32mFinished training classifier raw_1to3_1.0_3_exp2 for 50000 steps.[0m
+INFO:tensorflow:Saving dict for global step 50000: eval/accuracy = 0.891875, eval/precision = 0.8955224, eval/recall = 0.9622887, global_step = 50000, loss = 0.31585535
+[0;32mFinished training classifier raw_1to3_1.0_3_exp3 for 50000 steps.[0m
+INFO:tensorflow:Saving dict for global step 50000: eval/accuracy = 0.8915625, eval/precision = 0.8951613, eval/recall = 0.9622887, global_step = 50000, loss = 0.31266618
+[0;32mFinished training classifier raw_1to3_1.0_3_exp4 for 50000 steps.[0m
+INFO:tensorflow:Saving dict for global step 50000: eval/accuracy = 0.8471875, eval/precision = 0.8545242, eval/recall = 0.94971824, global_step = 50000, loss = 0.33723938
+[0;32mFinished training classifier raw_1to3_1.0_3_exp5 for 50000 steps.[0m
+INFO:tensorflow:Saving dict for global step 50000: eval/accuracy = 0.8734375, eval/precision = 0.88315874, eval/recall = 0.95015174, global_step = 50000, loss = 0.32940063
+[0;32mFinished training classifier raw_1to3_0.9_3_exp1 for 50000 steps.[0m
+INFO:tensorflow:Saving dict for global step 50000: eval/accuracy = 0.8825, eval/precision = 0.8848147, eval/recall = 0.9622887, global_step = 50000, loss = 0.32025418
+[0;32mFinished training classifier raw_1to3_0.9_3_exp2 for 50000 steps.[0m
+INFO:tensorflow:Saving dict for global step 50000: eval/accuracy = 0.8825, eval/precision = 0.89392084, eval/recall = 0.94971824, global_step = 50000, loss = 0.35767102
+[0;32mFinished training classifier raw_1to3_0.9_3_exp3 for 50000 steps.[0m
+INFO:tensorflow:Saving dict for global step 50000: eval/accuracy = 0.864375, eval/precision = 0.88208896, eval/recall = 0.9371478, global_step = 50000, loss = 0.3622969
+[0;32mFinished training classifier raw_1to3_0.9_3_exp4 for 50000 steps.[0m
+INFO:tensorflow:Saving dict for global step 50000: eval/accuracy = 0.838125, eval/precision = 0.84496725, eval/recall = 0.94971824, global_step = 50000, loss = 0.3561555
+[0;32mFinished training classifier raw_1to3_0.9_3_exp5 for 50000 steps.[0m
+INFO:tensorflow:Saving dict for global step 50000: eval/accuracy = 0.8465625, eval/precision = 0.8538582, eval/recall = 0.94971824, global_step = 50000, loss = 0.37050483
+[0;32mFinished training classifier raw_1to3_0.5_3_exp1 for 50000 steps.[0m
+INFO:tensorflow:Saving dict for global step 50000: eval/accuracy = 0.819375, eval/precision = 0.81888604, eval/recall = 0.9622887, global_step = 50000, loss = 0.3915664
+[0;32mFinished training classifier raw_1to3_0.5_3_exp2 for 50000 steps.[0m
+INFO:tensorflow:Saving dict for global step 50000: eval/accuracy = 0.846875, eval/precision = 0.86238533, eval/recall = 0.9371478, global_step = 50000, loss = 0.37316617
+[0;32mFinished training classifier raw_1to3_0.5_3_exp3 for 50000 steps.[0m
+INFO:tensorflow:Saving dict for global step 50000: eval/accuracy = 0.855625, eval/precision = 0.87212586, eval/recall = 0.9371478, global_step = 50000, loss = 0.36389858
+[0;32mFinished training classifier raw_1to3_0.5_3_exp4 for 50000 steps.[0m
+INFO:tensorflow:Saving dict for global step 50000: eval/accuracy = 0.8196875, eval/precision = 0.82616895, eval/recall = 0.94971824, global_step = 50000, loss = 0.42470813
+[0;32mFinished training classifier raw_1to3_0.5_3_exp5 for 50000 steps.[0m
+INFO:tensorflow:Saving dict for global step 50000: eval/accuracy = 0.8378125, eval/precision = 0.87849283, eval/recall = 0.8994365, global_step = 50000, loss = 0.4349928
+[0;32mFinished training classifier raw_1to3_0.2_3_exp1 for 50000 steps.[0m
+INFO:tensorflow:Saving dict for global step 50000: eval/accuracy = 0.7925, eval/precision = 0.84329295, eval/recall = 0.8747291, global_step = 50000, loss = 0.4433295
+[0;32mFinished training classifier raw_1to3_0.2_3_exp2 for 50000 steps.[0m
+INFO:tensorflow:Saving dict for global step 50000: eval/accuracy = 0.8465625, eval/precision = 0.8620415, eval/recall = 0.9371478, global_step = 50000, loss = 0.42312703
+[0;32mFinished training classifier raw_1to3_0.2_3_exp3 for 50000 steps.[0m
+INFO:tensorflow:Saving dict for global step 50000: eval/accuracy = 0.8646875, eval/precision = 0.8917224, eval/recall = 0.92457736, global_step = 50000, loss = 0.38347518
+[0;32mFinished training classifier raw_1to3_0.2_3_exp4 for 50000 steps.[0m
+INFO:tensorflow:Saving dict for global step 50000: eval/accuracy = 0.7921875, eval/precision = 0.83482873, eval/recall = 0.88729954, global_step = 50000, loss = 0.44300306
+[0;32mFinished training classifier raw_1to3_0.2_3_exp5 for 50000 steps.[0m
+INFO:tensorflow:Saving dict for global step 50000: eval/accuracy = 0.8375, eval/precision = 0.8876356, eval/recall = 0.88686603, global_step = 50000, loss = 0.41329238
+[0;32mFinished training classifier raw_1to3_0.1_3_exp1 for 50000 steps.[0m
+INFO:tensorflow:Saving dict for global step 50000: eval/accuracy = 0.7471875, eval/precision = 0.7705925, eval/recall = 0.92457736, global_step = 50000, loss = 0.48983487
+[0;32mFinished training classifier raw_1to3_0.1_3_exp2 for 50000 steps.[0m
+INFO:tensorflow:Saving dict for global step 50000: eval/accuracy = 0.684375, eval/precision = 0.9091483, eval/recall = 0.62462074, global_step = 50000, loss = 0.61746657
+[0;32mFinished training classifier raw_1to3_0.1_3_exp3 for 50000 steps.[0m
+INFO:tensorflow:Saving dict for global step 50000: eval/accuracy = 0.810625, eval/precision = 0.8392501, eval/recall = 0.9120069, global_step = 50000, loss = 0.41411364
+[0;32mFinished training classifier raw_1to3_0.1_3_exp4 for 50000 steps.[0m
+INFO:tensorflow:Saving dict for global step 50000: eval/accuracy = 0.755625, eval/precision = 0.83487046, eval/recall = 0.8240139, global_step = 50000, loss = 0.53452337
+[0;32mFinished training classifier raw_1to3_0.1_3_exp5 for 50000 steps.[0m
+INFO:tensorflow:Saving dict for global step 50000: eval/accuracy = 0.7478125, eval/precision = 0.7600555, eval/recall = 0.95015174, global_step = 50000, loss = 0.5223989
+[0;32mFinished training classifier raw_1to3_0.05_3_exp1 for 50000 steps.[0m
+INFO:tensorflow:Saving dict for global step 50000: eval/accuracy = 0.8103125, eval/precision = 0.86418164, eval/recall = 0.8742956, global_step = 50000, loss = 0.46405932
+[0;32mFinished training classifier raw_1to3_0.05_3_exp2 for 50000 steps.[0m
+INFO:tensorflow:Saving dict for global step 50000: eval/accuracy = 0.73875, eval/precision = 0.76852864, eval/recall = 0.9124404, global_step = 50000, loss = 0.50100374
+[0;32mFinished training classifier raw_1to3_0.05_3_exp3 for 50000 steps.[0m
+INFO:tensorflow:Saving dict for global step 50000: eval/accuracy = 0.73875, eval/precision = 0.7804041, eval/recall = 0.88729954, global_step = 50000, loss = 0.547771
+[0;32mFinished training classifier raw_1to3_0.05_3_exp4 for 50000 steps.[0m
+INFO:tensorflow:Saving dict for global step 50000: eval/accuracy = 0.765625, eval/precision = 0.7647059, eval/recall = 0.9748591, global_step = 50000, loss = 0.47970074
+[0;32mFinished training classifier raw_1to3_0.05_3_exp5 for 50000 steps.[0m
+INFO:tensorflow:Saving dict for global step 50000: eval/accuracy = 0.675625, eval/precision = 0.7117117, eval/recall = 0.92457736, global_step = 50000, loss = 0.6022065
+[0;32mFinished training classifier raw_1to3_0.02_3_exp1 for 50000 steps.[0m
+INFO:tensorflow:Saving dict for global step 50000: eval/accuracy = 0.6853125, eval/precision = 0.7106286, eval/recall = 0.9505852, global_step = 50000, loss = 0.57073426
+[0;32mFinished training classifier raw_1to3_0.02_3_exp2 for 50000 steps.[0m
+INFO:tensorflow:Saving dict for global step 50000: eval/accuracy = 0.675, eval/precision = 0.87911433, eval/recall = 0.6367577, global_step = 50000, loss = 0.6319292
+[0;32mFinished training classifier raw_1to3_0.02_3_exp3 for 50000 steps.[0m
+INFO:tensorflow:Saving dict for global step 50000: eval/accuracy = 0.638125, eval/precision = 0.8214885, eval/recall = 0.6363242, global_step = 50000, loss = 0.6763899
+[0;32mFinished training classifier raw_1to3_0.02_3_exp4 for 50000 steps.[0m
+INFO:tensorflow:Saving dict for global step 50000: eval/accuracy = 0.75625, eval/precision = 0.80454725, eval/recall = 0.8742956, global_step = 50000, loss = 0.488121
+[0;32mFinished training classifier raw_1to3_0.02_3_exp5 for 50000 steps.[0m
+INFO:tensorflow:Saving dict for global step 50000: eval/accuracy = 0.7209375, eval/precision = 0.7209375, eval/recall = 1.0, global_step = 50000, loss = 0.59221405
+[0;32mFinished training classifier raw_1to3_0.01_3_exp1 for 50000 steps.[0m
+INFO:tensorflow:Saving dict for global step 50000: eval/accuracy = 0.7209375, eval/precision = 0.7209375, eval/recall = 1.0, global_step = 50000, loss = 0.59221005
+[0;32mFinished training classifier raw_1to3_0.01_3_exp2 for 50000 steps.[0m
+INFO:tensorflow:Saving dict for global step 50000: eval/accuracy = 0.7209375, eval/precision = 0.7209375, eval/recall = 1.0, global_step = 50000, loss = 0.59221864
+[0;32mFinished training classifier raw_1to3_0.01_3_exp3 for 50000 steps.[0m
+INFO:tensorflow:Saving dict for global step 50000: eval/accuracy = 0.7209375, eval/precision = 0.7209375, eval/recall = 1.0, global_step = 50000, loss = 0.59220535
+[0;32mFinished training classifier raw_1to3_0.01_3_exp4 for 50000 steps.[0m
+INFO:tensorflow:Saving dict for global step 50000: eval/accuracy = 0.7209375, eval/precision = 0.7209375, eval/recall = 1.0, global_step = 50000, loss = 0.59223044
+[0;32mFinished training classifier raw_1to3_0.01_3_exp5 for 50000 steps.[0m
+INFO:tensorflow:Saving dict for global step 50000: eval/accuracy = 0.8746875, eval/precision = 0.8898932, eval/recall = 0.94214875, global_step = 50000, loss = 0.31894076
+[0;32mFinished training classifier trans_1to3_1.0_1_exp1 for 50000 steps.[0m
+INFO:tensorflow:Saving dict for global step 50000: eval/accuracy = 0.895625, eval/precision = 0.9150824, eval/recall = 0.94214875, global_step = 50000, loss = 0.3056452
+[0;32mFinished training classifier trans_1to3_1.0_1_exp2 for 50000 steps.[0m
+INFO:tensorflow:Saving dict for global step 50000: eval/accuracy = 0.885, eval/precision = 0.88086784, eval/recall = 0.97129184, global_step = 50000, loss = 0.31644613
+[0;32mFinished training classifier trans_1to3_1.0_1_exp3 for 50000 steps.[0m
+INFO:tensorflow:Saving dict for global step 50000: eval/accuracy = 0.8640625, eval/precision = 0.8883333, eval/recall = 0.9273597, global_step = 50000, loss = 0.3129021
+[0;32mFinished training classifier trans_1to3_1.0_1_exp4 for 50000 steps.[0m
+INFO:tensorflow:Saving dict for global step 50000: eval/accuracy = 0.864375, eval/precision = 0.8883798, eval/recall = 0.9277947, global_step = 50000, loss = 0.30923533
+[0;32mFinished training classifier trans_1to3_1.0_1_exp5 for 50000 steps.[0m
+INFO:tensorflow:Saving dict for global step 50000: eval/accuracy = 0.864375, eval/precision = 0.8997, eval/recall = 0.91300565, global_step = 50000, loss = 0.33801633
+[0;32mFinished training classifier trans_1to3_0.9_1_exp1 for 50000 steps.[0m
+INFO:tensorflow:Saving dict for global step 50000: eval/accuracy = 0.8853125, eval/precision = 0.89141005, eval/recall = 0.9569378, global_step = 50000, loss = 0.31607524
+[0;32mFinished training classifier trans_1to3_0.9_1_exp2 for 50000 steps.[0m
+INFO:tensorflow:Saving dict for global step 50000: eval/accuracy = 0.885, eval/precision = 0.891366, eval/recall = 0.95650285, global_step = 50000, loss = 0.3168158
+[0;32mFinished training classifier trans_1to3_0.9_1_exp3 for 50000 steps.[0m
+INFO:tensorflow:Saving dict for global step 50000: eval/accuracy = 0.8753125, eval/precision = 0.870226, eval/recall = 0.97129184, global_step = 50000, loss = 0.31587398
+[0;32mFinished training classifier trans_1to3_0.9_1_exp4 for 50000 steps.[0m
+INFO:tensorflow:Saving dict for global step 50000: eval/accuracy = 0.885, eval/precision = 0.891366, eval/recall = 0.95650285, global_step = 50000, loss = 0.2986593
+[0;32mFinished training classifier trans_1to3_0.9_1_exp5 for 50000 steps.[0m
+INFO:tensorflow:Saving dict for global step 50000: eval/accuracy = 0.8953125, eval/precision = 0.8823987, eval/recall = 0.98564595, global_step = 50000, loss = 0.33185855
+[0;32mFinished training classifier trans_1to3_0.5_1_exp1 for 50000 steps.[0m
+INFO:tensorflow:Saving dict for global step 50000: eval/accuracy = 0.8540625, eval/precision = 0.8664, eval/recall = 0.94214875, global_step = 50000, loss = 0.3370538
+[0;32mFinished training classifier trans_1to3_0.5_1_exp2 for 50000 steps.[0m
+INFO:tensorflow:Saving dict for global step 50000: eval/accuracy = 0.9059375, eval/precision = 0.89423835, eval/recall = 0.98564595, global_step = 50000, loss = 0.29799193
+[0;32mFinished training classifier trans_1to3_0.5_1_exp3 for 50000 steps.[0m
+INFO:tensorflow:Saving dict for global step 50000: eval/accuracy = 0.833125, eval/precision = 0.835169, eval/recall = 0.95650285, global_step = 50000, loss = 0.35472867
+[0;32mFinished training classifier trans_1to3_0.5_1_exp4 for 50000 steps.[0m
+INFO:tensorflow:Saving dict for global step 50000: eval/accuracy = 0.8753125, eval/precision = 0.88, eval/recall = 0.9569378, global_step = 50000, loss = 0.3212297
+[0;32mFinished training classifier trans_1to3_0.5_1_exp5 for 50000 steps.[0m
+INFO:tensorflow:Saving dict for global step 50000: eval/accuracy = 0.8746875, eval/precision = 0.9519048, eval/recall = 0.8695085, global_step = 50000, loss = 0.3622807
+[0;32mFinished training classifier trans_1to3_0.2_1_exp1 for 50000 steps.[0m
+INFO:tensorflow:Saving dict for global step 50000: eval/accuracy = 0.85375, eval/precision = 0.856642, eval/recall = 0.95650285, global_step = 50000, loss = 0.31920102
+[0;32mFinished training classifier trans_1to3_0.2_1_exp2 for 50000 steps.[0m
+INFO:tensorflow:Saving dict for global step 50000: eval/accuracy = 0.875, eval/precision = 0.89025897, eval/recall = 0.94214875, global_step = 50000, loss = 0.33161697
+[0;32mFinished training classifier trans_1to3_0.2_1_exp3 for 50000 steps.[0m
+INFO:tensorflow:Saving dict for global step 50000: eval/accuracy = 0.833125, eval/precision = 0.835169, eval/recall = 0.95650285, global_step = 50000, loss = 0.3718189
+[0;32mFinished training classifier trans_1to3_0.2_1_exp4 for 50000 steps.[0m
+INFO:tensorflow:Saving dict for global step 50000: eval/accuracy = 0.864375, eval/precision = 0.8779895, eval/recall = 0.94214875, global_step = 50000, loss = 0.37750018
+[0;32mFinished training classifier trans_1to3_0.2_1_exp5 for 50000 steps.[0m
+INFO:tensorflow:Saving dict for global step 50000: eval/accuracy = 0.823125, eval/precision = 0.8936847, eval/recall = 0.8555894, global_step = 50000, loss = 0.42791688
+[0;32mFinished training classifier trans_1to3_0.1_1_exp1 for 50000 steps.[0m
+INFO:tensorflow:Saving dict for global step 50000: eval/accuracy = 0.76, eval/precision = 0.78702664, eval/recall = 0.91300565, global_step = 50000, loss = 0.4534366
+[0;32mFinished training classifier trans_1to3_0.1_1_exp2 for 50000 steps.[0m
+INFO:tensorflow:Saving dict for global step 50000: eval/accuracy = 0.8125, eval/precision = 0.90471655, eval/recall = 0.8260113, global_step = 50000, loss = 0.42565307
+[0;32mFinished training classifier trans_1to3_0.1_1_exp3 for 50000 steps.[0m
+INFO:tensorflow:Saving dict for global step 50000: eval/accuracy = 0.8328125, eval/precision = 0.8348519, eval/recall = 0.95650285, global_step = 50000, loss = 0.3996134
+[0;32mFinished training classifier trans_1to3_0.1_1_exp4 for 50000 steps.[0m
+INFO:tensorflow:Saving dict for global step 50000: eval/accuracy = 0.79125, eval/precision = 0.78111, eval/recall = 0.98564595, global_step = 50000, loss = 0.48383945
+[0;32mFinished training classifier trans_1to3_0.1_1_exp5 for 50000 steps.[0m
+INFO:tensorflow:Saving dict for global step 50000: eval/accuracy = 0.8540625, eval/precision = 0.8982609, eval/recall = 0.8986516, global_step = 50000, loss = 0.3781696
+[0;32mFinished training classifier trans_1to3_0.05_1_exp1 for 50000 steps.[0m
+INFO:tensorflow:Saving dict for global step 50000: eval/accuracy = 0.7496875, eval/precision = 0.78457445, eval/recall = 0.8982166, global_step = 50000, loss = 0.5577972
+[0;32mFinished training classifier trans_1to3_0.05_1_exp2 for 50000 steps.[0m
+INFO:tensorflow:Saving dict for global step 50000: eval/accuracy = 0.780625, eval/precision = 0.92769146, eval/recall = 0.75337106, global_step = 50000, loss = 0.45010486
+[0;32mFinished training classifier trans_1to3_0.05_1_exp3 for 50000 steps.[0m
+INFO:tensorflow:Saving dict for global step 50000: eval/accuracy = 0.8434375, eval/precision = 0.9090082, eval/recall = 0.8690735, global_step = 50000, loss = 0.36824572
+[0;32mFinished training classifier trans_1to3_0.05_1_exp4 for 50000 steps.[0m
+INFO:tensorflow:Saving dict for global step 50000: eval/accuracy = 0.7709375, eval/precision = 0.8306588, eval/recall = 0.8555894, global_step = 50000, loss = 0.4677182
+[0;32mFinished training classifier trans_1to3_0.05_1_exp5 for 50000 steps.[0m
+INFO:tensorflow:Saving dict for global step 50000: eval/accuracy = 0.7184375, eval/precision = 0.7184375, eval/recall = 1.0, global_step = 50000, loss = 0.5723427
+[0;32mFinished training classifier trans_1to3_0.02_1_exp1 for 50000 steps.[0m
+INFO:tensorflow:Saving dict for global step 50000: eval/accuracy = 0.7184375, eval/precision = 0.7382413, eval/recall = 0.94214875, global_step = 50000, loss = 0.5421713
+[0;32mFinished training classifier trans_1to3_0.02_1_exp2 for 50000 steps.[0m
+INFO:tensorflow:Saving dict for global step 50000: eval/accuracy = 0.801875, eval/precision = 0.78383905, eval/recall = 1.0, global_step = 50000, loss = 0.47739285
+[0;32mFinished training classifier trans_1to3_0.02_1_exp3 for 50000 steps.[0m
+INFO:tensorflow:Saving dict for global step 50000: eval/accuracy = 0.686875, eval/precision = 0.7528265, eval/recall = 0.8399304, global_step = 50000, loss = 0.65942156
+[0;32mFinished training classifier trans_1to3_0.02_1_exp4 for 50000 steps.[0m
+INFO:tensorflow:Saving dict for global step 50000: eval/accuracy = 0.791875, eval/precision = 1.0, eval/recall = 0.71030885, global_step = 50000, loss = 0.5051519
+[0;32mFinished training classifier trans_1to3_0.02_1_exp5 for 50000 steps.[0m
+INFO:tensorflow:Saving dict for global step 50000: eval/accuracy = 0.6575, eval/precision = 0.97324944, eval/recall = 0.53806, global_step = 50000, loss = 0.5956972
+[0;32mFinished training classifier trans_1to3_0.01_1_exp1 for 50000 steps.[0m
+INFO:tensorflow:Saving dict for global step 50000: eval/accuracy = 0.68875, eval/precision = 0.8678713, eval/recall = 0.66855156, global_step = 50000, loss = 0.59269094
+[0;32mFinished training classifier trans_1to3_0.01_1_exp2 for 50000 steps.[0m
+INFO:tensorflow:Saving dict for global step 50000: eval/accuracy = 0.344375, eval/precision = 0.6672213, eval/recall = 0.17442366, global_step = 50000, loss = 0.91879195
+[0;32mFinished training classifier trans_1to3_0.01_1_exp3 for 50000 steps.[0m
+INFO:tensorflow:Saving dict for global step 50000: eval/accuracy = 0.7084375, eval/precision = 1.0, eval/recall = 0.5941714, global_step = 50000, loss = 0.6476554
+[0;32mFinished training classifier trans_1to3_0.01_1_exp4 for 50000 steps.[0m
+INFO:tensorflow:Saving dict for global step 50000: eval/accuracy = 0.51125, eval/precision = 0.8437792, eval/recall = 0.3923445, global_step = 50000, loss = 0.7716138
+[0;32mFinished training classifier trans_1to3_0.01_1_exp5 for 50000 steps.[0m
+INFO:tensorflow:Saving dict for global step 50000: eval/accuracy = 0.9021875, eval/precision = 0.9215372, eval/recall = 0.9516329, global_step = 50000, loss = 0.26520053
+[0;32mFinished training classifier trans_1to3_1.0_2_exp1 for 50000 steps.[0m
+INFO:tensorflow:Saving dict for global step 50000: eval/accuracy = 0.9021875, eval/precision = 0.9087733, eval/recall = 0.96775526, global_step = 50000, loss = 0.27932096
+[0;32mFinished training classifier trans_1to3_1.0_2_exp2 for 50000 steps.[0m
+INFO:tensorflow:Saving dict for global step 50000: eval/accuracy = 0.89, eval/precision = 0.9073709, eval/recall = 0.9516329, global_step = 50000, loss = 0.2541115
+[0;32mFinished training classifier trans_1to3_1.0_2_exp3 for 50000 steps.[0m
+INFO:tensorflow:Saving dict for global step 50000: eval/accuracy = 0.89, eval/precision = 0.9073709, eval/recall = 0.9516329, global_step = 50000, loss = 0.26256934
+[0;32mFinished training classifier trans_1to3_1.0_2_exp4 for 50000 steps.[0m
+INFO:tensorflow:Saving dict for global step 50000: eval/accuracy = 0.9021875, eval/precision = 0.9215372, eval/recall = 0.9516329, global_step = 50000, loss = 0.26145613
+[0;32mFinished training classifier trans_1to3_1.0_2_exp5 for 50000 steps.[0m
+INFO:tensorflow:Saving dict for global step 50000: eval/accuracy = 0.865625, eval/precision = 0.88030595, eval/recall = 0.9516329, global_step = 50000, loss = 0.27300507
+[0;32mFinished training classifier trans_1to3_0.9_2_exp1 for 50000 steps.[0m
+INFO:tensorflow:Saving dict for global step 50000: eval/accuracy = 0.9146875, eval/precision = 0.93653375, eval/recall = 0.9516329, global_step = 50000, loss = 0.2624245
+[0;32mFinished training classifier trans_1to3_0.9_2_exp2 for 50000 steps.[0m
+INFO:tensorflow:Saving dict for global step 50000: eval/accuracy = 0.926875, eval/precision = 0.9516329, eval/recall = 0.9516329, global_step = 50000, loss = 0.28700575
+[0;32mFinished training classifier trans_1to3_0.9_2_exp3 for 50000 steps.[0m
+INFO:tensorflow:Saving dict for global step 50000: eval/accuracy = 0.8778125, eval/precision = 0.89363354, eval/recall = 0.9516329, global_step = 50000, loss = 0.28766957
+[0;32mFinished training classifier trans_1to3_0.9_2_exp4 for 50000 steps.[0m
+INFO:tensorflow:Saving dict for global step 50000: eval/accuracy = 0.8778125, eval/precision = 0.8820648, eval/recall = 0.96775526, global_step = 50000, loss = 0.29125035
+[0;32mFinished training classifier trans_1to3_0.9_2_exp5 for 50000 steps.[0m
+INFO:tensorflow:Saving dict for global step 50000: eval/accuracy = 0.878125, eval/precision = 0.89398056, eval/recall = 0.9516329, global_step = 50000, loss = 0.29488817
+[0;32mFinished training classifier trans_1to3_0.5_2_exp1 for 50000 steps.[0m
+INFO:tensorflow:Saving dict for global step 50000: eval/accuracy = 0.8903125, eval/precision = 0.90772873, eval/recall = 0.9516329, global_step = 50000, loss = 0.30437514
+[0;32mFinished training classifier trans_1to3_0.5_2_exp2 for 50000 steps.[0m
+INFO:tensorflow:Saving dict for global step 50000: eval/accuracy = 0.85375, eval/precision = 0.87883496, eval/recall = 0.9355105, global_step = 50000, loss = 0.33189332
+[0;32mFinished training classifier trans_1to3_0.5_2_exp3 for 50000 steps.[0m
+INFO:tensorflow:Saving dict for global step 50000: eval/accuracy = 0.8046875, eval/precision = 0.8192171, eval/recall = 0.9516329, global_step = 50000, loss = 0.3623506
+[0;32mFinished training classifier trans_1to3_0.5_2_exp4 for 50000 steps.[0m
+INFO:tensorflow:Saving dict for global step 50000: eval/accuracy = 0.85375, eval/precision = 0.86769694, eval/recall = 0.9516329, global_step = 50000, loss = 0.32725516
+[0;32mFinished training classifier trans_1to3_0.5_2_exp5 for 50000 steps.[0m
+INFO:tensorflow:Saving dict for global step 50000: eval/accuracy = 0.8290625, eval/precision = 0.8426061, eval/recall = 0.9516329, global_step = 50000, loss = 0.3189668
+[0;32mFinished training classifier trans_1to3_0.2_2_exp1 for 50000 steps.[0m
+INFO:tensorflow:Saving dict for global step 50000: eval/accuracy = 0.865625, eval/precision = 0.8919984, eval/recall = 0.9355105, global_step = 50000, loss = 0.34787434
+[0;32mFinished training classifier trans_1to3_0.2_2_exp2 for 50000 steps.[0m
+INFO:tensorflow:Saving dict for global step 50000: eval/accuracy = 0.926875, eval/precision = 0.9242718, eval/recall = 0.98387766, global_step = 50000, loss = 0.3032826
+[0;32mFinished training classifier trans_1to3_0.2_2_exp3 for 50000 steps.[0m
+INFO:tensorflow:Saving dict for global step 50000: eval/accuracy = 0.9025, eval/precision = 0.9091262, eval/recall = 0.96775526, global_step = 50000, loss = 0.29907057
+[0;32mFinished training classifier trans_1to3_0.2_2_exp4 for 50000 steps.[0m
+INFO:tensorflow:Saving dict for global step 50000: eval/accuracy = 0.878125, eval/precision = 0.89398056, eval/recall = 0.9516329, global_step = 50000, loss = 0.33180997
+[0;32mFinished training classifier trans_1to3_0.2_2_exp5 for 50000 steps.[0m
+INFO:tensorflow:Saving dict for global step 50000: eval/accuracy = 0.829375, eval/precision = 0.8529966, eval/recall = 0.9355105, global_step = 50000, loss = 0.41707444
+[0;32mFinished training classifier trans_1to3_0.1_2_exp1 for 50000 steps.[0m
+INFO:tensorflow:Saving dict for global step 50000: eval/accuracy = 0.8290625, eval/precision = 0.8426061, eval/recall = 0.9516329, global_step = 50000, loss = 0.34933734
+[0;32mFinished training classifier trans_1to3_0.1_2_exp2 for 50000 steps.[0m
+INFO:tensorflow:Saving dict for global step 50000: eval/accuracy = 0.865625, eval/precision = 0.86929077, eval/recall = 0.96775526, global_step = 50000, loss = 0.3586471
+[0;32mFinished training classifier trans_1to3_0.1_2_exp3 for 50000 steps.[0m
+INFO:tensorflow:Saving dict for global step 50000: eval/accuracy = 0.878125, eval/precision = 0.96430206, eval/recall = 0.8710211, global_step = 50000, loss = 0.4055872
+[0;32mFinished training classifier trans_1to3_0.1_2_exp4 for 50000 steps.[0m
+INFO:tensorflow:Saving dict for global step 50000: eval/accuracy = 0.878125, eval/precision = 0.90628755, eval/recall = 0.9355105, global_step = 50000, loss = 0.3249918
+[0;32mFinished training classifier trans_1to3_0.1_2_exp5 for 50000 steps.[0m
+INFO:tensorflow:Saving dict for global step 50000: eval/accuracy = 0.85375, eval/precision = 0.87883496, eval/recall = 0.9355105, global_step = 50000, loss = 0.31744328
+[0;32mFinished training classifier trans_1to3_0.05_2_exp1 for 50000 steps.[0m
+INFO:tensorflow:Saving dict for global step 50000: eval/accuracy = 0.8046875, eval/precision = 0.84821427, eval/recall = 0.90326583, global_step = 50000, loss = 0.40585518
+[0;32mFinished training classifier trans_1to3_0.05_2_exp2 for 50000 steps.[0m
+INFO:tensorflow:Saving dict for global step 50000: eval/accuracy = 0.84125, eval/precision = 0.85480875, eval/recall = 0.9516329, global_step = 50000, loss = 0.38312584
+[0;32mFinished training classifier trans_1to3_0.05_2_exp3 for 50000 steps.[0m
+INFO:tensorflow:Saving dict for global step 50000: eval/accuracy = 0.7928125, eval/precision = 0.8358837, eval/recall = 0.90326583, global_step = 50000, loss = 0.43036953
+[0;32mFinished training classifier trans_1to3_0.05_2_exp4 for 50000 steps.[0m
+INFO:tensorflow:Saving dict for global step 50000: eval/accuracy = 0.780625, eval/precision = 0.8667236, eval/recall = 0.83877635, global_step = 50000, loss = 0.46695065
+[0;32mFinished training classifier trans_1to3_0.05_2_exp5 for 50000 steps.[0m
+INFO:tensorflow:Saving dict for global step 50000: eval/accuracy = 0.7928125, eval/precision = 0.792277, eval/recall = 0.98387766, global_step = 50000, loss = 0.426218
+[0;32mFinished training classifier trans_1to3_0.02_2_exp1 for 50000 steps.[0m
+INFO:tensorflow:Saving dict for global step 50000: eval/accuracy = 0.4875, eval/precision = 0.67826086, eval/recall = 0.61264986, global_step = 50000, loss = 0.8393549
+[0;32mFinished training classifier trans_1to3_0.02_2_exp2 for 50000 steps.[0m
+INFO:tensorflow:Saving dict for global step 50000: eval/accuracy = 0.8290625, eval/precision = 0.8330961, eval/recall = 0.96775526, global_step = 50000, loss = 0.37155503
+[0;32mFinished training classifier trans_1to3_0.02_2_exp3 for 50000 steps.[0m
+INFO:tensorflow:Saving dict for global step 50000: eval/accuracy = 0.768125, eval/precision = 0.8113628, eval/recall = 0.90326583, global_step = 50000, loss = 0.47632146
+[0;32mFinished training classifier trans_1to3_0.02_2_exp4 for 50000 steps.[0m
+INFO:tensorflow:Saving dict for global step 50000: eval/accuracy = 0.829375, eval/precision = 0.9138312, eval/recall = 0.8548987, global_step = 50000, loss = 0.42467925
+[0;32mFinished training classifier trans_1to3_0.02_2_exp5 for 50000 steps.[0m
+INFO:tensorflow:Saving dict for global step 50000: eval/accuracy = 0.4025, eval/precision = 1.0, eval/recall = 0.20959073, global_step = 50000, loss = 1.0706133
+[0;32mFinished training classifier trans_1to3_0.01_2_exp1 for 50000 steps.[0m
+INFO:tensorflow:Saving dict for global step 50000: eval/accuracy = 0.829375, eval/precision = 0.8333927, eval/recall = 0.96775526, global_step = 50000, loss = 0.36107868
+[0;32mFinished training classifier trans_1to3_0.01_2_exp2 for 50000 steps.[0m
+INFO:tensorflow:Saving dict for global step 50000: eval/accuracy = 0.6465625, eval/precision = 0.8000932, eval/recall = 0.70979744, global_step = 50000, loss = 0.67236626
+[0;32mFinished training classifier trans_1to3_0.01_2_exp3 for 50000 steps.[0m
+INFO:tensorflow:Saving dict for global step 50000: eval/accuracy = 0.6953125, eval/precision = 0.9302741, eval/recall = 0.64530796, global_step = 50000, loss = 0.5593679
+[0;32mFinished training classifier trans_1to3_0.01_2_exp4 for 50000 steps.[0m
+INFO:tensorflow:Saving dict for global step 50000: eval/accuracy = 0.8415625, eval/precision = 0.9152911, eval/recall = 0.8710211, global_step = 50000, loss = 0.36979112
+[0;32mFinished training classifier trans_1to3_0.01_2_exp5 for 50000 steps.[0m
+INFO:tensorflow:Saving dict for global step 50000: eval/accuracy = 0.8825, eval/precision = 0.8848147, eval/recall = 0.9622887, global_step = 50000, loss = 0.2882891
+[0;32mFinished training classifier trans_1to3_1.0_3_exp1 for 50000 steps.[0m
+INFO:tensorflow:Saving dict for global step 50000: eval/accuracy = 0.864375, eval/precision = 0.86482275, eval/recall = 0.9622887, global_step = 50000, loss = 0.31221923
+[0;32mFinished training classifier trans_1to3_1.0_3_exp2 for 50000 steps.[0m
+INFO:tensorflow:Saving dict for global step 50000: eval/accuracy = 0.865, eval/precision = 0.86549705, eval/recall = 0.9622887, global_step = 50000, loss = 0.32443786
+[0;32mFinished training classifier trans_1to3_1.0_3_exp3 for 50000 steps.[0m
+INFO:tensorflow:Saving dict for global step 50000: eval/accuracy = 0.8471875, eval/precision = 0.8391791, eval/recall = 0.9748591, global_step = 50000, loss = 0.35322025
+[0;32mFinished training classifier trans_1to3_1.0_3_exp4 for 50000 steps.[0m
+INFO:tensorflow:Saving dict for global step 50000: eval/accuracy = 0.8734375, eval/precision = 0.8663328, eval/recall = 0.9748591, global_step = 50000, loss = 0.30947724
+[0;32mFinished training classifier trans_1to3_1.0_3_exp5 for 50000 steps.[0m
+INFO:tensorflow:Saving dict for global step 50000: eval/accuracy = 0.8378125, eval/precision = 0.8371041, eval/recall = 0.9622887, global_step = 50000, loss = 0.35213727
+[0;32mFinished training classifier trans_1to3_0.9_3_exp1 for 50000 steps.[0m
+INFO:tensorflow:Saving dict for global step 50000: eval/accuracy = 0.846875, eval/precision = 0.854191, eval/recall = 0.94971824, global_step = 50000, loss = 0.3537437
+[0;32mFinished training classifier trans_1to3_0.9_3_exp2 for 50000 steps.[0m
+INFO:tensorflow:Saving dict for global step 50000: eval/accuracy = 0.8290625, eval/precision = 0.83562165, eval/recall = 0.94971824, global_step = 50000, loss = 0.36235633
+[0;32mFinished training classifier trans_1to3_0.9_3_exp3 for 50000 steps.[0m
+INFO:tensorflow:Saving dict for global step 50000: eval/accuracy = 0.846875, eval/precision = 0.84635913, eval/recall = 0.9622887, global_step = 50000, loss = 0.317389
+[0;32mFinished training classifier trans_1to3_0.9_3_exp4 for 50000 steps.[0m
+INFO:tensorflow:Saving dict for global step 50000: eval/accuracy = 0.838125, eval/precision = 0.84496725, eval/recall = 0.94971824, global_step = 50000, loss = 0.33307606
+[0;32mFinished training classifier trans_1to3_0.9_3_exp5 for 50000 steps.[0m
+INFO:tensorflow:Saving dict for global step 50000: eval/accuracy = 0.8109375, eval/precision = 0.8108108, eval/recall = 0.9622887, global_step = 50000, loss = 0.37830484
+[0;32mFinished training classifier trans_1to3_0.5_3_exp1 for 50000 steps.[0m
+INFO:tensorflow:Saving dict for global step 50000: eval/accuracy = 0.82875, eval/precision = 0.83530307, eval/recall = 0.94971824, global_step = 50000, loss = 0.36414978
+[0;32mFinished training classifier trans_1to3_0.5_3_exp2 for 50000 steps.[0m
+INFO:tensorflow:Saving dict for global step 50000: eval/accuracy = 0.8740625, eval/precision = 0.8841808, eval/recall = 0.94971824, global_step = 50000, loss = 0.31955403
+[0;32mFinished training classifier trans_1to3_0.5_3_exp3 for 50000 steps.[0m
+INFO:tensorflow:Saving dict for global step 50000: eval/accuracy = 0.8015625, eval/precision = 0.80848706, eval/recall = 0.94971824, global_step = 50000, loss = 0.40777263
+[0;32mFinished training classifier trans_1to3_0.5_3_exp4 for 50000 steps.[0m
+INFO:tensorflow:Saving dict for global step 50000: eval/accuracy = 0.7921875, eval/precision = 0.8128811, eval/recall = 0.92457736, global_step = 50000, loss = 0.42346057
+[0;32mFinished training classifier trans_1to3_0.5_3_exp5 for 50000 steps.[0m
+INFO:tensorflow:Saving dict for global step 50000: eval/accuracy = 0.7928125, eval/precision = 0.7822802, eval/recall = 0.98742956, global_step = 50000, loss = 0.4735392
+[0;32mFinished training classifier trans_1to3_0.2_3_exp1 for 50000 steps.[0m
+INFO:tensorflow:Saving dict for global step 50000: eval/accuracy = 0.765625, eval/precision = 0.7813516, eval/recall = 0.9371478, global_step = 50000, loss = 0.49815863
+[0;32mFinished training classifier trans_1to3_0.2_3_exp2 for 50000 steps.[0m
+INFO:tensorflow:Saving dict for global step 50000: eval/accuracy = 0.7834375, eval/precision = 0.797786, eval/recall = 0.9371478, global_step = 50000, loss = 0.4266079
+[0;32mFinished training classifier trans_1to3_0.2_3_exp3 for 50000 steps.[0m
+INFO:tensorflow:Saving dict for global step 50000: eval/accuracy = 0.846875, eval/precision = 0.8989899, eval/recall = 0.88729954, global_step = 50000, loss = 0.35645851
+[0;32mFinished training classifier trans_1to3_0.2_3_exp4 for 50000 steps.[0m
+INFO:tensorflow:Saving dict for global step 50000: eval/accuracy = 0.846875, eval/precision = 0.8316904, eval/recall = 0.98742956, global_step = 50000, loss = 0.35545027
+[0;32mFinished training classifier trans_1to3_0.2_3_exp5 for 50000 steps.[0m
+INFO:tensorflow:Saving dict for global step 50000: eval/accuracy = 0.7925, eval/precision = 0.8064155, eval/recall = 0.9371478, global_step = 50000, loss = 0.45027506
+[0;32mFinished training classifier trans_1to3_0.1_3_exp1 for 50000 steps.[0m
+INFO:tensorflow:Saving dict for global step 50000: eval/accuracy = 0.756875, eval/precision = 0.7626245, eval/recall = 0.9622887, global_step = 50000, loss = 0.48083696
+[0;32mFinished training classifier trans_1to3_0.1_3_exp2 for 50000 steps.[0m
+INFO:tensorflow:Saving dict for global step 50000: eval/accuracy = 0.828125, eval/precision = 0.90614885, eval/recall = 0.8495882, global_step = 50000, loss = 0.42778984
+[0;32mFinished training classifier trans_1to3_0.1_3_exp3 for 50000 steps.[0m
+INFO:tensorflow:Saving dict for global step 50000: eval/accuracy = 0.82875, eval/precision = 0.83530307, eval/recall = 0.94971824, global_step = 50000, loss = 0.39679933
+[0;32mFinished training classifier trans_1to3_0.1_3_exp4 for 50000 steps.[0m
+INFO:tensorflow:Saving dict for global step 50000: eval/accuracy = 0.8921875, eval/precision = 0.9053719, eval/recall = 0.94971824, global_step = 50000, loss = 0.3433093
+[0;32mFinished training classifier trans_1to3_0.1_3_exp5 for 50000 steps.[0m
+INFO:tensorflow:Saving dict for global step 50000: eval/accuracy = 0.819375, eval/precision = 0.85708386, eval/recall = 0.8994365, global_step = 50000, loss = 0.42653
+[0;32mFinished training classifier trans_1to3_0.05_3_exp1 for 50000 steps.[0m
+INFO:tensorflow:Saving dict for global step 50000: eval/accuracy = 0.73875, eval/precision = 0.73841166, eval/recall = 0.98742956, global_step = 50000, loss = 0.50128835
+[0;32mFinished training classifier trans_1to3_0.05_3_exp2 for 50000 steps.[0m
+INFO:tensorflow:Saving dict for global step 50000: eval/accuracy = 0.7659375, eval/precision = 0.7758499, eval/recall = 0.94971824, global_step = 50000, loss = 0.45170155
+[0;32mFinished training classifier trans_1to3_0.05_3_exp3 for 50000 steps.[0m
+INFO:tensorflow:Saving dict for global step 50000: eval/accuracy = 0.784375, eval/precision = 0.79240507, eval/recall = 0.94971824, global_step = 50000, loss = 0.49360374
+[0;32mFinished training classifier trans_1to3_0.05_3_exp4 for 50000 steps.[0m
+INFO:tensorflow:Saving dict for global step 50000: eval/accuracy = 0.7928125, eval/precision = 0.7880168, eval/recall = 0.9748591, global_step = 50000, loss = 0.44526294
+[0;32mFinished training classifier trans_1to3_0.05_3_exp5 for 50000 steps.[0m
+INFO:tensorflow:Saving dict for global step 50000: eval/accuracy = 0.801875, eval/precision = 0.7961062, eval/recall = 0.9748591, global_step = 50000, loss = 0.433463
+[0;32mFinished training classifier trans_1to3_0.02_3_exp1 for 50000 steps.[0m
+INFO:tensorflow:Saving dict for global step 50000: eval/accuracy = 0.828125, eval/precision = 0.8671124, eval/recall = 0.8994365, global_step = 50000, loss = 0.44549954
+[0;32mFinished training classifier trans_1to3_0.02_3_exp2 for 50000 steps.[0m
+INFO:tensorflow:Saving dict for global step 50000: eval/accuracy = 0.7390625, eval/precision = 0.7432254, eval/recall = 0.9748591, global_step = 50000, loss = 0.5378511
+[0;32mFinished training classifier trans_1to3_0.02_3_exp3 for 50000 steps.[0m
+INFO:tensorflow:Saving dict for global step 50000: eval/accuracy = 0.73875, eval/precision = 0.73841166, eval/recall = 0.98742956, global_step = 50000, loss = 0.46453178
+[0;32mFinished training classifier trans_1to3_0.02_3_exp4 for 50000 steps.[0m
+INFO:tensorflow:Saving dict for global step 50000: eval/accuracy = 0.694375, eval/precision = 0.75606936, eval/recall = 0.85045516, global_step = 50000, loss = 0.5491719
+[0;32mFinished training classifier trans_1to3_0.02_3_exp5 for 50000 steps.[0m
+INFO:tensorflow:Saving dict for global step 50000: eval/accuracy = 0.7209375, eval/precision = 0.7209375, eval/recall = 1.0, global_step = 50000, loss = 0.59221995
+[0;32mFinished training classifier trans_1to3_0.01_3_exp1 for 50000 steps.[0m
+INFO:tensorflow:Saving dict for global step 50000: eval/accuracy = 0.7209375, eval/precision = 0.7209375, eval/recall = 1.0, global_step = 50000, loss = 0.5922183
+[0;32mFinished training classifier trans_1to3_0.01_3_exp2 for 50000 steps.[0m
+INFO:tensorflow:Saving dict for global step 50000: eval/accuracy = 0.7209375, eval/precision = 0.7209375, eval/recall = 1.0, global_step = 50000, loss = 0.59221655
+[0;32mFinished training classifier trans_1to3_0.01_3_exp3 for 50000 steps.[0m
+INFO:tensorflow:Saving dict for global step 50000: eval/accuracy = 0.7209375, eval/precision = 0.7209375, eval/recall = 1.0, global_step = 50000, loss = 0.5925446
+[0;32mFinished training classifier trans_1to3_0.01_3_exp4 for 50000 steps.[0m
+INFO:tensorflow:Saving dict for global step 50000: eval/accuracy = 0.7209375, eval/precision = 0.7209375, eval/recall = 1.0, global_step = 50000, loss = 0.59221685
+[0;32mFinished training classifier trans_1to3_0.01_3_exp5 for 50000 steps.[0m

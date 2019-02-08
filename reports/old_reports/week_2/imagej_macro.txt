@@ -1,0 +1,8 @@
+ setSlice(13); 
+ makeRectangle(getWidth/8, getHeight/4, getWidth/4, getHeight/2);
+ run("Crop");
+ run("Median 3D...", "x=2 y=2 z=2");
+ //run("Brightness/Contrast...");
+ setMinAndMax(1700, 1921);
+
+
